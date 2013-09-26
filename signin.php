@@ -21,34 +21,6 @@
 	$id = $remoteip.'/'.$wifiboxid;
 	echo "id: $id </br>";
 	
-	/*$statement = $db->prepare("INSERT INTO $table(remoteip, localip, wifiboxid, date) VALUES(:remoteip, :localip, :wifiboxid, FROM_UNIXTIME(:timestamp))");
-	$statement->execute(array(	':remoteip' => $remoteip, 
-								':localip' => $localip, 
-								':wifiboxid' => $wifiboxid, 
-								':timestamp' => $timestamp 
-	));*/
-	
-	/*$statement = $db->prepare(	"UPDATE $table " .
-								"SET 	localip = :localip, " .
-								"		date = FROM_UNIXTIME(:timestamp)" .
-								"WHERE 	remoteip=:remoteip AND " .
-								"		wifiboxid=:wifiboxid");
-	$statement->execute(array(	':remoteip' => $remoteip, 
-								':localip' => $localip, 
-								':wifiboxid' => $wifiboxid, 
-								':timestamp' => $timestamp 
-	));*/
-	
-	
-	
-	/*$statement = $db->prepare("INSERT INTO $table(id,remoteip, localip, wifiboxid, date) VALUES(:id,:remoteip, :localip, :wifiboxid, FROM_UNIXTIME(:timestamp))");
-	$statement->execute(array(	':id' => $id,
-								':remoteip' => $remoteip, 
-								':localip' => $localip, 
-								':wifiboxid' => $wifiboxid, 
-								':timestamp' => $timestamp 
-	));*/
-	
 	$statement = $db->prepare(	"REPLACE INTO $table " .
 								"SET 	id = :id, " .
 								"		remoteip = :remoteip, " .
