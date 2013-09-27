@@ -12,10 +12,10 @@
 	} catch (PDOException $e) {
 		$response = array( 	"status" => "error",
 							"msg" => $e->getMessage()." (".$e->getCode().")");
-		exit(json_encode($response));
+		exit(json_encode($response)."\r\n");
 	}
 	
 	$response = array( 	"status" => "success",
 						"data" => $boxes);
-	exit(json_encode($response));
+	exit(json_encode($response)."\r\n");
 ?>

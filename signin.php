@@ -1,18 +1,27 @@
 <?php
-	
-	if ($_SERVER['REQUEST_METHOD'] != "POST") {
+	/*if ($_SERVER['REQUEST_METHOD'] != "POST") {
 		$response = array( 	"status" => "error",
 							"msg" => "'signin' can only be accessed with the POST method");
-		exit(json_encode($response));
-	}
+							
+		
+		exit(json_encode($response)."\r\n");
+	}*/
 	
 	require 'connect.php';
 	
-	if(!isset($_POST['localip'])) echo "missing localip </br>";
-	$localip = $_POST['localip'];
+	if(!isset($_GET['localip'])) {
+		$response = array( 	"status" => "error",
+							"msg" => "missing localip");
+		exit(json_encode($response)."\r\n");
+	}
+	$localip = $_GET['localip'];
 	
-	if(!isset($_POST['wifiboxid'])) echo "missing wifiboxid </br>";
-	$wifiboxid = $_POST['wifiboxid'];
+	if(!isset($_GET['wifiboxid'])) {
+		$response = array( 	"status" => "error",
+							"msg" => "missing wifiboxid");
+		exit(json_encode($response)."\r\n");
+	}
+	$wifiboxid = $_GET['wifiboxid'];
 	
 	$remoteip = getenv('REMOTE_ADDR');
 	
@@ -35,7 +44,7 @@
 	} catch (PDOException $e) {
 		$response = array( 	"status" => "error",
 							"msg" => $e->getMessage()." (".$e->getCode().")");
-		exit(json_encode($response));
+		exit(json_encode($response)."\r\n");
 	}
 	
 	$responseData = array( 	"remoteip" => $remoteip,
@@ -44,7 +53,7 @@
 							"timestamp" => $timestamp);
 	$response = array( 	"status" => "success",
 						"data" => $responseData);
-	exit(json_encode($response));
+	exit(json_encode($response)."\r\n");
 	
 	// Remove old signins
 	$hourago = time() - 60*60;
@@ -54,6 +63,6 @@
 	} catch (PDOException $e) {
 		$response = array( 	"status" => "error",
 							"msg" => $e->getMessage()." (".$e->getCode().")");
-		exit(json_encode($response));
+		exit(json_encode($response)."\r\n");
 	}
 ?>
