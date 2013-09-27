@@ -6,7 +6,12 @@
 	$password = "mysql";
 	$table = "signins";
 	
-	$db = new PDO($dsn, $username, $password);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	
+	try {
+		$db = new PDO($dsn, $username, $password);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch (PDOException $e) {
+		$response = array( 	"status" => "error",
+							"msg" => $e->getMessage()." (".$e->getCode().")");
+		exit(json_encode($response));
+	}
 ?>
