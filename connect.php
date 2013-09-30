@@ -1,9 +1,9 @@
 <?php
 	
+	require 'credentials.php';
+	
 	$database = "doodle3d_connect";
 	$dsn = "mysql:host=localhost;dbname=$database";
-	$username = "root";
-	$password = "mysql";
 	$table = "signins";
 	
 	try {
