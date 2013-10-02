@@ -5,7 +5,7 @@
 	try {
 		// exported structure using phpMyAdmin
 		$createsql = $db->prepare("CREATE TABLE IF NOT EXISTS $table (" .
-				"`id` varchar(151) NOT NULL," .
+				"`id` varchar(31) NOT NULL," .
 				"`remoteip` varchar(15) NOT NULL," .
 				"`localip` varchar(15) NOT NULL," .
 				"`wifiboxid` varchar(140) NOT NULL," .

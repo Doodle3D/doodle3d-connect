@@ -27,7 +27,7 @@
 	
 	$timestamp = time();
 	
-	$id = $remoteip.'/'.$wifiboxid;
+	$id = $remoteip.'/'.$localip; //TODO: column length: 31
 	
 	try {
 		$statement = $db->prepare(	"REPLACE INTO $table " .
@@ -47,14 +47,6 @@
 		exit(json_encode($response)."\r\n");
 	}
 	
-	$responseData = array( 	"remoteip" => $remoteip,
-							"localip" => $localip,
-							"wifiboxid" => $wifiboxid,
-							"timestamp" => $timestamp);
-	$response = array( 	"status" => "success",
-						"data" => $responseData);
-	exit(json_encode($response)."\r\n");
-	
 	// Remove old signins
 	$hourago = time() - 60*60;
 	try {
@@ -65,4 +57,13 @@
 							"msg" => $e->getMessage()." (".$e->getCode().")");
 		exit(json_encode($response)."\r\n");
 	}
+	
+	
+	$responseData = array( 	"remoteip" => $remoteip,
+							"localip" => $localip,
+							"wifiboxid" => $wifiboxid,
+							"timestamp" => $timestamp);
+	$response = array( 	"status" => "success",
+						"data" => $responseData);
+	exit(json_encode($response)."\r\n");
 ?>
