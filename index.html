@@ -12,15 +12,42 @@
 
   <link href="css/normalize.css" rel="stylesheet" media="screen">
   <link href="css/main.css" rel="stylesheet" media="screen">
+  <link href="css/bg.css" rel="stylesheet" media="screen">
+  <link href="css/popups.css" rel="stylesheet" media="screen">
   
   <script src="js/libs/jquery-1.8.3.min.js" type="text/javascript"></script>
   <script src="js/libs/spin.min.js" type="text/javascript"></script>
-  <script src="js/main.js" type="text/javascript"></script>
+  <script src="js/maixxn.js" type="text/javascript"></script>
 </head>
 <body>
-<p id="intro"></p>
-<ul id="list"></ul>
-<div id="preloader"></div>
+
+<div id="landscape">
+  <div class="uiButtonsContainer">
+    <img class="bgTop" src="img/bg_top.png" />
+    <img class="bgMiddle" src="img/bg_middle.png" />
+    <img class="bgBottom" src="img/bg_bottom.png" />
+    <div id="d3dlogo" onclick="location.reload()"></div>
+    <div id="contentOverlay">
+      <div id="settings" class="popup">
+        <div class="content">
+          <p id="intro"></p>
+  	  	  <ul id="list">
+  	  	  	<li><a href="http://192.168.0.102">Doodle3D-31C2E8</a></li>
+  	  	  	<li><a href="http://192.168.0.102">Doodle3D-31C2E8</a></li>
+  	  	  	<li><a href="http://192.168.0.102">Doodle3D-31C2E8</a></li>
+  	  	  	<li><a href="http://192.168.0.102">Doodle3D-31C2E8</a></li>
+  	  	  	<li><a href="http://192.168.0.102">Doodle3D-31C2E8</a></li>
+  	  	  	<li><a href="http://192.168.0.102">Doodle3D-31C2E8</a></li>
+  	  	  </ul>
+  	 	  <div id="preloader"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="portrait">
+  <img class="vertImage" src="img/bg_vertical2.png"/>
+</div>
 
 </body>
 </html>
