@@ -1,7 +1,7 @@
 
 var retrieveListInterval 	= 5000;
 var retrieveListDelay; 			// retry setTimout instance
-var boxTimeoutTime 				= 300;
+var boxTimeoutTime 				= 500;
 
 var numBoxesChecking 			= 0; // count how many boxes we are checking
 var numBoxesFound 				= 0; // count how many boxes responded
@@ -74,8 +74,8 @@ function updateList(boxes) {
 function checkBox(box) {
 	numBoxesChecking++;
 	$.ajax({
-		url: "http://"+box.localip+"/d3dapi/network/status",
-		dataType: 'json',
+		url: "http://"+box.localip+"/d3dapi/network/alive",
+		dataType: "json",
 		timeout: boxTimeoutTime,
 		success: function(response){
 			if(response.status == "success") {
