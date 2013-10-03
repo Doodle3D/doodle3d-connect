@@ -46,7 +46,7 @@ function retrieveList() {
 	//spinner.spin($preloader[0]);
 	
 	$.ajax({
-		url: "api/list.php",
+		url: "api/debug_list.php",
 		dataType: 'json',
 		success: function(response){
 			//console.log("retrieveList response: ",response);
@@ -63,9 +63,20 @@ function retrieveList() {
 	});
 }
 function updateList(boxes) {
-	$list.empty();
 	numBoxesChecking = 0;
 	numBoxesFound = 0;
+	
+	// remove displayed, but unlisted boxes
+	$list.find("a").each(function(index, element) { 
+		var localip = $(element).attr("id");
+		var wifiboxid = $(element).text();
+		var found = false;
+		jQuery.each(boxes, function (index,box) {
+			if(box.localip == localip && box.wifiboxid == wifiboxid) found = true;
+		});
+		if(!found) $(element).parent().remove();
+	})
+	
 	jQuery.each(boxes, function (index,box) {
 		checkBox(box);
 	});
@@ -80,22 +91,33 @@ function checkBox(box) {
 		success: function(response){
 			if(response.status == "success") {
 				numBoxesFound++;
-				var url = "http://"+box.localip;
-				if(boxIsListed(url)) return;
-				
-				$list.append("<li><a href='"+url+"'>"+box.wifiboxid+"</a></li>");
+				addBox(box);
+			} else {
+				removeBox(box);
 			}
 			numBoxesChecking--;
 			updateIntro();
 		}
 	}).fail(function() {
 		numBoxesChecking--;
+		removeBox(box);
 		updateIntro();
 	});
 }
-function boxIsListed(url){
-	return $list.find("a[href|='"+url+"']").length > 0;
+
+function addBox(box) {
+	if(boxExists(box.localip)) return;
+	var url = "http://"+box.localip;
+	var element = "<li><a href='"+url+"' id='"+box.localip+"'>"+box.wifiboxid+"</a></li>";
+	$(element).hide().appendTo($list).fadeIn(500);
 }
+function boxExists(localip){
+	return $list.find("a[id|='"+localip+"']").length > 0;
+}
+function removeBox(box) {
+	$list.remove("a[id|='"+box.localip+"']");
+}
+
 function updateIntro() {
 	if(numBoxesChecking <= 0) {
 		if(numBoxesFound > 0) {
