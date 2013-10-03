@@ -1,5 +1,5 @@
 
-var retrieveListInterval 	= 2000;
+var retrieveListInterval 	= 5000;
 var retrieveListDelay; 			// retry setTimout instance
 var boxTimeoutTime 				= 300;
 
@@ -26,7 +26,7 @@ $(function() {
 	  corners: 1, // Corner roundness (0..1)
 	  rotate: 0, // The rotation offset
 	  direction: 1, // 1: clockwise, -1: counterclockwise
-	  color: '#58C143', // #rgb or #rrggbb or array of colors
+	  color: '#57BF42', // #rgb or #rrggbb or array of colors
 	  speed: 1, // Rounds per second
 	  trail: 60, // Afterglow percentage
 	  shadow: false, // Whether to render a shadow
@@ -46,7 +46,7 @@ function retrieveList() {
 	//spinner.spin($preloader[0]);
 	
 	$.ajax({
-		url: "list.php",
+		url: "api/list.php",
 		dataType: 'json',
 		success: function(response){
 			//console.log("retrieveList response: ",response);

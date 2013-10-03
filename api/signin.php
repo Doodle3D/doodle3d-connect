@@ -58,7 +58,6 @@
 		exit(json_encode($response)."\r\n");
 	}
 	
-	
 	$responseData = array( 	"remoteip" => $remoteip,
 							"localip" => $localip,
 							"wifiboxid" => $wifiboxid,
