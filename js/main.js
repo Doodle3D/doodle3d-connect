@@ -46,7 +46,7 @@ function retrieveList() {
 	//spinner.spin($preloader[0]);
 	
 	$.ajax({
-		url: "api/debug_list.php",
+		url: "api/list.php",
 		dataType: 'json',
 		success: function(response){
 			//console.log("retrieveList response: ",response);
