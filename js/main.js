@@ -99,6 +99,7 @@ function checkBox(box) {
 			updateIntro();
 		}
 	}).fail(function() {
+		//console.log("box not alive: "+box.wifiboxid);
 		numBoxesChecking--;
 		removeBox(box);
 		updateIntro();
@@ -115,7 +116,8 @@ function boxExists(localip){
 	return $list.find("a[id|='"+localip+"']").length > 0;
 }
 function removeBox(box) {
-	$list.remove("a[id|='"+box.localip+"']");
+	var $element = $list.find("a[id|='"+box.localip+"']");
+	$element.remove();
 }
 
 function updateIntro() {
