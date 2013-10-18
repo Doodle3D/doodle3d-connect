@@ -6,6 +6,8 @@ var boxTimeoutTime 				= 500;
 var numBoxesChecking 			= 0; // count how many boxes we are checking
 var numBoxesFound 				= 0; // count how many boxes responded
 
+var connectedBox = {localip:"192.168.5.1",wifiboxid:"Connected WiFi box"};
+
 var $list;
 var $intro;
 var $hint;
@@ -68,6 +70,8 @@ function updateList(boxes) {
 	numBoxesChecking = 0;
 	numBoxesFound = 0;
 	
+	boxes.push(connectedBox);
+	
 	// remove displayed, but unlisted boxes
 	$list.find("a").each(function(index, element) { 
 		var localip = $(element).attr("id");
@@ -82,6 +86,7 @@ function updateList(boxes) {
 	jQuery.each(boxes, function (index,box) {
 		checkBox(box);
 	});
+	//checkBox(connectedBox);
 	updateIntro();
 }
 function checkBox(box) {
