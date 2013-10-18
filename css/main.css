@@ -42,3 +42,9 @@ a {
 	background-color: #5491D2;
 	color: #fff;
 }
+
+#hint {
+	display:none;
+	position: absolute;
+	bottom: 1em;
+}

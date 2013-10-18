@@ -1,5 +1,5 @@
 
-var retrieveListInterval 	= 5000;
+var retrieveListInterval 	= 3000;
 var retrieveListDelay; 			// retry setTimout instance
 var boxTimeoutTime 				= 500;
 
@@ -8,6 +8,7 @@ var numBoxesFound 				= 0; // count how many boxes responded
 
 var $list;
 var $intro;
+var $hint;
 var $preloader;
 var spinner;
 
@@ -16,6 +17,7 @@ $(function() {
 	
 	$intro = $("#intro");
 	$list = $("#list");
+	$hint = $("#hint");
 	$preloader = $("#preloader");
 	
 	var spinnerSettings = {
@@ -121,11 +123,14 @@ function removeBox(box) {
 }
 
 function updateIntro() {
+	$intro.fadeIn();
 	if(numBoxesChecking <= 0) {
 		if(numBoxesFound > 0) {
 			$intro.html("Found the following boxes near you:");
+			$hint.fadeOut();
 		} else {
 			$intro.html("No boxes found near you.");
+			$hint.fadeIn();
 		}
 		$preloader.fadeOut(1000);
 	}
