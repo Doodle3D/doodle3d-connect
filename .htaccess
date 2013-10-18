@@ -2,3 +2,5 @@
 php_flag display_startup_errors on
 php_flag display_errors on
 php_flag html_errors on	
+
+Header append Cache-Control "no-cache"
