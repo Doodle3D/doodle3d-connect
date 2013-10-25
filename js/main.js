@@ -6,7 +6,7 @@ var boxTimeoutTime 				= 500;
 var numBoxesChecking 			= 0; // count how many boxes we are checking
 var numBoxesFound 				= 0; // count how many boxes responded
 
-var connectedBox = {localip:"192.168.5.1",wifiboxid:"Connected WiFi box"};
+var connectedBox = {localip:"192.168.5.1",wifiboxid:"Wired WiFi box"};
 
 var $list;
 var $intro;
