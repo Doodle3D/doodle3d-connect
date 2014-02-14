@@ -6,34 +6,40 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link rel="apple-touch-icon-precomposed" href="img/icon.png"/>
-  <link rel="icon" type="image/ico" href="favicon.ico"/>
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png" />
+  <link rel="icon" type="image/ico" href="./img/favicon.ico"/>
   <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
 
   <link href="css/normalize.css" rel="stylesheet" media="screen">
   <link href="css/main.css" rel="stylesheet" media="screen">
   <link href="css/bg.css" rel="stylesheet" media="screen">
   <link href="css/popups.css" rel="stylesheet" media="screen">
-  
+  <link href="css/mobile.css" rel="stylesheet" media="screen">
+
   <script src="js/libs/jquery-1.8.3.min.js" type="text/javascript"></script>
   <script src="js/libs/spin.min.js" type="text/javascript"></script>
   <script src="js/main.js" type="text/javascript"></script>
 </head>
 <body>
 
-<div id="landscape">
-  <div class="uiButtonsContainer">
-    <img class="bgTop" src="img/bg_top.png" />
+<div id="container">
+  <div class="bgContainer">
+    <img class="bgTop"    src="img/bg_top.png" />
     <img class="bgMiddle" src="img/bg_middle.png" />
     <img class="bgBottom" src="img/bg_bottom.png" />
+  </div>
+
+  <div class="uiButtonsContainer">
     <div id="d3dlogo" onclick="location.reload()"></div>
     <div id="contentOverlay">
       <div id="settings" class="popup">
         <div class="content">
           <p id="intro"></p>
-  	  	  <ul id="list"></ul>
+  	  	  <ul id="list" class="cf"></ul>
   	  	  <small id="hint">
-  	  	  	Can&#8217;t find your box? Make sure you&#8217;re on the same wifi network. <br/>
+  	  	  	Can&#8217;t find your box? <br/>
+						Maybe the box isn&#8217;t connected to your network yet, try to connect to a Doodle3D-... WiFi network. <br/>
+						Otherwise, make sure you&#8217;re on the same WiFi network. <br/>
   	  	  	You can always connect your box to your computer using an ethernet cable.
   	  	  </small>
   	 	  <div id="preloader"></div>
@@ -41,9 +47,6 @@
       </div>
     </div>
   </div>
-</div>
-<div id="portrait">
-  <img class="vertImage" src="img/bg_vertical2.png"/>
 </div>
 
 </body>

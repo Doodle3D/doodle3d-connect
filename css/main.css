@@ -1,7 +1,24 @@
+#container {
+  position:absolute;
+  width: 100%;
+  max-width: 1024px;
+  /*max-height: 768px;*/
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  margin:  0 auto;
+
+  box-shadow: 0 0 0 2px #5e8c71, 0 0 8px 4px rgba(8, 8, 8, 0.25);
+}
+
 a {
 	color: #5491D2;
 	text-decoration: none;
 }
+
+
 #preloader {
 	position: absolute;
 	top: 50%;
@@ -48,3 +65,12 @@ a {
 	position: absolute;
 	bottom: 1em;
 }
+
+/*.vertImage {*/
+  /*margin: 0;*/
+  /*padding: 0;*/
+  /*border: 2px solid #f0f;*/
+  /*max-width: 100%;*/
+  /*height: auto;*/
+  /*width: auto; *//* for ie9 */
+/*}*/

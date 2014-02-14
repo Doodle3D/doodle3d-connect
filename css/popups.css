@@ -2,10 +2,14 @@
   background-color: rgba(255, 255, 255, 0.65);
   z-index: 10;
   position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 1024px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 1024px;
   height: 100%;
+  /*max-height: 768px;*/
 }
 
 .popup {
@@ -13,22 +17,25 @@
 	z-index: 15;
   
   position: absolute;
-  top: 50%;
+  bottom: 6%;
   left: 50%;
-  width: 835px;
-  height: 500px;
-  margin: -250px 0 0 -417.5px;
+  width: 80%;
+  height: 70%;
+  margin: -35% 0 0 -40%;
   
-  -moz-box-shadow:    0px 2px 6px 0px rgba(16, 16, 16, 0.65);
-  -webkit-box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);
+  /*-moz-box-shadow:    0px 2px 6px 0px rgba(16, 16, 16, 0.65);*/
+  /*-webkit-box-shadow: 0px 2px 6px 0px rgba(16, 16, 16, 0.65);*/
   box-shadow:         0px 2px 6px 0px rgba(16, 16, 16, 0.65);
   border: 2px solid #222;
   border-radius: 15px;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
-  overflow: hidden; 
+  /*-moz-border-radius: 15px;*/
+  /*-webkit-border-radius: 15px;*/
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .popup .content { 
 	margin: 0 1em;
 }
+

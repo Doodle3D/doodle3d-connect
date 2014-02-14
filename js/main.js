@@ -6,7 +6,10 @@ var boxTimeoutTime 				= 500;
 var numBoxesChecking 			= 0; // count how many boxes we are checking
 var numBoxesFound 				= 0; // count how many boxes responded
 
-var connectedBox = {localip:"192.168.5.1",wifiboxid:"Wired WiFi box"};
+var connectedBox = {localip:"192.168.5.1",wifiboxid:"Wired WiFi-Box"};
+var apBox = {localip:"draw.doodle3d.com",wifiboxid:"WiFi-Box"};
+var connectAPI = "http://connect.doodle3d.com/api"
+var boxAPI = "http://draw.doodle3d.com/d3dapi";
 
 var $list;
 var $intro;
@@ -15,9 +18,9 @@ var $preloader;
 var spinner;
 
 $(function() {
-  //console.log("ready");
-	
-	$intro = $("#intro");
+//  console.log("ready");
+
+  $intro = $("#intro");
 	$list = $("#list");
 	$hint = $("#hint");
 	$preloader = $("#preloader");
@@ -44,13 +47,19 @@ $(function() {
 	spinner.spin($preloader[0]);
 	
   retrieveList();
-})
+
+  // DEBUG
+//  numBoxesFound = 4;
+//  updateIntro();
+});
+
 function retrieveList() {
 	$preloader.show();
 	//spinner.spin($preloader[0]);
 	
 	$.ajax({
-		url: "api/list.php",
+    timeout: 2000,
+		url: connectAPI+"/list.php",
 		dataType: 'json',
 		success: function(response){
 			//console.log("retrieveList response: ",response);
@@ -61,15 +70,19 @@ function retrieveList() {
 			retrieveListDelay = setTimeout(retrieveList, retrieveListInterval);
 		}
 	}).fail(function() {
-		//console.log("retrieveList: failed");
+		console.log("retrieveList: failed");
+    updateList([apBox]); //if web is not accessible try to find the box as an accesspoint
 		clearTimeout(retrieveListDelay);
 		retrieveListDelay = setTimeout(retrieveList, retrieveListInterval); // retry after delay
 	});
 }
+
 function updateList(boxes) {
 	numBoxesChecking = 0;
 	numBoxesFound = 0;
 	
+  if (boxes===undefined) boxes = [];
+
 	boxes.push(connectedBox);
 	
 	// remove displayed, but unlisted boxes
@@ -89,6 +102,7 @@ function updateList(boxes) {
 	//checkBox(connectedBox);
 	updateIntro();
 }
+
 function checkBox(box) {
 	numBoxesChecking++;
 	$.ajax({
