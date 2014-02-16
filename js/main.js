@@ -64,14 +64,22 @@ function retrieveList() {
 		success: function(response){
 			//console.log("retrieveList response: ",response);
 			if(response.status == "success") {
-				updateList(response.data);
+				var foundBoxes = response.data;
+				foundBoxes.push(connectedBox);
+				updateList(foundBoxes);
 			}
 			clearTimeout(retrieveListDelay);
 			retrieveListDelay = setTimeout(retrieveList, retrieveListInterval);
 		}
 	}).fail(function() {
 		console.log("retrieveList: failed");
-    updateList([apBox]); //if web is not accessible try to find the box as an accesspoint
+		
+		// if web is not accessible try to find the box as an accesspoint
+		// if not found, we look for a wired box
+    checkBox(apBox, function(alive) {
+    	if(alive) updateList([apBox]);
+    	else updateList([connectedBox]);
+    });
 		clearTimeout(retrieveListDelay);
 		retrieveListDelay = setTimeout(retrieveList, retrieveListInterval); // retry after delay
 	});
@@ -82,9 +90,7 @@ function updateList(boxes) {
 	numBoxesFound = 0;
 	
   if (boxes===undefined) boxes = [];
-
-	boxes.push(connectedBox);
-	
+  
 	// remove displayed, but unlisted boxes
 	$list.find("a").each(function(index, element) { 
 		var localip = $(element).attr("id");
@@ -103,14 +109,15 @@ function updateList(boxes) {
 	updateIntro();
 }
 
-function checkBox(box) {
+function checkBox(box,checked) {
 	numBoxesChecking++;
 	$.ajax({
 		url: "http://"+box.localip+"/d3dapi/network/alive",
 		dataType: "json",
 		timeout: boxTimeoutTime,
 		success: function(response){
-			if(response.status == "success") {
+			var alive = (response.status == "success");
+			if(alive) {
 				numBoxesFound++;
 				addBox(box);
 			} else {
@@ -118,12 +125,14 @@ function checkBox(box) {
 			}
 			numBoxesChecking--;
 			updateIntro();
+			if(checked) checked(alive);
 		}
 	}).fail(function() {
 		//console.log("box not alive: "+box.wifiboxid);
 		numBoxesChecking--;
 		removeBox(box);
 		updateIntro();
+		if(checked) checked(false);
 	});
 }
 
