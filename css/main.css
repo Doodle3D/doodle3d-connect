@@ -26,6 +26,7 @@ a {
 	width: 50px;
 	height: 50px;
 	margin: -25px 0 0 -25px;
+	pointer-events: none;
 }
 #list {
 	padding: 0;
