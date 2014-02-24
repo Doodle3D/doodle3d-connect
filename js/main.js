@@ -1,4 +1,10 @@
-
+/*
+ * This file is part of the Doodle3D project (http://doodle3d.com).
+ *
+ * Copyright (c) 2013, Doodle3D
+ * This software is licensed under the terms of the GNU GPL v2 or later.
+ * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
+ */
 var retrieveListInterval 	= 3000;
 var retrieveListDelay; 			// retry setTimout instance
 var boxTimeoutTime 				= 500;
@@ -7,7 +13,7 @@ var numBoxesChecking 			= 0; // count how many boxes we are checking
 var numBoxesFound 				= 0; // count how many boxes responded
 
 var connectedBox = {localip:"192.168.5.1",wifiboxid:"Wired WiFi-Box"};
-var apBox = {localip:"draw.doodle3d.com",wifiboxid:"WiFi-Box"};
+var apBox = {localip:"192.168.10.1",wifiboxid:"WiFi-Box",link:"http://draw.doodle3d.com"};
 var connectAPI = "http://connect.doodle3d.com/api"
 var boxAPI = "http://draw.doodle3d.com/d3dapi";
 
@@ -17,11 +23,19 @@ var $hint;
 var $preloader;
 var spinner;
 
+var boxes = {};
+
+var networkAPI = new NetworkAPI();
+var connectAPI = new ConnectAPI();
+
 $(function() {
 //  console.log("ready");
-
+	
+	networkAPI.init();
+	
   $intro = $("#intro");
 	$list = $("#list");
+	
 	$hint = $("#hint");
 	$preloader = $("#preloader");
 	
@@ -47,107 +61,97 @@ $(function() {
 	spinner.spin($preloader[0]);
 	
   retrieveList();
-
-  // DEBUG
-//  numBoxesFound = 4;
-//  updateIntro();
 });
 
 function retrieveList() {
 	$preloader.show();
 	//spinner.spin($preloader[0]);
-	
-	$.ajax({
-    timeout: 2000,
-		url: connectAPI+"/list.php",
-		dataType: 'json',
-		success: function(response){
-			//console.log("retrieveList response: ",response);
-			if(response.status == "success") {
-				var foundBoxes = response.data;
-				foundBoxes.push(connectedBox);
-				updateList(foundBoxes);
-			}
-			clearTimeout(retrieveListDelay);
-			retrieveListDelay = setTimeout(retrieveList, retrieveListInterval);
-		}
-	}).fail(function() {
-		console.log("retrieveList: failed");
-		
+	connectAPI.list(function(foundBoxes) {
+		//console.log("  foundBoxes: ",foundBoxes);
+		foundBoxes.push(connectedBox);
+		updateList(foundBoxes);
+		clearTimeout(retrieveListDelay);
+		retrieveListDelay = setTimeout(retrieveList, retrieveListInterval);
+		removeBox(apBox.localip,true);
+	}, function() {
 		// if web is not accessible try to find the box as an accesspoint
 		// if not found, we look for a wired box
-    checkBox(apBox, function(alive) {
-    	if(alive) updateList([apBox]);
-    	else updateList([connectedBox]);
-    });
+		networkAPI.alive(apBox.localip,boxTimeoutTime,function() {
+			console.log("found apBox");
+			updateList([apBox]);
+		}, function() {
+			console.log("not found apBox");
+			updateList([connectedBox]);
+		});
 		clearTimeout(retrieveListDelay);
 		retrieveListDelay = setTimeout(retrieveList, retrieveListInterval); // retry after delay
 	});
 }
 
-function updateList(boxes) {
+function updateList(foundBoxes) {
+	//console.log("updateList");
 	numBoxesChecking = 0;
 	numBoxesFound = 0;
 	
   if (boxes===undefined) boxes = [];
   
-	// remove displayed, but unlisted boxes
-	$list.find("a").each(function(index, element) { 
-		var localip = $(element).attr("id");
-		var wifiboxid = $(element).text();
+  // remove displayed, but not found boxes
+	jQuery.each(boxes, function (index,box) {
 		var found = false;
-		jQuery.each(boxes, function (index,box) {
-			if(box.localip == localip && box.wifiboxid == wifiboxid) found = true;
+		jQuery.each(foundBoxes, function (index,foundBox) {
+			if(foundBox.localip == box.localip && 
+					foundBox.wifiboxid == box.wifiboxid) found = true;
 		});
-		if(!found) $(element).parent().remove();
+		if(!found) removeBox(box.localip);
 	})
 	
-	jQuery.each(boxes, function (index,box) {
-		checkBox(box);
+	// check if all found boxes are alive
+	jQuery.each(foundBoxes, function (index,foundBox) {
+		checkBox(foundBox);
 	});
-	//checkBox(connectedBox);
+	
 	updateIntro();
 }
 
-function checkBox(box,checked) {
+function checkBox(boxData) {
+	//console.log("  checkBox: ",boxData.localip);
 	numBoxesChecking++;
-	$.ajax({
-		url: "http://"+box.localip+"/d3dapi/network/alive",
-		dataType: "json",
-		timeout: boxTimeoutTime,
-		success: function(response){
-			var alive = (response.status == "success");
-			if(alive) {
-				numBoxesFound++;
-				addBox(box);
-			} else {
-				removeBox(box);
-			}
-			numBoxesChecking--;
-			updateIntro();
-			if(checked) checked(alive);
-		}
-	}).fail(function() {
-		//console.log("box not alive: "+box.wifiboxid);
+	
+	networkAPI.alive(boxData.localip,boxTimeoutTime,function() {
+		addBox(boxData);
+		numBoxesFound++;
 		numBoxesChecking--;
-		removeBox(box);
 		updateIntro();
-		if(checked) checked(false);
+	}, function() {
+		removeBox(boxData.localip);
+		numBoxesChecking--;
+		updateIntro();
 	});
 }
-
-function addBox(box) {
-	if(boxExists(box.localip)) return;
-	var url = "http://"+box.localip;
-	var element = "<li><a href='"+url+"' id='"+box.localip+"'>"+box.wifiboxid+"</a></li>";
-	$(element).hide().appendTo($list).fadeIn(500);
+function getBox(localip) {
+	return boxes[localip];
 }
-function boxExists(localip){
-	return $list.find("a[id|='"+localip+"']").length > 0;
+function addBox(boxData) {
+	if(getBox(boxData.localip) !== undefined) return;
+	//console.log("addBox: ",boxData.localip);
+	var box = new Box();
+	box.init(boxData,$list);
+	box.destroyedHandler = boxDestroyedHandler;
+	boxes[box.localip] = box;
+	
+	//createBox(boxData);
 }
-function removeBox(box) {
-	var $element = $list.find("a[id|='"+box.localip+"']");
-	$element.remove();
+function removeBox(localip,force) {
+	var box = getBox(localip);
+	if(box === undefined) return;
+	//console.log("removeBox: ",localip," force: ",force);
+	if(!force && box.connecting) return;
+	//console.log("  calling destroyed");
+	box.destroy();
+}
+function boxDestroyedHandler(box) {
+	//console.log("boxDestroyedHandler");
+	delete boxes[box.localip];
 }
 
 function updateIntro() {
@@ -163,3 +167,32 @@ function updateIntro() {
 		$preloader.fadeOut(1000);
 	}
 }
+
+/*function createBox(boxData) {
+	//console.log("createBox: ",box.localip,box.wifiboxid);
+	var url = "http://"+box.localip;
+	var element = $("<li id='"+box.localip+"' class='box'></li>");
+	element.data("wifiboxid",box.wifiboxid);
+	element.append("<a href='"+((box.url)? box.url : url)+"'>"+box.wifiboxid+"</a>");
+	
+	var networkPanelElement = $("#networkForm").clone();
+	networkPanelElement.addClass(networkPanelElement.attr("id"));
+	networkPanelElement.removeAttr("id");
+	element.append(networkPanelElement);
+		
+	var networkPanel = new NetworkPanel();
+	networkPanel.id = box.localip;
+	networkPanel.init(url,networkPanelElement, function(networkStatus) {
+		element.toggleClass("complex",(networkStatus != NetworkAPI.STATUS.CONNECTED));
+		element.toggleClass("connecting",(networkStatus == NetworkAPI.STATUS.CONNECTING));
+		console.log("status changed: ",networkStatus);
+		//console.log("  url: ",url);
+		if(networkStatus == NetworkAPI.STATUS.CONNECTING) {
+			setTimeout(function() {
+				console.log("delayed remove");
+				removeBox(box,true); 
+			}, 10000);
+		}
+	});
+	return element;
+}*/
