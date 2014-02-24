@@ -45,7 +45,6 @@ function NetworkPanel() {
 	var _btnListNetworks;
 	var _passwordSettings;
 	var _passwordField;
-	var _showPassword;
 	var _btnConnect;
 	var _statusTextField;
 	
@@ -64,7 +63,6 @@ function NetworkPanel() {
 		_btnListNetworks 		= _element.find("#listNetworks");
 		_passwordSettings 	= _element.find("#passwordSettings");
 		_passwordField 			= _element.find("#phrase");
-		_showPassword 			= _element.find("#showPassword");
 		_btnConnect 				= _element.find("#btnConnect");
 		_statusTextField	 	= _element.find("#statusText");
 		
@@ -72,7 +70,7 @@ function NetworkPanel() {
 		_btnListNetworks.on('touchstart mousedown',showNetworkSelector);
 		_btnConnect.on('touchstart mousedown',_self.connectToNetwork);
 		_networkSelector.change(networkSelectorChanged);
-		_showPassword.change(showPassWordToggle);
+		_passwordField.showPassword();
 		
 		_statusChangeHandler = statusChangeHandler;
 		
@@ -94,11 +92,6 @@ function NetworkPanel() {
 	function networkSelectorChanged(e) {
 		var selectedOption = $(this).find("option:selected");
 		_self.selectNetwork(selectedOption.val());
-	};
-	function showPassWordToggle() {
-		var type = (_showPassword.prop('checked'))? "text" : "password";
-		//console.log("  type: ",type);
-		_passwordField.attr("type",type);
 	};
 	
 	this.retrieveStatus = function(completeHandler) {
