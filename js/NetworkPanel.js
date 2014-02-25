@@ -47,6 +47,7 @@ function NetworkPanel() {
 	var _passwordField;
 	var _btnConnect;
 	var _statusTextField;
+	var _actionTextField;
 	
 	var _self = this;
 	
@@ -64,12 +65,16 @@ function NetworkPanel() {
 		_passwordSettings 	= _element.find("#passwordSettings");
 		_passwordField 			= _element.find("#phrase");
 		_btnConnect 				= _element.find("#btnConnect");
-		_statusTextField	 	= _element.find("#statusText");
+		_statusTextField	 	= _element.find("#status");
+		_actionTextField	 	= _element.find("#action");
 		
 		_btnRefreshNetworks.on('touchstart mousedown',onRefreshClick);
 		_btnListNetworks.on('touchstart mousedown',showNetworkSelector);
-		_btnConnect.on('touchstart mousedown',_self.connectToNetwork);
+		//_btnConnect.on('touchstart mousedown',_self.connectToNetwork);
+		_element.submit(connectToNetwork);
+		
 		_networkSelector.change(networkSelectorChanged);
+		_networkSelector.blur(networkSelectorBlurred);
 		_passwordField.showPassword();
 		
 		_statusChangeHandler = statusChangeHandler;
@@ -93,6 +98,12 @@ function NetworkPanel() {
 		var selectedOption = $(this).find("option:selected");
 		_self.selectNetwork(selectedOption.val());
 	};
+	function networkSelectorBlurred(e) {
+		console.log("networkSelectorBlurred");
+		var selectedOption = $(this).find("option:selected");
+		//_self.selectNetwork(selectedOption.val());
+	};
+	
 	
 	this.retrieveStatus = function(completeHandler) {
 		//console.log(_self.id,"NetworkPanel:retrieveStatus");
@@ -125,6 +136,7 @@ function NetworkPanel() {
 	function setStatus(status,data) {
 		if(status == _currentNetworkStatus) return;
 		_currentNetworkStatus = status;
+		var targetNetwork; 
 		
 		// update info
 		switch(status) {
@@ -138,6 +150,12 @@ function NetworkPanel() {
 					_currentNetwork = data.ssid;
 				}
 				break;
+			case NetworkAPI.STATUS.CONNECTING:
+				if(_selectedNetwork != undefined) {
+					targetNetwork = _selectedNetwork;
+				} else if(_currentNetwork != undefined) {
+					targetNetwork = _currentNetwork;
+				}
 			case NetworkAPI.STATUS.CREATING:
 			case NetworkAPI.STATUS.CREATED:					
 				_currentNetwork = undefined;
@@ -169,35 +187,33 @@ function NetworkPanel() {
 				break;
 		}
 		// update status text
-		//updateStatusText(status,data.statusMessage);
-		var msg = "";
+		var statusText = "";
 		switch(status) {
-			case NetworkAPI.STATUS.NOT_CONNECTED:
-			case NetworkAPI.STATUS.CREATING:
-			case NetworkAPI.STATUS.CREATED:
-				break;
-			case NetworkAPI.STATUS.CONNECTED:
-				msg = "Connected to: <b>"+_currentNetwork+"</b>.";
-				break;
 			case NetworkAPI.STATUS.CONNECTING:
-				msg = "Connecting... "; 
-				var targetNetwork; 
-				if(_selectedNetwork != undefined) {
-					targetNetwork = _selectedNetwork;
-				} else if(_currentNetwork != undefined) {
-					targetNetwork = _currentNetwork;
-				}
-				if(targetNetwork != undefined) {
-					msg += "<br/>Connect your device to <b>"+targetNetwork+"</b>.";
-				}
+				statusText = "Connecting... ";
 				break;
 			case NetworkAPI.STATUS.CONNECTING_FAILED:
 				//msg = data.statusMessage;
-				msg = "Could not connect, please check password";
+				statusText = "Could not connect.";
 				break;
 		}
-		//console.log("  client display msg: ",msg);
-		_statusTextField.html(msg);
+		_statusTextField.html(statusText);
+		
+		// update action text
+		var actionText = "";
+		switch(status) {
+			case NetworkAPI.STATUS.CONNECTING:
+				if(targetNetwork != undefined) {
+					actionText = "Connect your device to <b>"+targetNetwork+"</b>.";
+					_actionTextField.attr("class","info");
+				}
+				break;
+			case NetworkAPI.STATUS.CONNECTING_FAILED:
+				actionText = "Please check password";
+				_actionTextField.attr("class","error");
+				break;
+		}
+		_actionTextField.html(actionText);
 			
 		if(_statusChangeHandler) _statusChangeHandler(status);
 	}
@@ -207,14 +223,14 @@ function NetworkPanel() {
 			//console.log("NetworkPanel:scanned");
 			
 			// order networks alphabetically
-			data.networks.sort(function (a, b) {
+			/*data.networks.sort(function (a, b) {
 				if (a.ssid > b.ssid)
 					return 1;
 				if (a.ssid < b.ssid)
 					return -1;
 				// a must be equal to b
 				return 0;
-			});
+			});*/
 			
 			fillNetworkSelector(data.networks)
 			_networks = {};
@@ -276,7 +292,7 @@ function NetworkPanel() {
 		_element.addClass("customNetwork");
 	}*/
 	
-	this.connectToNetwork = function() {
+	function connectToNetwork() {
 		//console.log("NetworkPanel:connectToNetwork");
 		if(_selectedNetwork == NETWORK_SELECTOR_DEFAULT) return;
 		
@@ -289,6 +305,8 @@ function NetworkPanel() {
 		// because the webserver needs time to switch it's status
 		clearTimeout(_retrieveStatusDelay);
 		_retrieveStatusDelay = setTimeout(_self.retrieveStatus, _retrieveStatusDelayTime);
+		
+		return false;
 	};
 	this.destroy = function() {
 		clearTimeout(_retryRetrieveStatusDelay);

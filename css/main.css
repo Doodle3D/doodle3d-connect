@@ -1,3 +1,7 @@
+p, small {
+	line-height: 1.2em;
+}
+
 #container {
   position:absolute;
   width: 100%;
@@ -17,7 +21,6 @@ a {
 	color: #5491D2;
 	text-decoration: none;
 }
-
 
 #preloader {
 	position: absolute;
@@ -58,7 +61,7 @@ a {
 .box:hover {
 	background-color: #5491D2;
 }
-.box:hover a{
+.box:hover .link{
 	color: #fff;
 }
 .box.complex {
@@ -68,7 +71,7 @@ a {
 box.connecting {
 	border: 2px solid #ff0;
 }	
-.box a{
+.box .link{
 	display:block;
 	padding: 25px 25px 12px 25px;
 	text-align: center;
@@ -79,19 +82,22 @@ box.connecting {
 	bottom: 0;
 	left: 0;
 }
-.box.complex a {
+.box.complex .link {
 	position: relative;
 	top: auto;
 	right: auto;
 	bottom: auto;
 	left: auto;
 }
+.box small {
+	margin: 1em 0 0 0;
+	display: block;
+}
 
 #hint {
 	display:none;
 	position: absolute;
 	bottom: 1em;
-	line-height: 1.5;
 }
 
 #networkForm {
@@ -105,56 +111,60 @@ box.connecting {
 }
 
 
+/* FORMS */
+form label {
+  min-width: 110px;
+  display: block;
+  float: left;
+  margin: 1px 0 10px 0;
+}
+form label.inline {
+	display: inline;
+	float: none;
+}
+
+form input, form select {
+  margin-bottom: 5px;
+}
+form select {
+	margin-right: 5px;
+}
+form input[type="text"], form input[type="number"], form input[type="password"], form select {
+	width: 130px;
+}
+form input[type="text"], form input[type="number"], form input[type="password"] {
+  border: 1px solid rgb(144, 192, 255);
+  -webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+form .row {
+	clear: left;
+}
+form .row div {
+/*	float: left;*/
+}
+
+
 /* NETWORK PANEL */
 .networkForm {
 	background-color: #fff;
 	/*border-radius: 0 0 25px 25px;*/
 	padding: 12px 25px 12px 25px;
 }
-
-form p {
+.networkForm p {
 	margin: 0 0 10px 0;
-}
-form label {
-  min-width: 110px;
-  display: block;
-  float: left;
-  margin: 1px 0 10px 0;
-	clear: left;
-}
-form label.inline {
-	display: inline;
-	float: none;
-}
-form div {
-	float: left;
-}
-form input[type="text"], form input[type="number"], form input[type="password"] {
-  border: 1px solid rgb(144, 192, 255);
-  margin-right: 5px;
-  margin-bottom: 5px;
-  -webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	
-	width: 130px;
-	
-}
-form .button {
-	display: inline-block;
 }
 
 .networkForm #network {
-	margin-right: 5px;
-	width: 130px;
-}
+	/*margin-right: 5px;*/
 
+}
 .networkForm #ssid,
 .networkForm #listNetworks,
 .networkForm #passwordSettings {
 	display: none;
 }
-
 .networkForm.customNetwork #passwordSettings {
 	display: block;
 }
@@ -166,7 +176,25 @@ form .button {
 .networkForm.customNetwork #refreshNetworks {
 	display: none;
 }
-.networkForm #btnConnect {
-	display: block;
-	clear:left;
+.networkForm #status {
+	position: relative;
+	top: 2px;
+}
+.networkForm #action {
+    /*clear: left;*/
+    display: block;
+    padding: 5px 4px 4px 4px;
+}
+.networkForm #action.error {
+    background: #EB313C;
+    color: #fff;
+}
+.networkForm #action.warning {
+    background: #E9A86E;
+}
+.networkForm #action.notice {
+    background: #93CAF4;
+}
+.networkForm #action.info {
+    background: #97DD8A;
 }

@@ -26,7 +26,7 @@ function Box() {
 		// create box dom element
 		var link = (boxData.link)? boxData.link : url;
 		_element = $("<li id='"+_self.localip+"' class='box'></li>");
-		_element.append("<a href='"+link+"'>"+_self.wifiboxid+"</a>");
+		_element.append("<a href='"+link+"' class='link'>"+_self.wifiboxid+"</a>");
 		_element.hide().appendTo(parentElement).fadeIn(500);
 		
 		// create network panel dom element

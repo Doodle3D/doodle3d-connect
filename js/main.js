@@ -138,8 +138,6 @@ function addBox(boxData) {
 	box.init(boxData,$list);
 	box.destroyedHandler = boxDestroyedHandler;
 	boxes[box.localip] = box;
-	
-	//createBox(boxData);
 }
 function removeBox(localip,force) {
 	var box = getBox(localip);
@@ -167,32 +165,3 @@ function updateIntro() {
 		$preloader.fadeOut(1000);
 	}
 }
-
-/*function createBox(boxData) {
-	//console.log("createBox: ",box.localip,box.wifiboxid);
-	var url = "http://"+box.localip;
-	var element = $("<li id='"+box.localip+"' class='box'></li>");
-	element.data("wifiboxid",box.wifiboxid);
-	element.append("<a href='"+((box.url)? box.url : url)+"'>"+box.wifiboxid+"</a>");
-	
-	var networkPanelElement = $("#networkForm").clone();
-	networkPanelElement.addClass(networkPanelElement.attr("id"));
-	networkPanelElement.removeAttr("id");
-	element.append(networkPanelElement);
-		
-	var networkPanel = new NetworkPanel();
-	networkPanel.id = box.localip;
-	networkPanel.init(url,networkPanelElement, function(networkStatus) {
-		element.toggleClass("complex",(networkStatus != NetworkAPI.STATUS.CONNECTED));
-		element.toggleClass("connecting",(networkStatus == NetworkAPI.STATUS.CONNECTING));
-		console.log("status changed: ",networkStatus);
-		//console.log("  url: ",url);
-		if(networkStatus == NetworkAPI.STATUS.CONNECTING) {
-			setTimeout(function() {
-				console.log("delayed remove");
-				removeBox(box,true); 
-			}, 10000);
-		}
-	});
-	return element;
-}*/

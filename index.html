@@ -55,10 +55,12 @@
 </div>
 						
 <form id="networkForm">
-	<p>Connect box to your WiFi network:</p>
-	<label for="ssid">Network:</label><input type="text" name="ssid" id="ssid"><input type="button" name="list" value="List" class="button" id="listNetworks"/>
-	<select id="network" name=""></select><input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br/>
-	<div id="passwordSettings">
+	<p>Connect this box to your WiFi network:</p>
+	<div class="row">
+		<label for="ssid">Network:</label><input type="text" name="ssid" id="ssid"><input type="button" name="list" value="List" class="button" id="listNetworks"/>
+		<select id="network" name=""></select><input type="button" name="refresh" value="Refresh" class="button" id="refreshNetworks"/><br/>
+	</div>
+	<div id="passwordSettings" class="row">
 		<div>
 			<label for="phrase" id="phraseLabel">Password:</label>
 		</div>
@@ -68,9 +70,16 @@
 			<label for="showPassword" class="inline">show password</label>
 		</div>
 	</div>
-	<br/>
-	<input type="button" value="Connect" class="button" id="btnConnect"/>
-	<span id="statusText"></span><br/>
+	<div class="row">
+		<input type="submit" value="Connect" class="button" id="btnConnect"/>
+		<span id="status"></span>
+	</div>
+	<div class="row">
+		<span id="action"></span>
+	</div>
+	<div class="row">
+		<small>Connecting the box to your WiFi network makes it easier to connect to and allows you to update. You can also continue using the box on it&#8217;s own WiFi network by going to <a href="http://draw.doodle3d.com">draw.doodle3d.com</a>. </small>
+	</div>
 </form>
 
 </body>
