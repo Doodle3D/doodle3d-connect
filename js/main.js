@@ -24,6 +24,7 @@ var $preloader;
 var spinner;
 
 var boxes = {};
+var numBoxes = 0;
 
 var networkAPI = new NetworkAPI();
 var connectAPI = new ConnectAPI();
@@ -77,10 +78,8 @@ function retrieveList() {
 		// if web is not accessible try to find the box as an accesspoint
 		// if not found, we look for a wired box
 		networkAPI.alive(apBox.localip,boxTimeoutTime,function() {
-			console.log("found apBox");
 			updateList([apBox]);
 		}, function() {
-			console.log("not found apBox");
 			updateList([connectedBox]);
 		});
 		clearTimeout(retrieveListDelay);
@@ -93,7 +92,7 @@ function updateList(foundBoxes) {
 	numBoxesChecking = 0;
 	numBoxesFound = 0;
 	
-  if (boxes===undefined) boxes = [];
+  if (foundBoxes===undefined) foundBoxes = [];
   
   // remove displayed, but not found boxes
 	jQuery.each(boxes, function (index,box) {
@@ -121,11 +120,9 @@ function checkBox(boxData) {
 		addBox(boxData);
 		numBoxesFound++;
 		numBoxesChecking--;
-		updateIntro();
 	}, function() {
 		removeBox(boxData.localip);
 		numBoxesChecking--;
-		updateIntro();
 	});
 }
 function getBox(localip) {
@@ -138,6 +135,8 @@ function addBox(boxData) {
 	box.init(boxData,$list);
 	box.destroyedHandler = boxDestroyedHandler;
 	boxes[box.localip] = box;
+	numBoxes++;
+	updateIntro();
 }
 function removeBox(localip,force) {
 	var box = getBox(localip);
@@ -150,18 +149,18 @@ function removeBox(localip,force) {
 function boxDestroyedHandler(box) {
 	//console.log("boxDestroyedHandler");
 	delete boxes[box.localip];
+	numBoxes--;
+	updateIntro();
 }
 
 function updateIntro() {
-	$intro.fadeIn();
-	if(numBoxesChecking <= 0) {
-		if(numBoxesFound > 0) {
-			$intro.html("Found the following boxes near you:");
-			$hint.fadeOut();
-		} else {
-			$intro.html("No boxes found near you.");
-			$hint.fadeIn();
-		}
-		$preloader.fadeOut(1000);
+	//console.log("updateIntro,  numBoxes: ",numBoxes);
+	if(numBoxes > 0) {
+		$intro.html("Found the following boxes near you:");
+		$hint.fadeOut();
+	} else {
+		$intro.html("No boxes found near you.");
+		$hint.fadeIn();
 	}
+	$preloader.fadeOut(1000);
 }
