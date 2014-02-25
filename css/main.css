@@ -90,7 +90,7 @@ box.connecting {
 	left: auto;
 }
 .box small {
-	margin: 1em 0 0 0;
+	margin: 0.5em 0 0 0;
 	display: block;
 }
 
@@ -157,8 +157,8 @@ form .row div {
 }
 
 .networkForm #network {
-	/*margin-right: 5px;*/
-
+	margin-right: 5px;
+	width: 180px;
 }
 .networkForm #ssid,
 .networkForm #listNetworks,
@@ -197,4 +197,7 @@ form .row div {
 }
 .networkForm #action.info {
     background: #97DD8A;
+}
+.networkForm #action.none {
+    display: none;
 }

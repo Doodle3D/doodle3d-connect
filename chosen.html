@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chosen</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./img/webpage_icons/apple-touch-icon-144x144-precomposed.png" />
+  <link rel="icon" type="image/ico" href="./img/favicon.ico"/>
+  <meta id="Viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
+
+	<link href="css/normalize.css" rel="stylesheet" media="screen">
+  <link href="css/chosen.min.css" rel="stylesheet" media="screen">
+  <style>
+  	#network {
+  		width: 200px;
+  	}
+  </style>
+  <script src="js/libs/jquery-1.8.3.min.js" type="text/javascript"></script>
+  <script src="js/libs/chosen.jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function() {
+			console.log("ready");
+			var networkSelector = $("#network");
+			networkSelector.chosen();
+			
+			setTimeout(function() {
+				console.log("fill");
+				networkSelector.append(
+						$("<option></option>").val("a").html("Optie a"),
+						$("<option></option>").val("b").html("Optie b"),
+						$("<option></option>").val("c").html("Optie c")
+				);
+				networkSelector.trigger("chosen:updated");
+			},1000);
+		});
+	</script>
+</head>
+<body>
+
+<form id="networkForm">
+	<select id="network" name="" data-placeholder="Choose a country...">
+    <!-- <option value=""></option> -->
+	</select>
+</form>
+
+</body>
+</html>

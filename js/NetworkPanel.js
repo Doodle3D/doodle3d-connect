@@ -10,7 +10,7 @@ function NetworkPanel() {
 	
 	this.id;
 	
-	var NETWORK_SELECTOR_DEFAULT = "please select"; // used as first item in networks list
+	var NETWORK_SELECTOR_DEFAULT = ""; // used as first item in networks list
 	//var NETWORK_SELECTOR_CUSTOM = "join other network...";
 	
 	// network mode
@@ -74,7 +74,11 @@ function NetworkPanel() {
 		_element.submit(connectToNetwork);
 		
 		_networkSelector.change(networkSelectorChanged);
-		_networkSelector.blur(networkSelectorBlurred);
+		_networkSelector.chosen({width: "180px"});
+		_networkSelector.on('chosen:hiding_dropdown', function() { 
+			_self.refreshNetworks 
+		});
+		//_networkSelector.trigger("chosen:updated");
 		_passwordField.showPassword();
 		
 		_statusChangeHandler = statusChangeHandler;
@@ -98,12 +102,6 @@ function NetworkPanel() {
 		var selectedOption = $(this).find("option:selected");
 		_self.selectNetwork(selectedOption.val());
 	};
-	function networkSelectorBlurred(e) {
-		console.log("networkSelectorBlurred");
-		var selectedOption = $(this).find("option:selected");
-		//_self.selectNetwork(selectedOption.val());
-	};
-	
 	
 	this.retrieveStatus = function(completeHandler) {
 		//console.log(_self.id,"NetworkPanel:retrieveStatus");
@@ -212,6 +210,9 @@ function NetworkPanel() {
 				actionText = "Please check password";
 				_actionTextField.attr("class","error");
 				break;
+			default:
+				_actionTextField.attr("class","none");
+				break;
 		}
 		_actionTextField.html(actionText);
 			
@@ -262,6 +263,7 @@ function NetworkPanel() {
 			_networkSelector.val(_currentNetwork);
 			//_self.selectNetwork(_currentNetwork);
 		}
+		_networkSelector.trigger("chosen:updated");
 	}
 	
 	this.selectNetwork = function(ssid) {
