@@ -62,6 +62,10 @@ $(function() {
 	spinner.spin($preloader[0]);
 	
   retrieveList();
+  
+  // make sure all links are opened in same WebApp (added to homescreen) 
+  // and they don't start a browser
+  $.stayInWebApp('a',true);
 });
 
 function retrieveList() {
