@@ -66,6 +66,7 @@ a {
 }
 .box.complex {
 	width: 375px; /*320px;*/
+	height: 350px;
 	/*border: 2px solid #00f;*/
 }
 box.connecting {
@@ -200,4 +201,7 @@ form .row div {
 }
 .networkForm #action.none {
     display: none;
+}
+.networkForm .chosen-container-single .chosen-default {
+	color: #333; /* let's not pretend it's disabled */
 }

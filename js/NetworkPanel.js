@@ -207,7 +207,7 @@ function NetworkPanel() {
 				}
 				break;
 			case NetworkAPI.STATUS.CONNECTING_FAILED:
-				actionText = "Please check password";
+				actionText = "Please check password and try again";
 				_actionTextField.attr("class","error");
 				break;
 			default:
