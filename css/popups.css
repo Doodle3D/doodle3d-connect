@@ -31,7 +31,7 @@
   /*-moz-border-radius: 15px;*/
   /*-webkit-border-radius: 15px;*/
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 

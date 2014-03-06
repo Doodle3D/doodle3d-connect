@@ -15,7 +15,6 @@ var numBoxesFound 				= 0; // count how many boxes responded
 var connectedBox = {localip:"192.168.5.1",wifiboxid:"Wired WiFi-Box"};
 var apBox = {localip:"192.168.10.1",wifiboxid:"WiFi-Box",link:"http://draw.doodle3d.com"};
 var connectAPI = "http://connect.doodle3d.com/api"
-var boxAPI = "http://draw.doodle3d.com/d3dapi";
 
 var $list;
 var $intro;
