@@ -5,8 +5,8 @@
 	
 	require 'credentials.php';
 	
-	$database = "doodle3d_connect";
-	$dsn = "mysql:host=localhost;dbname=$database";
+	$database = "doodle3d_com_connect";
+	$dsn = "mysql:host=doodle1.sql.greenhost.nl;dbname=$database";
 	$table = "signins";
 	
 	try {
