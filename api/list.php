@@ -15,12 +15,7 @@
 		exit(json_encode($response)."\r\n");
 	}
 	
-	$debug = array(		"time" => time(),
-						"hourago" => $hourago,
-						"remoteip" => $remoteip);
-	
 	$response = array( 	"status" => "success",
-						"data" => $boxes,
-						"debug" => $debug);
+						"data" => $boxes);
 	exit(json_encode($response)."\r\n");
 ?>
