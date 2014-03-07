@@ -1,5 +1,8 @@
 <?php
 	
+	header("Access-Control-Allow-Origin: *");
+	header("Content-type: application/json");
+	
 	require 'credentials.php';
 	
 	$database = "doodle3d_connect";
