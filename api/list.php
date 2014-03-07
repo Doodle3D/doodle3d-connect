@@ -8,7 +8,7 @@
 		$statement = $db->prepare("SELECT * FROM $table where date >= FROM_UNIXTIME(:hourago) AND remoteip = :remoteip");
 		$statement->execute(array(	':hourago' => $hourago,
 									':remoteip' => $remoteip));
-		$boxes = $statement->fetchAll();
+		$boxes = $statement->fetchAll(PDO::FETCH_CLASS);
 	} catch (PDOException $e) {
 		$response = array( 	"status" => "error",
 							"msg" => $e->getMessage()." (".$e->getCode().")");
