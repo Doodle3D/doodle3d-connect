@@ -123,7 +123,7 @@ function NetworkAPI() {
 		});
 	};
 	
-	this.alive = function(wifiboxURL,timeoutTime,completeHandler,failedHandler) {
+	this.alive = function(wifiboxURL,timeoutTime,successHandler,failedHandler, completeHandler) {
 		if(wifiboxURL.indexOf("http://") != 0) {
 			wifiboxURL = "http://" + wifiboxURL;
 		}
@@ -138,13 +138,16 @@ function NetworkAPI() {
 				//console.log("NetworkAPI:alive response: ",response);
 				if(response.status == "error" || response.status == "fail") {
 					if(failedHandler) failedHandler(response);
+					if(completeHandler) completeHandler(false, response);
 				} else {
-					completeHandler(response.data);
+					successHandler(response.data);
+					if(completeHandler) completeHandler(true, response.data);
 				}
 			}
 		}).fail(function() {
 			//console.log("NetworkAPI:alive failed");
 			if(failedHandler) failedHandler();
+			if(completeHandler) completeHandler(false);
 		});
 	};
 }

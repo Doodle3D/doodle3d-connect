@@ -5,75 +5,137 @@
  * This software is licensed under the terms of the GNU GPL v2 or later.
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
-function Box() {
-	
-	this.localip;
-	this.wifiboxid;
-	this.connecting = false;
-	this.destroyedHandler;
-	
-	var _element;
-	var _networkPanel;
-	var _delayedDestroy;
-	var _self = this;
 
-	this.init = function(boxData,parentElement) {
+var BoxPage = (function (w) {
+	var _page;
+	var _title;
+	var _intro;
+	var _networkStatus;
+	var _networkAPI = new NetworkAPI();
+	var _boxData = {};
+	var _retryRetrieveStatusDelay;
+	var _retryRetrieveStatusDelayTime = 3000;
+	var PAGE_ID = "#box";
+	
+	var _self = this;
+	
+	$.mobile.document.on( "pageinit", PAGE_ID, function( event, data ) {
+		//console.log("Box page pageinit");
+		_page = $(this);
+		_title = _page.find(".ui-title");
+		_intro = _page.find(".intro");
 		
-		_self.localip = boxData.localip;
-		_self.wifiboxid = boxData.wifiboxid;
-		var url = "http://"+_self.localip;
+  });
+	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
+		console.log("Box page pagebeforeshow");
+		_boxData = d3d.util.getPageParams(PAGE_ID);
+		var boxURL = "http://"+_boxData.localip;
+		console.log("  _boxData: ",_boxData);
 		
-		// create box dom element
-		var link = (boxData.link)? boxData.link : url;
-		var linkElement = $("<a href='"+link+"' class='link'>"+_self.wifiboxid+"</a>");
-		_element = $("<li id='"+_self.localip+"' class='box'></li>");
-		_element.append(linkElement);
-		_element.hide().appendTo(parentElement).fadeIn(500);
+		_title.text(_boxData.wifiboxid);
+		_intro.text("");
 		
-		// create network panel dom element
-		var networkPanelElement = $("#networkForm").clone();
-		networkPanelElement.addClass(networkPanelElement.attr("id"));
-		networkPanelElement.removeAttr("id");
-		_element.append(networkPanelElement);
+		var drawLink = (_boxData.link)? _boxData.link : boxURL;
+		_page.find("#drawItem a").attr("href",drawLink);
 		
-		// create network panel
-		_networkPanel = new NetworkPanel();
-		_networkPanel.id = _self.localip;
-		_networkPanel.init(url,networkPanelElement, networkStatusChangeHandler);
-		
-	}
-	function networkStatusChangeHandler(networkStatus) {
-		console.log("Box:networkStatusChangeHandler: ",networkStatus);
-		_self.connecting = (networkStatus == NetworkAPI.STATUS.CONNECTING);
-		
-		// because openwrt can be slow to update it's ssid, a box might 
-		// report it failed connecting but is then slightly later connects
-		// so we correct CONNECTING_FAILED to CONNECTED unless the box is connected by wire
-		if(_self.localip != "192.168.5.1" && networkStatus == NetworkAPI.STATUS.CONNECTING_FAILED) {
-			networkStatus = NetworkAPI.STATUS.CONNECTED;
-		}
-		
-		_element.toggleClass("complex",(networkStatus !== NetworkAPI.STATUS.CONNECTED));
-		
-		if(_self.connecting) {
-			clearTimeout(_delayedDestroy);
-			_delayedDestroy = setTimeout(function() {
-				console.log("delayed remove");
-				//removeBox(box,true); 
-				_self.destroy()
-			}, 10000);
-		}
-	}
-	this.destroy = function() {
-		console.log("Box:destroy");
-		clearTimeout(_delayedDestroy);
-		
-		_networkPanel.destroy();
-		
-		_element.fadeOut(500,function() {
-			_element.remove();
+		_networkAPI.init(boxURL);
+		retrieveNetworkStatus();
+  });
+	
+	function retrieveNetworkStatus() {
+		console.log("retrieveNetworkStatus");
+		_networkAPI.status(function(data) {
+			console.log("_networkAPI.status complete");
+			console.log("  data: ",data);
+			if(data.status !== "" && typeof data.status === 'string') {
+				data.status = parseInt(data.status,10);
+			}
+			//console.log(_self.id,"NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
+			//console.log("  networkPanel ",_element[0]," parent: ",_element.parent()[0]);
+			// ToDo: update _currentNetwork when available
+			
+			setNetworkStatus(data.status,data);
+			
+			/*// Keep checking for updates?
+			switch(data.status) {
+				case NetworkAPI.STATUS.CONNECTING:
+				case NetworkAPI.STATUS.CREATING:
+					clearTimeout(_retryRetrieveStatusDelay);
+					_retryRetrieveStatusDelay = setTimeout(_self.retrieveStatus,_retryRetrieveStatusDelayTime); // retry after delay
+					break;
+			}*/
+			//if(completeHandler) completeHandler(data.status);
+		}, function() {
+			//console.log("NetworkPanel:retrieveStatus failed");
+			clearTimeout(_retryRetrieveStatusDelay);
+			_retryRetrieveStatusDelay = setTimeout(_self.retrieveStatus, _retryRetrieveStatusDelayTime); // retry after delay
 		});
-		
-		if(_self.destroyedHandler) _self.destroyedHandler(_self);
 	}
-}
+	function setNetworkStatus(status,data) {
+		console.log("setNetworkStatus: ",status,data);
+		if(status === NetworkAPI.STATUS.CONNECTED) { // online
+			_page.find("#drawItem a").text("Draw");
+			// ToDo: Link to update page (auto retrieve if available)
+			// ToDo: Link to your app here? 
+			// ToDo: Status
+			// ToDo: Control
+			_page.find("#joinNetworkItem").toggleClass("ui-screen-hidden",true);
+			
+		} else { // offline
+			_intro.text("Please connect your WiFi-Box to the internet. You can also use it offline but then you aren't able to update.");
+			
+			var joinNetworkItem = _page.find("#joinNetworkItem");
+			joinNetworkItem.toggleClass("ui-screen-hidden",false);
+			
+			var joinLink = joinNetworkItem.find("a").attr("href");
+			joinLink = d3d.util.replaceURLParameters(joinLink,_boxData);
+			joinNetworkItem.find("a").attr("href",joinLink);
+			
+			_page.find("#drawItem a").text("Draw (offline)");
+			
+			// ToDo: Status
+			// ToDo: Control
+		}
+		
+		// update info
+		/*switch(status) {
+			case NetworkAPI.STATUS.CONNECTED:
+				//console.log("  data.ssid: ",data.ssid);
+				if(data.ssid == "") {
+					_currentNetwork = undefined;
+					//data.status = NetworkAPI.STATUS.NOT_CONNECTED;
+					setStatus(NetworkAPI.STATUS.NOT_CONNECTED);
+				} else {
+					_currentNetwork = data.ssid;
+				}
+				break;
+			case NetworkAPI.STATUS.CONNECTING:
+				if(_selectedNetwork != undefined) {
+					targetNetwork = _selectedNetwork;
+				} else if(_currentNetwork != undefined) {
+					targetNetwork = _currentNetwork;
+				}
+			case NetworkAPI.STATUS.CREATING:
+			case NetworkAPI.STATUS.CREATED:					
+				_currentNetwork = undefined;
+				break;
+		}*/
+		_networkStatus = data.status;
+	}
+	
+	// to get to the box data we need the url
+	// only pagecontainer events contain url's
+	/*$.mobile.document.on( "pagecontainerbeforetransition", function( event, data ) {
+		//console.log("Box page pagebeforetransition");
+		var url = d3d.util.processURL(data.absUrl);
+		console.log("  url: ",url);
+		if(url.hash == PAGE_ID) {
+			_boxData = {
+				localip: url.parameters.localip,
+				wifiboxid: url.parameters.wifiboxid,
+				link: url.parameters.link,
+				url: "http://"+url.parameters.localip
+			}
+		}
+  });*/
+})(window);
