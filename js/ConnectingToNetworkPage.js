@@ -28,7 +28,6 @@
 		console.log("Connecting to network page pagebeforeshow");
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		var boxURL = "http://"+_pageData.localip;
-		//console.log("  _boxData: ",_boxData);
 		
 		_networkAPI.init(boxURL);
 		_networkAPI.refreshing = onRefreshing;
@@ -71,7 +70,7 @@
 				break;
 			case NetworkAPI.STATUS.CONNECTED:
 				statusText = "Connected";
-				actionText = "The WiFi-Box is connected to <b>"+_pageData.ssid+"</b>";
+				actionText = "The WiFi-Box is connected to <b>"+_pageData.ssid+"</b>. <br/>Please reconnect to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
 				_actionField.attr("class","info");
 				break;
 			default:
@@ -90,4 +89,3 @@
 		// attempt to retrieve connectAPI list, if same wifiboxid available (only works for version 0.10.2+), redirect to box page
 	}
 })(window);
-//new JoinNetworkPage();

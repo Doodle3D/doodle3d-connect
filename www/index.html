@@ -299,8 +299,10 @@
 	</div><!-- /header -->
 	<div role="main" class="ui-content">
 		<h3>Join a secured network</h3>
-		<input type="password" name="textinput-s" id="textinput-s" placeholder="Password" value="" data-clear-btn="true">
-		<button class="ui-shadow ui-btn ui-corner-all">Connect</button>
+		<form data-ajax="false" data-target="#connecting_to_network">
+			<input type="password" name="password" placeholder="Password" data-clear-btn="true">
+			<input type=submit value="Connect">
+		</form>
 	</div><!-- /content -->
 </div><!-- /page -->
 
