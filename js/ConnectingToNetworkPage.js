@@ -82,7 +82,7 @@
 		_statusField.html(statusText);
 		_actionField.html(actionText);
 		
-		if(data.status == NetworkAPI.STATUS.CONNECTED) {
+		if(data.status === NetworkAPI.STATUS.CONNECTED) {
 			_networkAPI.stopAutoRefresh();
 		}
 		

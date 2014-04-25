@@ -67,7 +67,7 @@
 			console.log("  network: ",network);
 			linkParams.ssid = network.ssid;
 			
-			var secured = (network.encryption !== "none" && network.encryption !== "")
+			var secured = (network.encryption !== "none" && network.encryption !== "");
 			var link;
 			var icon = "";
 			if(secured) {

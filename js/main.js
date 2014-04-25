@@ -19,11 +19,8 @@ d3d.util = {
 				var pair = value.split( "=" );
 				if ( pair.length > 0 && pair[ 0 ] ) {
 					parameters[ pair[ 0 ] ] =
-						( pair.length > 1 ? pair[ 1 ] : true );
+						( pair.length > 1 ? decodeURIComponent(pair[ 1 ]) : true );
 				}
-			});
-			$.each(parameters, function( index, value ) {
-				parameters[index] = decodeURIComponent(value)
 			});
 		}
 		return {
