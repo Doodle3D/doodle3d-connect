@@ -7,7 +7,7 @@
  */
 
 var BoxesPage = (function (w) {
-	var connectAPI = new ConnectAPI(); // TODO add _
+	var _connectAPI = new ConnectAPI();
 	
 	var _page; 
 	var _list;
@@ -20,18 +20,18 @@ var BoxesPage = (function (w) {
 		_list = _page.find("#boxeslist");
 		_findItem = _list.find("#findItem");
 		
-		connectAPI.refreshing = onRefreshing;
-		connectAPI.listUpdated = onListUpdated;
-		connectAPI.boxAppeared = onBoxAppeared;
-		connectAPI.boxDisapeared = onBoxDisapeared;
+		_connectAPI.refreshing = onRefreshing;
+		_connectAPI.listUpdated = onListUpdated;
+		_connectAPI.boxAppeared = onBoxAppeared;
+		_connectAPI.boxDisapeared = onBoxDisapeared;
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		//console.log("Boxes page pagebeforeshow");
-		connectAPI.start();
+		_connectAPI.start();
   });
 	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
 		//console.log("Boxes page pagehide");
-		connectAPI.stop();
+		_connectAPI.stop();
   });
 	
 	function onRefreshing() {
@@ -46,8 +46,10 @@ var BoxesPage = (function (w) {
 	function onBoxAppeared(boxData) {
 		console.log("onBoxAppeared: ",boxData.localip);
 		
-		var link = "#box?localip="+boxData.localip+"&wifiboxid="+boxData.wifiboxid;
-		if(boxData.link) { link += "&link="+boxData.link; }
+		var linkParams = {localip: boxData.localip,wifiboxid: boxData.wifiboxid};
+		if(boxData.link) { linkParams.link = boxData.link; }
+		var link = "#box";
+		link = d3d.util.replaceURLParameters(link,linkParams);
 		var id = boxData.localip.replace(/\./g,"-");
 		var linkElement = $("<a href='"+link+"' class='link'>"+boxData.wifiboxid+"</a>");
 		var box = $("<li id='"+id+"' class='box'></li>");

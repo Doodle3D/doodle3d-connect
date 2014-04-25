@@ -8,8 +8,13 @@
 
 var BoxPage = (function (w) {
 	var _page;
+	var _list;
 	var _title;
 	var _intro;
+	var _drawItem;
+	var _updateItem;
+	var _joinNetworkItem;
+	
 	var _networkStatus;
 	var _networkAPI = new NetworkAPI();
 	var _boxData = {};
@@ -22,9 +27,13 @@ var BoxPage = (function (w) {
 	$.mobile.document.on( "pageinit", PAGE_ID, function( event, data ) {
 		//console.log("Box page pageinit");
 		_page = $(this);
+		_list = _page.find("ul[data-role=listview]");
 		_title = _page.find(".ui-title");
 		_intro = _page.find(".intro");
 		
+		_drawItem = _page.find("#drawItem");
+		_updateItem = _page.find("#updateItem");
+		_joinNetworkItem = _page.find("#joinNetworkItem");
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Box page pagebeforeshow");
@@ -47,9 +56,8 @@ var BoxPage = (function (w) {
 		_networkAPI.status(function(data) {
 			console.log("_networkAPI.status complete");
 			console.log("  data: ",data);
-			if(data.status !== "" && typeof data.status === 'string') {
-				data.status = parseInt(data.status,10);
-			}
+			data.status = parseInt(data.status,10);
+			console.log("  data.status: ",data.status);
 			//console.log(_self.id,"NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
 			//console.log("  networkPanel ",_element[0]," parent: ",_element.parent()[0]);
 			// ToDo: update _currentNetwork when available
@@ -71,55 +79,40 @@ var BoxPage = (function (w) {
 			_retryRetrieveStatusDelay = setTimeout(_self.retrieveStatus, _retryRetrieveStatusDelayTime); // retry after delay
 		});
 	}
+	
 	function setNetworkStatus(status,data) {
 		console.log("setNetworkStatus: ",status,data);
+		console.log("  _updateItem: ",_updateItem);
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
-			_page.find("#drawItem a").text("Draw");
-			// ToDo: Link to update page (auto retrieve if available)
+			console.log("online");
+			_drawItem.find("#a").text("Draw");
 			// ToDo: Link to your app here? 
 			// ToDo: Status
 			// ToDo: Control
-			_page.find("#joinNetworkItem").toggleClass("ui-screen-hidden",true);
+			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
+			_updateItem.toggleClass("ui-screen-hidden",false);
+			// ToDo: retrieve update information
 			
 		} else { // offline
+			console.log("offline");
 			_intro.text("Please connect your WiFi-Box to the internet. You can also use it offline but then you aren't able to update.");
 			
-			var joinNetworkItem = _page.find("#joinNetworkItem");
-			joinNetworkItem.toggleClass("ui-screen-hidden",false);
+			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
 			
-			var joinLink = joinNetworkItem.find("a").attr("href");
+			var joinLink = _joinNetworkItem.find("a").attr("href");
 			joinLink = d3d.util.replaceURLParameters(joinLink,_boxData);
-			joinNetworkItem.find("a").attr("href",joinLink);
+			_joinNetworkItem.find("a").attr("href",joinLink);
 			
-			_page.find("#drawItem a").text("Draw (offline)");
+			_drawItem.find("a").text("Draw (offline)");
+			_updateItem.toggleClass("ui-screen-hidden",true);
 			
 			// ToDo: Status
 			// ToDo: Control
 		}
 		
-		// update info
-		/*switch(status) {
-			case NetworkAPI.STATUS.CONNECTED:
-				//console.log("  data.ssid: ",data.ssid);
-				if(data.ssid == "") {
-					_currentNetwork = undefined;
-					//data.status = NetworkAPI.STATUS.NOT_CONNECTED;
-					setStatus(NetworkAPI.STATUS.NOT_CONNECTED);
-				} else {
-					_currentNetwork = data.ssid;
-				}
-				break;
-			case NetworkAPI.STATUS.CONNECTING:
-				if(_selectedNetwork != undefined) {
-					targetNetwork = _selectedNetwork;
-				} else if(_currentNetwork != undefined) {
-					targetNetwork = _currentNetwork;
-				}
-			case NetworkAPI.STATUS.CREATING:
-			case NetworkAPI.STATUS.CREATED:					
-				_currentNetwork = undefined;
-				break;
-		}*/
+		// ToDo: update footer with network info
+		
+		_list.listview('refresh'); // jQuery mobile enhance content
 		_networkStatus = data.status;
 	}
 	
