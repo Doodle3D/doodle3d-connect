@@ -22,6 +22,9 @@ d3d.util = {
 						( pair.length > 1 ? pair[ 1 ] : true );
 				}
 			});
+			$.each(parameters, function( index, value ) {
+				parameters[index] = decodeURIComponent(value)
+			});
 		}
 		return {
 				parsed: parsed,
@@ -37,6 +40,7 @@ d3d.util = {
 		href = href.split("?")[0];
 		var i = 0;
 		jQuery.each(parameters, function (key,value) {
+			value = encodeURIComponent(value);
 			href += (i===0)? "?" : "&";
 			href += key+"="+value;
 			i++;
