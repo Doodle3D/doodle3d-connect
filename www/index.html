@@ -280,31 +280,18 @@
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
-		<p>Select your own network from the following list:</p>
-		<br/>
-		<ul data-role="listview">
+		<!-- <p>Select your own network from the following list:</p>
+		<br/> -->
+		<ul data-role="listview" 
+			data-connecting-target="#connecting_to_network" 
+			data-secured-target="#join_secured_network">
 			<!-- <li data-icon="lock"><a href="#join_secured_network">Baksteen</a></li>
 			<li><a href="#connecting_to_network">Thomson12445</a></li>
-			<li><a href="#connecting_to_network">H234SD53</a></li>
-			<li data-icon="edit"><a href="#join_other_network">Other...</a></li> -->
+			<li><a href="#connecting_to_network">H234SD53</a></li>-->
+			<li data-icon="edit" id="joinOther"><a href="#join_other_network">Other...</a></li>
 		</ul>
 	</div><!-- /content -->
 
-</div><!-- /page -->
-
-
-<div data-role="page" id="join_other_network">
-	<a href="#devices"><img id="logo" src="img/logo_full.png"></a>
-	<div data-role="header">
-		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Connect</h1>
-	</div><!-- /header -->
-	<div role="main" class="ui-content">
-		<h3>Join a hidden network</h3>
-		<input type="text" name="textinput-s" id="ssid" placeholder="Network name" value="" data-clear-btn="true">
-		<input type="password" name="textinput-s" id="textinput-s" placeholder="Password" value="" data-clear-btn="true">
-		<button class="ui-shadow ui-btn ui-corner-all">Connect</button>
-	</div><!-- /content -->
 </div><!-- /page -->
 
 <div data-role="page" id="join_secured_network">
@@ -320,16 +307,30 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
-<div data-role="page" id="connecting_to_network">
+<div data-role="page" id="join_other_network">
 	<a href="#devices"><img id="logo" src="img/logo_full.png"></a>
 	<div data-role="header">
 		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 		<h1>Connect</h1>
 	</div><!-- /header -->
 	<div role="main" class="ui-content">
+		<h3>Join a hidden network</h3>
+		<input type="text" name="textinput-s" id="ssid" placeholder="Network name" value="" data-clear-btn="true">
+		<input type="password" name="textinput-s" id="textinput-s" placeholder="Password" value="" data-clear-btn="true">
+		<button class="ui-shadow ui-btn ui-corner-all">Connect</button>
+	</div><!-- /content -->
+</div><!-- /page -->
+
+<div data-role="page" id="connecting_to_network">
+	<a href="#devices"><img id="logo" src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Connecting...</h1>
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
 		<img id="logo" src="img/Connect to home.png">
-		<h3>Connecting to network...</h3>
-		<p>Your WiFi-Box is trying to connect to your local network. To use your WiFi-Box, reconnect to the network you directed the WiFi-Box to. Once you are connected return to this page.</p>
+		<h3 id="status"></h3>
+		<p id="action"></p>
 		<!-- redirect to connect.doodle3d.com when reconnected to internet --> 
 	</div><!-- /content -->
 </div><!-- /page -->
