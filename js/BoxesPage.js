@@ -39,9 +39,7 @@ var BoxesPage = (function (w) {
 		d3d.util.showLoader(true);
 	}
 	function onListUpdated(boxesData) {
-		console.log("onListUpdated: ",boxesData);
-		_list.append(_findItem); // make sure find is the last item
-		_list.listview('refresh'); // jQuery mobile enhance content
+		//console.log("onListUpdated: ",boxesData);
 	}
 	function onBoxAppeared(boxData) {
 		console.log("onBoxAppeared: ",boxData.localip);
@@ -55,6 +53,8 @@ var BoxesPage = (function (w) {
 		var box = $("<li id='"+id+"' class='box'></li>");
 		box.append(linkElement);
 		box.hide().appendTo(_list).fadeIn(500);
+		_list.append(_findItem); // make sure find is the last item
+		_list.listview('refresh'); // jQuery mobile enhance content
 	}
 	function onBoxDisapeared(boxData) {
 		console.log("onBoxDisapeared: ",boxData.localip);
