@@ -15,20 +15,10 @@
   <link rel="icon" type="image/ico" href="./img/favicon.ico">
 	
 	<!-- <link rel="stylesheet" href="js/libs/jquery.mobile/jquery.mobile-1.4.2.min.css" /> -->
-	<!-- <link rel="stylesheet" href="css/add2home.css" media="screen"> -->
 	<link rel="stylesheet" href="css/doodle3d-server.min.css"/>
 	
 	<!-- <script src="jquery/jquery-1.11.0.min.js"></script>
-	<script src="jquery.mobile/jquery.mobile-1.4.2.min.js"></script>
-	<script src="js/libs/spin.min.js" type="text/javascript"></script>
-	<script src="js/libs/add2home.js" type="text/javascript"></script>
-	<script src="js/libs/jquery.showpassword.js" type="text/javascript"></script>
-	<script src="js/libs/jquery.stayInWebApp.js" type="text/javascript"></script>
-	<script src="js/api/NetworkAPI.js" type="text/javascript"></script>
-	<script src="js/api/ConnectAPI.js" type="text/javascript"></script>
-	<script src="js/main.js"></script>
-	<script src="js/boxes.js"></script>
-	<script src="js/box.js"></script> -->
+	<script src="jquery.mobile/jquery.mobile-1.4.2.min.js"></script>-->
 	<script src="js/doodle3d-server.js" type="text/javascript"></script>
 	
 </head>
@@ -81,48 +71,21 @@
 
 <!-- Start of FIND page -->
 <div data-role="page" id="find">
-
 	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
 	<div data-role="header">
 		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Find a WiFi-Box</h1>
-	</div><!-- /header -->
-
-
-	<div role="main" class="ui-content">
-
-	<img id = "logo" src="img/Step_1.png">
-	<h1>Step 1 of 2</h1>
-	<p>There's a big chance the Doodle3D WiFi-Box you're looking for is running it's own network. Please open your network settings and connect to a network like 'Doodle3D-...'. Once connected return to this page.<small> (<a href="#problems">problems?</a>)</small>
-
-	<a href="#find_step2" class="ui-btn">Next</a>
-	
-	</div><!-- /content -->
-</div><!-- /page -->
-
-
-<!-- Start of FIND_STEP2 page -->
-<div data-role="page" id="find_step2">
-
-	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
-	<div data-role="header">
-		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Find a WiFi-Box</h1>
+		<h1>Find WiFi-Box</h1>
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
 
-	<h1>Step 2 of 2</h1>
+		<p>There's a big chance the Doodle3D WiFi-Box you're looking for is running it's own network. Please open your network settings and connect to a network like 'Doodle3D-...'. Once connected return to this page.<small> (<a href="#problems">problems?</a>)</small>
 	
-	<p>We found your Doodle3D WiFi-Box. Please connect your WiFi-Box to the internet. You can also use it offline but then you aren't able to update.</p>
-	<br>
-	<ul data-role="listview">
-		<li><a href="#network">Connect to the internet</a></li>
-		<li><a href="#draw">Draw (offline)</a></li>
-	</ul>
-	
+		<a href="#find_step2" class="ui-btn">Next</a>
+		
 	</div><!-- /content -->
 </div><!-- /page -->
+
 
 <!-- Start of STEP1_PROBLEMS page -->
 <div data-role="page" id="problems">
@@ -132,7 +95,6 @@
 		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 		<h1>Troubleshooting</h1>
 	</div><!-- /header -->
-
 
 	<div role="main" class="ui-content">
 
@@ -183,7 +145,6 @@
 		<h1>Troubleshooting</h1>
 	</div><!-- /header -->
 
-
 	<div role="main" class="ui-content">
 		<h3>Locate WiFi-Box</h3>
 		<p>If you are able to connect to connect.doodle3d.com through the internet this means you are connected to a network.</p>
@@ -221,55 +182,6 @@
 
 	</div><!-- /content -->
 </div><!-- /page -->
-
-
-
-<!-- Start of reset page -->
-<div data-role="page" id="reset">
-
-	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
-	<div data-role="header">
-		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Troubleshooting</h1>
-	</div><!-- /header -->
-
-	<div role="main" class="ui-content">
-
-		<p>If your WiFi-Box is already connected to another network, it is possible to reset the WiFi-Box and make it run it's own network again.</p>
-		<ul>
-			<li><p>You can do this by press and holding the green light button on the top of the WiFi-Box. By holding this button for 3 seconds the WiFi-Box will reset its own network.</p></li>
-
-			<li><p>If you have a device with an Ethernet port, it is always possible to connect your WiFi-Box through the ethernet cable.</p></li>
-		</ul>
-
-	</div><!-- /content -->
-</div><!-- /page -->
-
-<!-- Start of first page -->
-<div data-role="page" id="status">
-
-	<img id="logo" src="img/logo_full.png">
-	<div data-role="header">
-			<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-			<h1>Ultimaker @ Doodle3D-123456</h1>
-	</div><!-- /header -->
-
-	<div role="main" class="ui-content">
-
-		<ul data-role="listview">
-				<li data-role="list-divider">temperature</li>
-				<li>nozzle: 223</li>
-				<li>bed: 85</li>
-				<li data-role="list-divider">progress</li>
-				<li>printing time: 20m</li>
-				<li>time left: 2h30</li>
-		</ul>
-
-
-	</div><!-- /content -->
-
-</div><!-- /page -->
-
 
 <div data-role="page" id="join_network">
 
@@ -334,28 +246,6 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
-<div data-role="page" id="draw">
-	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
-
-	<div role="main" class="ui-content">
-		<div id="drawingCanvas"></div>
-	</div><!-- /content -->
-
-</div><!-- /page -->
-
-
-<div data-role="page" id="settings">
-
-	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
-
-	<div role="main" class="ui-content">
-		<p>Settings</p>
-
-	</div><!-- /content -->
-
-</div><!-- /page -->
-
-
 <div data-role="page" id="tune">
 
 	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
@@ -402,11 +292,24 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
-
-<div data-role="page" id="control">
+<div data-role="page" id="update">
 
 	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
 
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Update</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+
+<div data-role="page" id="control">
+	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
 	<div data-role="header">
 		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 		<h1>Ultimaker @ Doodle3D-123456</h1>
@@ -430,27 +333,54 @@
 			<div class="ui-block-a"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-u ui-btn-icon-left">Z-</button></div>
 			<div class="ui-block-b"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-d ui-btn-icon-right">Z+</button></div>
 		</div>
-		
 	</div><!-- /content -->
-
 </div><!-- /page -->
 
-
-<div data-role="page" id="update">
+<!-- Start of reset page -->
+<div data-role="page" id="reset">
 
 	<a href="#boxes"><img id="logo" src="img/logo_full.png"></a>
-
 	<div data-role="header">
 		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Update</h1>
+		<h1>Troubleshooting</h1>
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
 
+		<p>If your WiFi-Box is already connected to another network, it is possible to reset the WiFi-Box and make it run it's own network again.</p>
+		<ul>
+			<li><p>You can do this by press and holding the green light button on the top of the WiFi-Box. By holding this button for 3 seconds the WiFi-Box will reset its own network.</p></li>
+
+			<li><p>If you have a device with an Ethernet port, it is always possible to connect your WiFi-Box through the ethernet cable.</p></li>
+		</ul>
+
+	</div><!-- /content -->
+</div><!-- /page -->
+
+<!-- Start of first page -->
+<div data-role="page" id="status">
+
+	<img id="logo" src="img/logo_full.png">
+	<div data-role="header">
+			<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+			<h1>Ultimaker @ Doodle3D-123456</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+
+		<ul data-role="listview">
+				<li data-role="list-divider">temperature</li>
+				<li>nozzle: 223</li>
+				<li>bed: 85</li>
+				<li data-role="list-divider">progress</li>
+				<li>printing time: 20m</li>
+				<li>time left: 2h30</li>
+		</ul>
+
+
 	</div><!-- /content -->
 
 </div><!-- /page -->
-
 
 	<script>
 		$(function(){
