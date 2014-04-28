@@ -96,7 +96,9 @@ module.exports = function(grunt) {
           console: false,
           d3d: true,
           ConnectAPI: true,
-          NetworkAPI: true
+          NetworkAPI: true,
+          InfoAPI: true,
+          ConfigAPI: true
         },
         browser: true,
         curly: true,
