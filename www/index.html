@@ -31,10 +31,6 @@
 	<!-- <p>Please select your Doodle3D WiFi-Box to connect or press search to add your box to this list.</p> -->
 	<div role="main" class="ui-content">
 		<ul data-role="listview" id="boxeslist">
-				<!-- <li><a href="#wifibox">Doodle3D-A4D953</a></li>
-				<li><a href="#wifibox">Doodle3D-Rick</a></li>
-				<li><a href="#wifibox">Doodle3D-D63BA4</a></li>
-				<li><a href="#connect_ap">Wired WiFi-Box</a></li> -->
 				<li id="findItem"><a href="#find">Find...</a></li>
 		</ul>
 	</div><!-- /content -->
@@ -170,46 +166,7 @@
 	<div role="main" class="ui-content">
 		<img id="logo" src="img/Connect to home.png">
 		<h3 id="status"></h3>
-		<p id="action"></p>
-		<!-- redirect to connect.doodle3d.com when reconnected to internet --> 
-	</div><!-- /content -->
-</div><!-- /page -->
-
-
-<div data-role="page" id="tune">
-	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
-	<div data-role="header">
-		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Ultimaker @ Doodle3D-123456</h1>
-	</div><!-- /header -->
-	<div role="main" class="ui-content">
-		<h3>Tune [current value's]</h3>
-		<div data-role="fieldcontain">
-				<label for="slider-0">Speed [<div id="divSpeed" style="display: inline;">100</div>%]:</label>
-				<input type="range" name="slider" id="slider-0" value="100" min="0" max="300" step="1" />
-		</div>
-		<div data-role="fieldcontain">
-				<label for="slider-0">Temp [<div id="divHotend" style="display: inline;"></div>&deg;C/<div id="divHotendTarget" style="display: inline;">0</div>&deg;C]:</label>
-				<input type="range" name="printer.temperature" id="sliderHotend" value="200" min="0" max="250" step="1" />
-		</div>
-		<div data-role="fieldcontain">
-				<label for="slider-0">Flow [<div id="divFlow" style="display: inline;">100</div>%]:</label>
-				<input type="range" name="slider" id="slider-0" value="100" min="10" max="300" step="1" />
-		</div>
-		<div data-role="fieldcontain">
-				<label for="slider-0">Fan Speed [<div id="divFan" style="display: inline;">0</div>%]:</label>
-				<input type="range" name="slider" id="slider-0" value="255" min="0" max="255" step="1" />
-		</div>
-		<div data-role="fieldcontain">
-				<label for="basic">Custom gcode:</label>
-				<input type="text" name="name" id="basic" value=""  />
-		</div>
-		<div class="ui-body">
-			<fieldset class="ui-grid-a">
-					<div class="ui-block-a"><button type="submit" data-theme="c">Cancel</button></div>
-					<div class="ui-block-b"><button type="submit" data-theme="b">Submit</button></div>
-			</fieldset>
-		</div>
+		<p id="action"></p> 
 	</div><!-- /content -->
 </div><!-- /page -->
 
@@ -224,48 +181,6 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
-
-<div data-role="page" id="control">
-	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
-	<div data-role="header">
-		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-		<h1>Ultimaker @ Doodle3D-123456</h1>
-	</div><!-- /header -->
-	<div role="main" class="ui-content">
-		<h3>Control</h3>
-		<div class="ui-grid-a">
-			<div class="ui-block-a"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-l ui-btn-icon-left">X-</button></div>
-			<div class="ui-block-b"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-r ui-btn-icon-right">X+</button></div>
-		</div>
-		<div class="ui-grid-a">
-			<div class="ui-block-a"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-u ui-btn-icon-left">Y-</button></div>
-			<div class="ui-block-b"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-d ui-btn-icon-right">Y+</button></div>
-		</div>
-		<div class="ui-grid-a">
-			<div class="ui-block-a"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-u ui-btn-icon-left">Z-</button></div>
-			<div class="ui-block-b"><button type="submit" data-theme="c" class="ui-btn ui-icon-arrow-d ui-btn-icon-right">Z+</button></div>
-		</div>
-	</div><!-- /content -->
-</div><!-- /page -->
-
-
-<div data-role="page" id="status">
-	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
-	<div data-role="header">
-			<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-			<h1>Ultimaker @ Doodle3D-123456</h1>
-	</div><!-- /header -->
-	<div role="main" class="ui-content">
-		<ul data-role="listview">
-				<li data-role="list-divider">temperature</li>
-				<li>nozzle: 223</li>
-				<li>bed: 85</li>
-				<li data-role="list-divider">progress</li>
-				<li>printing time: 20m</li>
-				<li>time left: 2h30</li>
-		</ul>
-	</div><!-- /content -->
-</div><!-- /page -->
 
 	<script>
 		$(function(){
