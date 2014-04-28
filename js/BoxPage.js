@@ -85,7 +85,7 @@ var BoxPage = (function (w) {
 		console.log("  _updateItem: ",_updateItem);
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			console.log("online");
-			_drawItem.find("#a").text("Draw");
+			_drawItem.find("a").text("Draw");
 			// ToDo: Link to your app here? 
 			// ToDo: Status
 			// ToDo: Control
