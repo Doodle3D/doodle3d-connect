@@ -15,6 +15,7 @@
 	var _connectAPI = new ConnectAPI();
 	var _infoAPI = new InfoAPI();
 	var _pageData = {};
+	var _wifiboxid;
 	var _connectedChecking = false;
 	
 	var PAGE_ID = "#connecting_to_network";
