@@ -12,7 +12,10 @@
 	var _statusField;
 	var _actionField;
 	var _networkAPI = new NetworkAPI();
+	var _connectAPI = new ConnectAPI();
+	var _infoAPI = new InfoAPI();
 	var _pageData = {};
+	var _connectedChecking = false;
 	
 	var PAGE_ID = "#connecting_to_network";
 	
@@ -29,20 +32,36 @@
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		var boxURL = "http://"+_pageData.localip;
 		
+		_infoAPI.init(boxURL);
 		_networkAPI.init(boxURL);
-		_networkAPI.refreshing = onRefreshing;
-		_networkAPI.updated = onStatusUpdated;
-		joinNetwork();
-		_networkAPI.startAutoRefresh();
+		retrieveWiFiBoxID(function() {
+			joinNetwork();
+			_networkAPI.refreshing = onRefreshing;
+			_networkAPI.updated = onStatusUpdated;
+			_networkAPI.startAutoRefresh();
+		});
   });
 	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
 		console.log("Connecting to network page pagehide");
 		_networkAPI.stopAutoRefresh();
+		_connectAPI.stop();
   });
+	function retrieveWiFiBoxID(completeHandler) {
+		console.log(PAGE_ID+":retrieveWiFiBoxID");
+		_infoAPI.getInfo(function(infoData) {
+			_wifiboxid = infoData.wifiboxid;
+			console.log("  _wifiboxid: ",_wifiboxid);
+			completeHandler();
+		},function() {
+			// try connecting anyway (making sure wifiboxid retrieval isn't blocking
+			completeHandler();
+		});
+	}
 	function joinNetwork() {
 		console.log("joinNetwork");
 		console.log("  _pageData.password: ",_pageData.password);
-		_networkAPI.associate(_pageData.ssid,_pageData.password,true);		
+		_networkAPI.associate(_pageData.ssid,_pageData.password,true);
+		_connectedChecking = false;
 	}
 	function onRefreshing() {
 		//console.log("ConnectingToNetworkPage:onRefreshing");
@@ -60,18 +79,14 @@
 		switch(data.status) {
 			case NetworkAPI.STATUS.CONNECTING:
 				statusText = "Connecting to network ";
-				actionText = "Please reconnect to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
-				_actionField.attr("class","info");
+				//actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
+				actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Keep this page open.";
+				_actionField.attr("class","notice"); 
 				break;
 			case NetworkAPI.STATUS.CONNECTING_FAILED:
 				statusText = "Could not connect...";
 				actionText = "Please check password and try again";
 				_actionField.attr("class","error");
-				break;
-			case NetworkAPI.STATUS.CONNECTED:
-				statusText = "Connected";
-				actionText = "The WiFi-Box is connected to <b>"+_pageData.ssid+"</b>. <br/>Please reconnect to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
-				_actionField.attr("class","info");
 				break;
 			default:
 				actionText = "Something went wrong, please try again";
@@ -81,11 +96,36 @@
 		_statusField.html(statusText);
 		_actionField.html(actionText);
 		
-		if(data.status === NetworkAPI.STATUS.CONNECTED) {
-			_networkAPI.stopAutoRefresh();
+		// When the box is connecting we start checking connect.doodle3d.com 
+		// for a box with the same wifiboxid 
+		if(data.status === NetworkAPI.STATUS.CONNECTING && !_connectedChecking && _wifiboxid !== undefined) {
+			_connectAPI.boxAppeared = onBoxAppeared;
+			_connectAPI.start();
+			_connectedChecking = true;
 		}
-		
-		// ToDo: attempt to auto redirect to connected WiFi-Box
-		// attempt to retrieve connectAPI list, if same wifiboxid available (only works for version 0.10.2+), redirect to box page
+	}
+	function onBoxAppeared(boxData) {
+		console.log(PAGE_ID+":onBoxAppeared: ",boxData.localip,boxData.wifiboxid);
+		// if same box is found...
+		if(boxData.wifiboxid === _wifiboxid) {
+			// check if it finished connecting 
+			var boxURL = "http://"+boxData.localip;
+			var connectedBoxNetworkAPI = new NetworkAPI();
+			connectedBoxNetworkAPI.init(boxURL);
+			connectedBoxNetworkAPI.updated = function(data) {
+				data.status = parseInt(data.status,10);
+				console.log(PAGE_ID+":connectedBoxNetworkAPI:onStatusUpdated: ",data.status);
+				if(data.status === NetworkAPI.STATUS.CONNECTED) {
+					// redirect to it's box page
+					console.log("  redirect to box");
+					var linkParams = {localip: boxData.localip,wifiboxid: boxData.wifiboxid};
+					var link = "#box";
+					link = d3d.util.replaceURLParameters(link,linkParams);
+					$.mobile.changePage(link);
+					connectedBoxNetworkAPI.stopAutoRefresh();
+				}
+			};
+			connectedBoxNetworkAPI.startAutoRefresh();
+		}
 	}
 })(window);
