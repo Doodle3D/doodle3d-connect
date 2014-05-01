@@ -133,17 +133,11 @@ module.exports = function(grunt) {
     watch: {
       javascript: {
         files: ["js/**", '!www/js/<%= pkg.name %>.min.js', '!www/js/<%= pkg.name %>.js'],
-        tasks: ["concat:js", "uglify:js"]
-//        tasks: ["jshint", "concat", "uglify"]
+        tasks: ["jshint", "concat:js", "uglify:js"]
       },
-//      javascriptLibs: {
-//        files: ["js/libs/*"],
-//        tasks: ["uglify:jslibs"]
-////        tasks: ["jshint", "concat", "uglify"]
-//      },
       styles: {
-        files: ["less/*"],
-        tasks: ["concat:less", "less", "autoprefixer", "cssmin"]
+        files: ["less/**"],
+        tasks: ["less", "autoprefixer", "concat:less", "cssmin"]
       }
     },
   });
