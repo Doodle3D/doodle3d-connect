@@ -138,7 +138,9 @@
 	<div role="main" class="ui-content">
 		<h3>Join a secured network</h3>
 		<form data-ajax="false" data-target="#connecting_to_network">
-			<input type="password" name="password" placeholder="Password" data-clear-btn="true">
+			<input type="password" name="password" placeholder="Password" data-clear-btn="true" data-typetoggle='#showPassword' autocomplete="off">
+			<input id="showPassword" type="checkbox" value="showPassword">
+			<label for="showPassword" class="inline">show password</label>
 			<input type=submit value="Connect">
 		</form>
 	</div><!-- /content -->
