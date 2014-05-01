@@ -79,15 +79,20 @@
 		var actionText = "";
 		switch(data.status) {
 			case NetworkAPI.STATUS.CONNECTING:
-				statusText = "Connecting to network ";
+				statusText = "Connecting to "+_pageData.ssid+"...";
 				//actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
-				actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once connected return to this page.";
+				actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
 				_actionField.attr("class","notice"); 
 				break;
 			case NetworkAPI.STATUS.CONNECTING_FAILED:
 				statusText = "Could not connect...";
 				actionText = "Please check password and try again";
 				_actionField.attr("class","error");
+				break;
+			case NetworkAPI.STATUS.CONNECTED:
+				statusText = "Connected to "+_pageData.ssid;
+				actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
+				_actionField.attr("class","notice"); 
 				break;
 			default:
 				actionText = "Something went wrong, please try again";

@@ -42,7 +42,7 @@ var BoxPage = (function (w) {
 		console.log("  _boxData: ",_boxData);
 		
 		_title.text(_boxData.wifiboxid);
-		_intro.text("");
+		setNetworkStatus(NetworkAPI.STATUS.CONNECTED);
 		
 		var drawLink = (_boxData.link)? _boxData.link : boxURL;
 		_page.find("#drawItem a").attr("href",drawLink);
@@ -62,7 +62,7 @@ var BoxPage = (function (w) {
 			//console.log("  networkPanel ",_element[0]," parent: ",_element.parent()[0]);
 			// ToDo: update _currentNetwork when available
 			
-			setNetworkStatus(data.status,data);
+			setNetworkStatus(data.status);
 			
 			/*// Keep checking for updates?
 			switch(data.status) {
@@ -80,9 +80,10 @@ var BoxPage = (function (w) {
 		});
 	}
 	
-	function setNetworkStatus(status,data) {
-		console.log("setNetworkStatus: ",status,data);
+	function setNetworkStatus(status) {
+		console.log("setNetworkStatus: ",status);
 		console.log("  _updateItem: ",_updateItem);
+		var introText = "";
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			console.log("online");
 			_drawItem.find("a").text("Draw");
@@ -93,9 +94,11 @@ var BoxPage = (function (w) {
 			_updateItem.toggleClass("ui-screen-hidden",false);
 			// ToDo: retrieve update information
 			
+			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
+			
 		} else { // offline
 			console.log("offline");
-			_intro.text("Please connect your WiFi-Box to the internet. You can also use it offline but then you aren't able to update.");
+			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
 			
@@ -110,10 +113,13 @@ var BoxPage = (function (w) {
 			// ToDo: Control
 		}
 		
+		_intro.text(introText);
+		_intro.toggleClass("ui-screen-hidden",(introText === ""));
+		
 		// ToDo: update footer with network info
 		
 		_list.listview('refresh'); // jQuery mobile enhance content
-		_networkStatus = data.status;
+		_networkStatus = status;
 	}
 	
 	// to get to the box data we need the url

@@ -1,5 +1,6 @@
-body {
-	
+body.ui-mobile-viewport {
+	margin: 0 auto;
+	max-width: 1024px;
 }
 
 #logo {
@@ -10,39 +11,41 @@ body {
 	margin: 10px 5px 5px 5px;
 	max-width: 200px;
 }
-
-.ui-content ul {
-	padding: 0 0 0 1em;
-}
-.ui-content ul.ui-listview {
-	padding: 0;
+#slogan {
+	text-align: center;
 }
 
+.ui-content {
+	ul {
+		padding: 0 0 0 1em;
+	}
+	ul.ui-listview {
+		padding: 0;
+	}
+	.intro {
+		margin: 0 0 2em 0;
+	}
+	img {
+		max-width: 100%;
+	}
+}
 
 #action {
 	margin: 0 -1em;
 	padding: 1em;
 	color: #fff;
   text-shadow: 0px 1px 0px #999;
-}
-
-#action.error {
+	&.error {
     background: #EB313C;
     text-shadow: 0px 1px 0px #333;
-}
-#action.warning {
+	}
+	&.warning {
     background: #E9A86E;
 }
-#action.notice {
-    background: #93CAF4;
-}
-#action.info {
-    background: #97DD8A;
-}
-
-@media only screen and (min-width: 768px) {
-	body {
-		padding-left: 20em;
-		padding-right: 20em;
+	&.notice {
+	    background: #93CAF4;
+	}
+	&.info {
+	    background: #97DD8A;
 	}
 }
