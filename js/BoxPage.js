@@ -52,12 +52,12 @@ var BoxPage = (function (w) {
   });
 	
 	function retrieveNetworkStatus() {
-		console.log("retrieveNetworkStatus");
+		//console.log("retrieveNetworkStatus");
 		_networkAPI.status(function(data) {
-			console.log("_networkAPI.status complete");
-			console.log("  data: ",data);
+			//console.log("_networkAPI.status complete");
+			//console.log("  data: ",data);
 			data.status = parseInt(data.status,10);
-			console.log("  data.status: ",data.status);
+			//console.log("  data.status: ",data.status);
 			//console.log(_self.id,"NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
 			//console.log("  networkPanel ",_element[0]," parent: ",_element.parent()[0]);
 			// ToDo: update _currentNetwork when available
@@ -81,11 +81,10 @@ var BoxPage = (function (w) {
 	}
 	
 	function setNetworkStatus(status) {
-		console.log("setNetworkStatus: ",status);
-		console.log("  _updateItem: ",_updateItem);
+		//console.log("setNetworkStatus: ",status);
 		var introText = "";
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
-			console.log("online");
+			//console.log("online");
 			_drawItem.find("a").text("Draw");
 			// ToDo: Link to your app here? 
 			// ToDo: Status
@@ -97,7 +96,7 @@ var BoxPage = (function (w) {
 			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
 			
 		} else { // offline
-			console.log("offline");
+			//console.log("offline");
 			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);

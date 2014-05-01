@@ -12,9 +12,10 @@ d3d.util = {
 	parseURL:function(url) {
 		var parsed = $.mobile.path.parseUrl( url );
 		var hashParts = parsed.hash.split( "?" );
-		var parameters = {};
+		var parameters;
 			// Assemble query parameters object from the query string
 		if (hashParts.length > 1) {
+			parameters = {};
 			$.each(hashParts[1].split( "&" ), function( index, value ) {
 				var pair = value.split( "=" );
 				if ( pair.length > 0 && pair[ 0 ] ) {
@@ -60,30 +61,30 @@ d3d.util = {
 };
 
 (function (w) {
-	
-	/*$.mobile.document.on( "pagebeforechange", function( event, data ) {
-		console.log("pagebeforechange");
-		//console.log("	event: ",event);
-		//console.log("	data: ",data);
-		d3d.pageParams[pageID]
-		
-		if ($.type(data.toPage) === "string") {
-			console.log("	data.toPage: ",data.toPage);
-			//var url = d3d.util.processURL(data.toPage);
-			//data.url = url;
-			// add to data attribute of target page ?
-		}
-	});*/
-	
-	// to get to url parameters we need the url
+	//$(function () {
+	//to get to url parameters we need the url
 	// only pagecontainer events contain url's
 	// we parse the parameters and store them in a global object
-	$.mobile.document.on( "pagecontainerbeforetransition", function( event, data ) {
-		//console.log("pagecontainerbeforetransition");
-		var url = d3d.util.parseURL(data.absUrl);
+	$.mobile.document.on( "pagebeforechange", function( event, data ) {
+		//console.log("pagebeforechange");
+		//console.log("	event: ",event);
+		//console.log("	data: ",data);
+		//d3d.pageParams[pageID]
+		//console.log("	data.toPage: ",data.toPage);
+		if (typeof data.toPage !== "string") { return; }			
+		
+		var url = d3d.util.parseURL(data.toPage);
 		//console.log("	url: ",url);
+		//console.log("	url.hash: ",url.hash);
+		if(url.parameters === undefined) { return; }
 		if(!d3d.pageParams) { d3d.pageParams = {}; }
 		d3d.pageParams[url.hash] = url.parameters;
+		
+		// let jQuery mobile navigate to page (providing only the page id so it understands)
+		$.mobile.changePage(url.hash, data.options);
+		// replace the history item with a url including parameters
+		window.history.replaceState(null, null, url.parsed.href);
+		// make sure that the parameters are not removed from the visible url
+		event.preventDefault();
 	});
-	
 })(window);
