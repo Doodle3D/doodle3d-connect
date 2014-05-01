@@ -15,6 +15,7 @@
 	var _connectAPI = new ConnectAPI();
 	var _infoAPI = new InfoAPI();
 	var _pageData = {};
+	var _formData;
 	var _wifiboxid;
 	var _connectedChecking = false;
 	
@@ -33,6 +34,9 @@
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		var boxURL = "http://"+_pageData.localip;
 		
+		var form = data.prevPage.find("form");
+		_formData = d3d.util.getFormData(form);
+				
 		_infoAPI.init(boxURL);
 		_networkAPI.init(boxURL);
 		retrieveWiFiBoxID(function() {
@@ -60,8 +64,7 @@
 	}
 	function joinNetwork() {
 		console.log("joinNetwork");
-		console.log("  _pageData.password: ",_pageData.password);
-		_networkAPI.associate(_pageData.ssid,_pageData.password,true);
+		_networkAPI.associate(_pageData.ssid,_formData.password,true);
 		_connectedChecking = false;
 	}
 	function onRefreshing() {

@@ -44,8 +44,6 @@
 		// ToDo: validation
 		// http://www.raymondcamden.com/index.cfm/2012/7/30/Example-of-form-validation-in-a-jQuery-Mobile-Application
 		
-		var linkParams = _pageData;
-		linkParams.password = _passwordField.val();
 		var submitLink = _form.data("target");
 		submitLink = d3d.util.replaceURLParameters(submitLink,_pageData);
 		$.mobile.changePage(submitLink);

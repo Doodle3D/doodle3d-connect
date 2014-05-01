@@ -16,7 +16,7 @@ d3d.util = {
 			// Assemble query parameters object from the query string
 		if (hashParts.length > 1) {
 			parameters = {};
-			$.each(hashParts[1].split( "&" ), function( index, value ) {
+			jQuery.each(hashParts[1].split( "&" ), function( index, value ) {
 				var pair = value.split( "=" );
 				if ( pair.length > 0 && pair[ 0 ] ) {
 					parameters[ pair[ 0 ] ] =
@@ -57,6 +57,13 @@ d3d.util = {
 	},
 	hideLoader:function() {
 		$.mobile.loading('hide');
+	},
+	getFormData:function(form) {
+		var formData = {};
+		jQuery.each(form.serializeArray(), function(index,field) {
+			formData[field['name']] = field['value']; 
+		});
+		return formData;
 	}
 };
 
@@ -73,6 +80,7 @@ d3d.util = {
 		//console.log("	data.toPage: ",data.toPage);
 		if (typeof data.toPage !== "string") { return; }			
 		
+		console.log("pagebeforechange, data: ",data);
 		var url = d3d.util.parseURL(data.toPage);
 		//console.log("	url: ",url);
 		//console.log("	url.hash: ",url.hash);
