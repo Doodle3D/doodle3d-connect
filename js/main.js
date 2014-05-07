@@ -47,7 +47,11 @@ d3d.util = {
 	},
 	showLoader:function(autoHide) {
 		setTimeout(function(){
-			$.mobile.loading('show');
+			var loader = $.mobile.loading('show'); //.addClass("fadePrepare");
+			loader.addClass("fadeIn");
+			/*setTimeout(function() {
+				loader.addClass("fadeIn");
+			},500);*/
 			if(autoHide) {
 				setTimeout(function() {
 					$.mobile.loading('hide');

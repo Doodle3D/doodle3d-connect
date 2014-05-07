@@ -49,3 +49,13 @@ body.ui-mobile-viewport {
 	    background: #97DD8A;
 	}
 }
+
+/* hack to fadein loader widget (will break normal loader usage) */
+.ui-loader {
+	display: block;
+	opacity: 0;
+	transition: opacity 0.5s linear;
+}
+.ui-loading .ui-loader.fadeIn {
+	opacity: 0.18;
+}
