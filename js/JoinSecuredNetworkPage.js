@@ -12,6 +12,7 @@
 	var _title;
 	var _form;
 	var _passwordField;
+	var _passwordCloneField;
 	var _submitButton;
 	var _pageData = {};
 	var PAGE_ID = "#join_secured_network";
@@ -24,8 +25,10 @@
 		_title = _page.find("h3");
 		_form = _page.find("form");
 		_passwordField = _form.find("input[name=password]");
-		_submitButton = _form.find("input[type=submit]");
 		_passwordField.showPassword();
+		_passwordCloneField = _form.find("input[name=password-clone]");
+		_submitButton = _form.find("input[type=submit]");
+		
 		_form.submit(join);
 	});
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
@@ -35,6 +38,7 @@
 		_title.text("Join "+_pageData.ssid);
 		_form.attr("id","Join "+_pageData.ssid);
 		_passwordField.val("");
+		_passwordCloneField.val("");
   });
 	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
 		console.log(PAGE_ID+" pagehide");
