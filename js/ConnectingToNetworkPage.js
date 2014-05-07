@@ -60,7 +60,7 @@
 			console.log("  _wifiboxid: ",_wifiboxid);
 			completeHandler();
 		},function() {
-			// try connecting anyway (making sure wifiboxid retrieval isn't blocking
+			// try connecting anyway (making sure wifiboxid retrieval isn't blocking)
 			completeHandler();
 		});
 	}
@@ -104,12 +104,14 @@
 				_actionField.attr("class","error");
 				break;
 		}
+		// TODO ignore connected? 
 		_statusField.html(statusText);
 		_actionField.html(actionText);
 		
 		// When the box is connecting we start checking connect.doodle3d.com 
 		// for a box with the same wifiboxid 
 		if(data.status === NetworkAPI.STATUS.CONNECTING && !_connectedChecking && _wifiboxid !== undefined) {
+			_connectAPI.checkLocal = false;
 			_connectAPI.boxAppeared = onBoxAppeared;
 			_connectAPI.start();
 			_connectedChecking = true;
