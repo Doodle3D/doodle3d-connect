@@ -64,6 +64,33 @@ d3d.util = {
 			formData[field['name']] = field['value']; 
 		});
 		return formData;
+	},
+	enableRefreshPrevention:function() {
+		$(document).on("keydown",d3d.util.preventRefresh);
+	},
+	disableRefreshPrevention:function() {
+		$(document).off("keydown",d3d.util.preventRefresh);
+	},
+	preventRefresh:function(event) {
+		if((event.which === 82 && (event.ctrlKey || event.metaKey)) || // ctrl+r
+				event.which === 116) { // F5
+			console.log("d3d.util.preventRefresh");
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			return false;
+		}
+	},
+	disableLeaveWarning:function() {
+		window.onbeforeunload = null;
+	},
+	enableLeaveWarning:function(warning) {
+		if(warning === undefined) {
+			warning = "Are you sure you want to leave?";
+		}
+		window.onbeforeunload = function() {
+			console.log("WARNING:"+warning);
+			return warning;
+		};
 	}
 };
 

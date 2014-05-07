@@ -21,6 +21,8 @@ var BoxesPage = (function (w) {
 		_findItem = _list.find("#findItem");
 		
 		_connectAPI.refreshing = onRefreshing;
+		_connectAPI.listFailed = onListFailed;
+		_connectAPI.listSuccess = onlistSuccess;
 		_connectAPI.listUpdated = onListUpdated;
 		_connectAPI.boxAppeared = onBoxAppeared;
 		_connectAPI.boxDisapeared = onBoxDisapeared;
@@ -37,6 +39,14 @@ var BoxesPage = (function (w) {
 	function onRefreshing() {
 		//console.log("onRefreshing");
 		d3d.util.showLoader(true);
+	}
+	function onListFailed() {
+		d3d.util.enableRefreshPrevention();
+		d3d.util.enableLeaveWarning("You're not connecting to the internet, leaving now will interrupt the connection proces");
+	}
+	function onlistSuccess() {
+		d3d.util.disableRefreshPrevention();
+		d3d.util.disableLeaveWarning();
 	}
 	function onListUpdated(boxesData) {
 		//console.log("onListUpdated: ",boxesData);

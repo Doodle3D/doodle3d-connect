@@ -9,6 +9,8 @@ function ConnectAPI() {
 	
 	// callbacks
 	this.refreshing; 		// I'm refreshing my list
+	this.listFailed;		// list retrieval from connect.doodle3d.com failed
+	this.listSuccess;		// list retrieval from connect.doodle3d.com succeeded 
 	this.listUpdated; 	// the list of boxes is updated / changed
 	this.boxAppeared; 	// a new box appeared
 	this.boxDisapeared; // a box disappeared
@@ -47,12 +49,14 @@ function ConnectAPI() {
 					//console.log("ConnectAPI:list failed: ",response);
 					if(failedHandler) failedHandler(response);
 				} else {
+					if(_self.listSuccess) {_self.listSuccess(); }
 					completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
 			//console.log("ConnectAPI:list failed");
 			if(failedHandler) failedHandler();
+			if(_self.listFailed) {_self.listFailed(); }
 		});
 	};
 	
@@ -71,12 +75,8 @@ function ConnectAPI() {
 		clearTimeout(_refreshDelay);
 	}
 	this.refresh = function(listUpdated) {
-		if(listUpdated) {
-			_self.listUpdated = listUpdated;
-		}
-		if(_self.refreshing) {
-			_self.refreshing();
-		}
+		if(listUpdated) { _self.listUpdated = listUpdated; }
+		if(_self.refreshing) { _self.refreshing(); }
 		
 		_self.list(function(foundBoxes) {
 			//console.log("  foundBoxes: ",foundBoxes);
@@ -86,8 +86,8 @@ function ConnectAPI() {
 				clearTimeout(_refreshDelay);
 				_refreshDelay = setTimeout(_self.refresh, _refreshInterval);
 			}
-			//removeBox(_apBox.localip,true); // TODO: why again?
 		}, function() {
+			console.log("ConnectAPI list retrieve failed");
 			// if web is not accessible try to find a box as an accesspoint
 			// if not found, we look for a wired box
 			_networkAPI.alive(_apBox.localip,_boxTimeoutTime,function() {

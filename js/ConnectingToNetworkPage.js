@@ -132,6 +132,10 @@
 					link = d3d.util.replaceURLParameters(link,linkParams);
 					$.mobile.changePage(link);
 					connectedBoxNetworkAPI.stopAutoRefresh();
+					
+					// disable warnings that are enabled on boxes page
+					d3d.util.disableRefreshPrevention();
+					d3d.util.disableLeaveWarning();
 				}
 			};
 			connectedBoxNetworkAPI.startAutoRefresh();
