@@ -27,7 +27,7 @@ function NetworkAPI() {
 	var _networkSSID;
 	
 	var _associateTime;
-	var _retrieveStatusDelayTime = 1000;
+	var _retrieveStatusDelayTime = 3000;
 	var _autoRefreshing = false;
 	var _refreshDelay;
 	this.refreshDelayTime = 2000;
