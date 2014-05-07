@@ -19,6 +19,8 @@
 	var _wifiboxid;
 	var _connectedChecking = false;
 	
+	var CONNECTED_REDIRECT_DELAY = 5000;
+	
 	var PAGE_ID = "#connecting_to_network";
 	
 	var _self = this;
@@ -124,18 +126,26 @@
 			connectedBoxNetworkAPI.updated = function(data) {
 				data.status = parseInt(data.status,10);
 				console.log(PAGE_ID+":connectedBoxNetworkAPI:onStatusUpdated: ",data.status);
+				// if box finished connecting
 				if(data.status === NetworkAPI.STATUS.CONNECTED) {
-					// redirect to it's box page
-					console.log("  redirect to box");
-					var linkParams = {localip: boxData.localip,wifiboxid: boxData.wifiboxid};
-					var link = "#box";
-					link = d3d.util.replaceURLParameters(link,linkParams);
-					$.mobile.changePage(link);
-					connectedBoxNetworkAPI.stopAutoRefresh();
+					console.log("  found connected box");
+					_statusField.html("Connected to "+_pageData.ssid);
+					_actionField.html("Congratulations the box is connected to <b>"+_pageData.ssid+"</b>. You will be redirected in a moment...");
+					_actionField.attr("class","info"); 
 					
-					// disable warnings that are enabled on boxes page
-					d3d.util.disableRefreshPrevention();
-					d3d.util.disableLeaveWarning();
+					setTimeout(function () {
+						// redirect to it's box page
+						console.log("  redirect to box");
+						var linkParams = {localip: boxData.localip,wifiboxid: boxData.wifiboxid};
+						var link = "#box";
+						link = d3d.util.replaceURLParameters(link,linkParams);
+						$.mobile.changePage(link);
+						connectedBoxNetworkAPI.stopAutoRefresh();
+						
+						// disable warnings that are enabled on boxes page
+						d3d.util.disableRefreshPrevention();
+						d3d.util.disableLeaveWarning();
+					},CONNECTED_REDIRECT_DELAY);
 				}
 			};
 			connectedBoxNetworkAPI.startAutoRefresh();
