@@ -133,7 +133,9 @@
 					console.log("  found connected box");
 					_statusField.html("Connected to "+_pageData.ssid);
 					_actionField.html("Congratulations the box is connected to <b>"+_pageData.ssid+"</b>. You will be redirected in a moment...");
-					_actionField.attr("class","info"); 
+					_actionField.attr("class","info");
+					// prevent status changes by wired box
+					_networkAPI.stopAutoRefresh();
 					
 					setTimeout(function () {
 						// redirect to it's box page
