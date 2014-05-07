@@ -37,12 +37,13 @@ function InfoAPI() {
 					if(failedHandler) failedHandler(response);
 				} else {
 					var infoData = response.data;
-					
 					// Versions older than 0.10.2 don't include wifiboxid in info response 
-					// so we use a workaround (saving to config)
+					// so we use a workaround (saving to config to retrieve substituted_wifiboxid or substituted_ssid)
 					if(infoData.wifiboxid === undefined) {
 						_configAPI.save({},function(saveResponseData) {
 							infoData.wifiboxid = saveResponseData.substituted_wifiboxid;
+							// when no wifiboxid is available we could use the substituted_ssid to compare
+							infoData.substituted_ssid = saveResponseData.substituted_ssid;
 							completeHandler(infoData);
 						},function() {
 							failedHandler();
