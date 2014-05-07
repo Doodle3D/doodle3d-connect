@@ -25,7 +25,7 @@
 		_page = $(this);
 		_list = _page.find("ul[data-role=listview]");
 		//_joinOtherItem = _list.find("#joinOther");
-		console.log("  list: ",_list);
+		//console.log("  list: ",_list);
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Join network page pagebeforeshow");

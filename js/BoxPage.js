@@ -41,7 +41,7 @@ var BoxPage = (function (w) {
 		console.log("Box page pagebeforeshow");
 		_boxData = d3d.util.getPageParams(PAGE_ID);
 		var boxURL = "http://"+_boxData.localip;
-		console.log("  _boxData: ",_boxData);
+		//console.log("  _boxData: ",_boxData);
 		
 		_title.text(_boxData.wifiboxid);
 		setNetworkStatus(NetworkAPI.STATUS.CONNECTED);
@@ -104,9 +104,6 @@ var BoxPage = (function (w) {
 			_defaultItems.toggleClass("ui-screen-hidden",true);
 			_drawItem.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
-			console.log("  _defaultItems: ",_defaultItems);
-			console.log("  _drawItem: ",_drawItem);
-			console.log("  _joinNetworkItem: ",_joinNetworkItem);
 			
 			var joinLink = _joinNetworkItem.find("a").attr("href");
 			joinLink = d3d.util.replaceURLParameters(joinLink,_boxData);

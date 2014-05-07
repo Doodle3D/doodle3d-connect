@@ -111,7 +111,7 @@ d3d.util = {
 		//console.log("	data.toPage: ",data.toPage);
 		if (typeof data.toPage !== "string") { return; }			
 		
-		console.log("pagebeforechange, data: ",data);
+		//console.log("pagebeforechange, data: ",data);
 		var url = d3d.util.parseURL(data.toPage);
 		//console.log("	url: ",url);
 		//console.log("	url.hash: ",url.hash);
