@@ -16,6 +16,8 @@ function ConnectAPI() {
 	this.boxDisapeared; // a box disappeared
 	//this.boxUpdated; 		// a box is updated / changed
 	
+	this.checkLocal = true; // check for wired and access point boxes
+	
 	var _apiURL = "http://connect.doodle3d.com/api";
 	var _networkAPI = new NetworkAPI();
 	var _timeoutTime = 3000;
@@ -80,7 +82,9 @@ function ConnectAPI() {
 		
 		_self.list(function(foundBoxes) {
 			//console.log("  foundBoxes: ",foundBoxes);
-			foundBoxes.push(_wiredBox); // always check for a wired box
+			if(_self.checkLocal) {
+				foundBoxes.push(_wiredBox); // check for a wired box
+			}
 			updateList(foundBoxes);
 			if(_running) {
 				clearTimeout(_refreshDelay);
@@ -88,13 +92,15 @@ function ConnectAPI() {
 			}
 		}, function() {
 			console.log("ConnectAPI list retrieve failed");
-			// if web is not accessible try to find a box as an accesspoint
-			// if not found, we look for a wired box
-			_networkAPI.alive(_apBox.localip,_boxTimeoutTime,function() {
-				updateList([_apBox]);
-			}, function() {
-				updateList([_wiredBox]);
-			});			
+			if(_self.checkLocal) {
+				// if web is not accessible try to find a box as an accesspoint
+				// if not found, we look for a wired box
+				_networkAPI.alive(_apBox.localip,_boxTimeoutTime,function() {
+					updateList([_apBox]);
+				}, function() {
+					updateList([_wiredBox]);
+				});
+			}
 			if(_running) {
 				clearTimeout(_refreshDelay);
 				_refreshDelay = setTimeout(_self.refresh, _refreshInterval);
