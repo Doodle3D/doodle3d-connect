@@ -14,6 +14,7 @@ var BoxPage = (function (w) {
 	var _drawItem;
 	var _updateItem;
 	var _joinNetworkItem;
+	var _defaultItems;
 	
 	var _networkStatus;
 	var _networkAPI = new NetworkAPI();
@@ -31,9 +32,10 @@ var BoxPage = (function (w) {
 		_title = _page.find(".ui-title");
 		_intro = _page.find(".intro");
 		
-		_drawItem = _page.find("#drawItem");
-		_updateItem = _page.find("#updateItem");
-		_joinNetworkItem = _page.find("#joinNetworkItem");
+		_defaultItems = _list.children();
+		_drawItem = _list.find("#drawItem");
+		_updateItem = _list.find("#updateItem");
+		_joinNetworkItem = _list.find("#joinNetworkItem");
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Box page pagebeforeshow");
@@ -81,35 +83,34 @@ var BoxPage = (function (w) {
 	}
 	
 	function setNetworkStatus(status) {
-		//console.log("setNetworkStatus: ",status);
+		console.log(PAGE_ID+":setNetworkStatus: ",status);
 		var introText = "";
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			//console.log("online");
 			_drawItem.find("a").text("Draw");
-			// ToDo: Link to your app here? 
-			// ToDo: Status
-			// ToDo: Control
-			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
-			_updateItem.toggleClass("ui-screen-hidden",false);
-			// ToDo: retrieve update information
 			
+			// display the right buttons
+			_defaultItems.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
+			// ToDo: retrieve update information
 			
 		} else { // offline
 			//console.log("offline");
 			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
+			_drawItem.find("a").text("Draw (offline)");
+			
+			// display the right buttons
+			_defaultItems.toggleClass("ui-screen-hidden",true);
+			_drawItem.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
+			console.log("  _defaultItems: ",_defaultItems);
+			console.log("  _drawItem: ",_drawItem);
+			console.log("  _joinNetworkItem: ",_joinNetworkItem);
 			
 			var joinLink = _joinNetworkItem.find("a").attr("href");
 			joinLink = d3d.util.replaceURLParameters(joinLink,_boxData);
 			_joinNetworkItem.find("a").attr("href",joinLink);
-			
-			_drawItem.find("a").text("Draw (offline)");
-			_updateItem.toggleClass("ui-screen-hidden",true);
-			
-			// ToDo: Status
-			// ToDo: Control
 		}
 		
 		_intro.text(introText);
