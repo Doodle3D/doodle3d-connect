@@ -97,6 +97,7 @@
 					
 				});
 				
+				// https://code.google.com/p/showpassword/issues/detail?id=1&thanks=1&ts=1399477719
 				$clone.bind('change', function() {
 					update( $clone , $input)
 				});
