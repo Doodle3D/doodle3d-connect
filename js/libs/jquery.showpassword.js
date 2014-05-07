@@ -97,6 +97,10 @@
 					
 				});
 				
+				$clone.bind('change', function() {
+					update( $clone , $input)
+				});
+				
 				// Added for JQuery Validation compatibility
 				// This will trigger validation if it's ON for blur event
 				$clone.bind('blur', function() { $input.trigger('focusout'); });
