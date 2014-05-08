@@ -25,7 +25,7 @@
 		_title = _page.find("h3");
 		_form = _page.find("form");
 		_passwordField = _form.find("input[name=password]");
-		_passwordField.showPassword();
+		_passwordField.psswrd();
 		_passwordCloneField = _form.find("input[name=password-clone]");
 		_submitButton = _form.find("input[type=submit]");
 		
