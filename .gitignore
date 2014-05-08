@@ -1,6 +1,5 @@
 credentials.php
 .*
-**/.*/**
 !/.gitignore
 www/js/*.js
 www/css/*.css

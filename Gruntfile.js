@@ -121,13 +121,19 @@ module.exports = function(grunt) {
 //      }
       src: ['js/**.js'],
     },
+    clean: {
+      main: {
+        src: "www/css/images"
+      }
+    },
     copy: {
       main: {
       	expand: true,
         nonull: true,
         cwd: "js/libs/jquery.mobile/images/",
         src: "**",
-        dest: "www/css/images/"
+        dest: "www/css/images/",
+        filter: grunt.file.exists
       }
     },
     watch: {
@@ -151,6 +157,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task.
   grunt.registerTask('default', [
@@ -160,6 +167,7 @@ module.exports = function(grunt) {
     'cssmin',
     'uglify',
     'jshint',
+    'clean',
     'copy',
     'watch'
   ]);
