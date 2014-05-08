@@ -95,6 +95,12 @@ d3d.util = {
 			console.log("WARNING:"+warning);
 			return warning;
 		};
+	},
+	autofocus:function(form) {
+		if (!("autofocus" in document.createElement("input"))) {
+			var target = form.find("input[autofocus]:visible");
+			target.focus();
+    }
 	}
 };
 
