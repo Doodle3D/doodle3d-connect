@@ -23,7 +23,7 @@ function ConnectAPI() {
 	var _timeoutTime = 3000;
 	
 	var _refreshDelay;
-	var _refreshInterval = 3000;
+	var _refreshInterval = 5000;
 	var _running;
 	var _listChanged = false;
 	
@@ -45,6 +45,7 @@ function ConnectAPI() {
 			type: "GET",
 			dataType: 'json',
 			timeout: _timeoutTime,
+			cache: false,
 			success: function(response){
 				//console.log("ConnectAPI:list response: ",response);
 				if(response.status == "error" || response.status == "fail") {
@@ -126,7 +127,11 @@ function ConnectAPI() {
 		
 		// check if all found boxes are alive
 		jQuery.each(foundBoxes, function (index,foundBox) {
-			checkBox(foundBox);
+			if(foundBox === _apBox) { // don't recheck apBox
+				addBox(foundBox);
+			} else {
+				checkBox(foundBox);
+			}
 		});
 		
 		if(foundBoxes.length == 0 && _self.listUpdated) {

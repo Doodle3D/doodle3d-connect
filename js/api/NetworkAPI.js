@@ -202,6 +202,7 @@ function NetworkAPI() {
 			type: "GET",
 			dataType: 'json',
 			timeout: timeoutTime,
+			cache: false,
 			success: function(response){
 				//console.log("NetworkAPI:alive response: ",response);
 				if(response.status == "error" || response.status == "fail") {
