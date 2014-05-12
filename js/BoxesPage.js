@@ -42,7 +42,7 @@
 			maxDisplayCount: 0      // do not obey the max display count
 		}*/);
   });
-	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
+	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		//console.log("Boxes page pagehide");
 		_connectAPI.stop();
   });

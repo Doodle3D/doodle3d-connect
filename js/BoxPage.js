@@ -52,7 +52,7 @@
 		_networkAPI.init(boxURL);
 		retrieveNetworkStatus();
   });
-	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
+	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		clearTimeout(_retryRetrieveStatusDelay);
   });
 	

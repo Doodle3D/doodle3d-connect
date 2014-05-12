@@ -43,9 +43,6 @@
 	$.mobile.document.on( "pageshow", PAGE_ID, function( event, data ) {
 		d3d.util.autofocus(_form);
   });
-	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
-		console.log(PAGE_ID+" pagehide");
-  });
 	function join(){
 		console.log("JoinSecuredNetworkPage:submit");
 		// ToDo: validation

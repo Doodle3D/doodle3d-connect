@@ -35,7 +35,7 @@
 		_networkAPI.init(boxURL);
 		refreshNetworks();
   });
-	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
+	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		console.log("Join network page pagehide");
 		clearTimeout(_refreshDelay);
   });
