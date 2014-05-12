@@ -6,7 +6,10 @@
       	var $input					= $(this);
   			var $checkbox 			= $($input.data('typetoggle'));
   			
-  			$checkbox.change(updateType);
+  			$checkbox.change(function() {
+  				updateType();
+  				$input.focus();
+  			});
   			updateType();
   			function updateType() {
   				$input[0].type = $checkbox.is(':checked') ? 'text' : 'password';
