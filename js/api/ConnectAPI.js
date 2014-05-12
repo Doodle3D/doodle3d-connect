@@ -35,7 +35,7 @@ function ConnectAPI() {
 	var _numBoxesFound 			= 0; // count how many boxes responded
 	var _boxes 							= {}; // current list of boxes
 	var _numBoxes 					= 0; // current number of boxes
-	
+	var _checkedWiredBox 		= false;
 	var _self = this;
 	
 	this.list = function(completeHandler,failedHandler) {
@@ -143,10 +143,22 @@ function ConnectAPI() {
 		_numBoxesChecking++;
 		
 		_networkAPI.alive(boxData.localip,_boxTimeoutTime,function() {
-			addBox(boxData);
-			_numBoxesFound++;
+			if(boxData.localip === _wiredBox.localip) {
+				// double check wired box (otherwise it shows up on switch to ap)
+				if(_checkedWiredBox) {
+					addBox(boxData);
+					_numBoxesFound++;
+				}
+				_checkedWiredBox = true;
+			} else {
+				addBox(boxData);
+				_numBoxesFound++;
+			}
 		}, function() {
 			removeBox(boxData.localip);
+			if(boxData === _wiredBox) {
+				_checkedWiredBox = false;
+			}
 		},function(){
 			_numBoxesChecking--;
 			if(_numBoxesChecking <= 0 && _listChanged && _self.listUpdated) {
