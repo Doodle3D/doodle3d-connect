@@ -13,6 +13,7 @@
 	var _actionField;
 	var _networkAPI = new NetworkAPI();
 	var _connectAPI = new ConnectAPI();
+	var _connectedBoxNetworkAPI = new NetworkAPI();
 	var _infoAPI = new InfoAPI();
 	var _pageData = {};
 	var _formData;
@@ -21,7 +22,9 @@
 	var _connectedChecking = false;
 	
 	var CONNECTED_REDIRECT_DELAY = 5000;
+	var _connectedRedirectDelay;
 	var BACKUP_REDIRECT_DELAY = 10*1000; // when the wifiboxid isn't retrievable we want to redirect anyway
+	var _backupRedirectDelay;
 	var PAGE_ID = "#connecting_to_network";
 	
 	var _self = this;
@@ -53,6 +56,9 @@
 		console.log("Connecting to network page pagehide");
 		_networkAPI.stopAutoRefresh();
 		_connectAPI.stop();
+		_connectedBoxNetworkAPI.stopAutoRefresh();
+		clearTimeout(_connectedRedirectDelay);
+		clearTimeout(_backupRedirectDelay);
   });
 	function retrieveWiFiBoxID(completeHandler) {
 		console.log(PAGE_ID+":retrieveWiFiBoxID");
@@ -148,9 +154,9 @@
 	function checkBox(boxData) {
 		// check if it finished connecting 
 		var boxURL = "http://"+boxData.localip;
-		var connectedBoxNetworkAPI = new NetworkAPI();
-		connectedBoxNetworkAPI.init(boxURL);
-		connectedBoxNetworkAPI.updated = function(data) {
+		_connectedBoxNetworkAPI = new NetworkAPI();
+		_connectedBoxNetworkAPI.init(boxURL);
+		_connectedBoxNetworkAPI.updated = function(data) {
 			data.status = parseInt(data.status,10);
 			console.log(PAGE_ID+":connectedBoxNetworkAPI:onStatusUpdated: ",data.status);
 			// if box finished connecting
@@ -162,14 +168,14 @@
 				// prevent status changes by wired box
 				_networkAPI.stopAutoRefresh();
 				
-				setTimeout(function () {
+				_connectedRedirectDelay = setTimeout(function () {
 					// redirect to it's box page
 					console.log("  redirect to box");
 					var linkParams = {localip: boxData.localip,wifiboxid: boxData.wifiboxid};
 					var link = "#box";
 					link = d3d.util.replaceURLParameters(link,linkParams);
 					$.mobile.changePage(link);
-					connectedBoxNetworkAPI.stopAutoRefresh();
+					_connectedBoxNetworkAPI.stopAutoRefresh();
 					
 					// disable warnings that are enabled on boxes page
 					d3d.util.disableRefreshPrevention();
@@ -177,10 +183,10 @@
 				},CONNECTED_REDIRECT_DELAY);
 			}
 		};
-		connectedBoxNetworkAPI.startAutoRefresh();
+		_connectedBoxNetworkAPI.startAutoRefresh();
 	}
 	function onListSuccess() {
-		setTimeout(function () {
+		_backupRedirectDelay = setTimeout(function () {
 			$.mobile.changePage("#boxes");
 		},BACKUP_REDIRECT_DELAY);
 	}

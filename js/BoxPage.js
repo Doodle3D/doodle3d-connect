@@ -52,6 +52,10 @@ var BoxPage = (function (w) {
 		_networkAPI.init(boxURL);
 		retrieveNetworkStatus();
   });
+	$.mobile.document.on( "pagehide", PAGE_ID, function( event, data ) {
+		clearTimeout(_retryRetrieveStatusDelay);
+  });
+	
 	
 	function retrieveNetworkStatus() {
 		//console.log("retrieveNetworkStatus");
