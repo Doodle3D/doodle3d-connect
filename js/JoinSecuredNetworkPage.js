@@ -47,7 +47,7 @@
 		console.log("JoinSecuredNetworkPage:submit");
 		// ToDo: validation
 		// http://www.raymondcamden.com/index.cfm/2012/7/30/Example-of-form-validation-in-a-jQuery-Mobile-Application
-		
+		if(_passwordField.val().length === 0) { return false; }
 		var submitLink = _form.data("target");
 		submitLink = d3d.util.replaceURLParameters(submitLink,_pageData);
 		$.mobile.changePage(submitLink);
