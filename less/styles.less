@@ -59,3 +59,30 @@ body.ui-mobile-viewport {
 .ui-loading .ui-loader.fadeIn {
 	opacity: 0.18;
 }
+
+/* Add to home */
+.ath-viewport {
+	.ath-container {
+		box-shadow: 0 0 0 0.2em #D1D1D1;
+		background-color: #fff;
+	}
+	.ath-ios.ath-phone:after,
+	.ath-ios.ath-tablet:after,
+	.ath-android:after {
+		background-color: #fff;
+	}
+	.ath-android:after {
+		background: -webkit-linear-gradient(-45deg,	rgba(255,255,255,0) 0,
+																								rgba(255,255,255,0) 50%,
+																								rgba(255,255,255,1) 50%,
+																								rgba(255,255,255,1) 100%);
+	}
+	// add shadow around up arrow
+	.ath-ios.ath-tablet:after {
+		box-shadow: -.2em -.2em 0 #d1d1d1;
+	}
+	// close cross color
+	.ath-container:before {
+		color: #F18DB1;
+	}
+}
