@@ -6,7 +6,7 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
-var BoxPage = (function (w) {
+(function (w) {
 	var _page;
 	var _list;
 	var _title;
@@ -58,29 +58,10 @@ var BoxPage = (function (w) {
 	
 	
 	function retrieveNetworkStatus() {
-		//console.log("retrieveNetworkStatus");
 		_networkAPI.status(function(data) {
-			//console.log("_networkAPI.status complete");
-			//console.log("  data: ",data);
 			data.status = parseInt(data.status,10);
-			//console.log("  data.status: ",data.status);
-			//console.log(_self.id,"NetworkPanel:retrievedStatus status: ",data.status,data.statusMessage);
-			//console.log("  networkPanel ",_element[0]," parent: ",_element.parent()[0]);
-			// ToDo: update _currentNetwork when available
-			
 			setNetworkStatus(data.status);
-			
-			/*// Keep checking for updates?
-			switch(data.status) {
-				case NetworkAPI.STATUS.CONNECTING:
-				case NetworkAPI.STATUS.CREATING:
-					clearTimeout(_retryRetrieveStatusDelay);
-					_retryRetrieveStatusDelay = setTimeout(_self.retrieveStatus,_retryRetrieveStatusDelayTime); // retry after delay
-					break;
-			}*/
-			//if(completeHandler) completeHandler(data.status);
 		}, function() {
-			//console.log("NetworkPanel:retrieveStatus failed");
 			clearTimeout(_retryRetrieveStatusDelay);
 			_retryRetrieveStatusDelay = setTimeout(_self.retrieveStatus, _retryRetrieveStatusDelayTime); // retry after delay
 		});
@@ -122,20 +103,4 @@ var BoxPage = (function (w) {
 		_list.listview('refresh'); // jQuery mobile enhance content
 		_networkStatus = status;
 	}
-	
-	// to get to the box data we need the url
-	// only pagecontainer events contain url's
-	/*$.mobile.document.on( "pagecontainerbeforetransition", function( event, data ) {
-		//console.log("Box page pagebeforetransition");
-		var url = d3d.util.processURL(data.absUrl);
-		console.log("  url: ",url);
-		if(url.hash == PAGE_ID) {
-			_boxData = {
-				localip: url.parameters.localip,
-				wifiboxid: url.parameters.wifiboxid,
-				link: url.parameters.link,
-				url: "http://"+url.parameters.localip
-			}
-		}
-  });*/
 })(window);

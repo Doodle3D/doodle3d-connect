@@ -6,7 +6,7 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
-(function JoinNetworkPage(w) {
+(function (w) {
 	
 	var _page;
 	var _list;
@@ -25,7 +25,6 @@
 		_page = $(this);
 		_list = _page.find("ul[data-role=listview]");
 		//_joinOtherItem = _list.find("#joinOther");
-		//console.log("  list: ",_list);
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Join network page pagebeforeshow");
@@ -86,4 +85,3 @@
 		_list.listview('refresh'); // jQuery mobile enhance content
 	}
 })(window);
-//new JoinNetworkPage();

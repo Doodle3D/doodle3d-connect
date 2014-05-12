@@ -6,7 +6,7 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
-var BoxesPage = (function (w) {
+(function (w) {
 	var _connectAPI = new ConnectAPI();
 	
 	var _page; 

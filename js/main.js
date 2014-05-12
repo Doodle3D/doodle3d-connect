@@ -34,7 +34,6 @@ d3d.util = {
 		return d3d.pageParams[pageID];
 	},
 	replaceURLParameters:function(href,parameters){
-		//console.log("replaceURLParameters: ",href,parameters);
 		href = href.split("?")[0];
 		var i = 0;
 		jQuery.each(parameters, function (key,value) {
@@ -78,7 +77,6 @@ d3d.util = {
 	preventRefresh:function(event) {
 		if((event.which === 82 && (event.ctrlKey || event.metaKey)) || // ctrl+r
 				event.which === 116) { // F5
-			console.log("d3d.util.preventRefresh");
 			event.preventDefault();
 			event.stopImmediatePropagation();
 			return false;
@@ -92,7 +90,6 @@ d3d.util = {
 			warning = "Are you sure you want to leave?";
 		}
 		window.onbeforeunload = function() {
-			console.log("WARNING:"+warning);
 			return warning;
 		};
 	},
@@ -105,22 +102,12 @@ d3d.util = {
 };
 
 (function (w) {
-	//$(function () {
-	//to get to url parameters we need the url
+	// To get to url parameters we need the url
 	// only pagecontainer events contain url's
 	// we parse the parameters and store them in a global object
 	$.mobile.document.on( "pagebeforechange", function( event, data ) {
-		//console.log("pagebeforechange");
-		//console.log("	event: ",event);
-		//console.log("	data: ",data);
-		//d3d.pageParams[pageID]
-		//console.log("	data.toPage: ",data.toPage);
-		if (typeof data.toPage !== "string") { return; }			
-		
-		//console.log("pagebeforechange, data: ",data);
+		if (typeof data.toPage !== "string") { return; }
 		var url = d3d.util.parseURL(data.toPage);
-		//console.log("	url: ",url);
-		//console.log("	url.hash: ",url.hash);
 		if(url.parameters === undefined) { return; }
 		if(!d3d.pageParams) { d3d.pageParams = {}; }
 		d3d.pageParams[url.hash] = url.parameters;

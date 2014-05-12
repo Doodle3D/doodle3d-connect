@@ -6,7 +6,7 @@
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
 
-(function ConnectingToNetworkPage(w) {
+(function (w) {
 	
 	var _page;
 	var _statusField;
@@ -185,6 +185,7 @@
 		};
 		_connectedBoxNetworkAPI.startAutoRefresh();
 	}
+	// when no wifiboxid or wifiboxSSID is available but we are online, we redirect to the boxes page 
 	function onListSuccess() {
 		_backupRedirectDelay = setTimeout(function () {
 			$.mobile.changePage("#boxes");
