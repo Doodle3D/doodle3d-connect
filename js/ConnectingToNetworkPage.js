@@ -171,6 +171,8 @@
 				_connectedRedirectDelay = setTimeout(function () {
 					// redirect to it's box page
 					console.log("  redirect to box");
+					// replace this page with boxes page in history
+					window.history.replaceState(null, "", "#boxes");
 					var linkParams = {localip: boxData.localip,wifiboxid: boxData.wifiboxid};
 					var link = "#box";
 					link = d3d.util.replaceURLParameters(link,linkParams);
