@@ -36,6 +36,10 @@
 		_drawItem = _list.find("#drawItem");
 		_updateItem = _list.find("#updateItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
+		
+		// make sure draw link is opened in same WebApp (added to homescreen) 
+		// and it doesn't start a browser
+		$.stayInWebApp("#box #drawItem a",true);
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Box page pagebeforeshow");
