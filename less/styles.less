@@ -30,6 +30,9 @@ body.ui-mobile-viewport {
 	}
 }
 
+.ui-mobile-viewport, .ui-page {
+	background-color: #fefefe;
+}
 .ui-page .ui-header {
 	background-color: #93CAF4;
 	border-color: #fff;
@@ -49,6 +52,14 @@ body.ui-mobile-viewport {
 .ui-content .ui-listview { 
 	> li.ui-first-child .ui-btn {
 		border-top-width: 0;
+	}
+	.ui-btn {
+		border-color: #fefefe;
+		border-width: 1px 0;
+		background-color: #f3f3f3;
+		&:hover {
+			background-color: rgb(228, 227, 227);
+		}
 	}
 }
 
