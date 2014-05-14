@@ -1,2 +1,7 @@
-
 credentials.php
+.*
+!/.gitignore
+www/js/*.js
+www/css/*.css
+node_modules/*
+www/css/images/**

@@ -1,0 +1,186 @@
+body.ui-mobile-viewport {
+	margin: 0 auto;
+	max-width: 1024px;
+}
+
+#logo {
+	text-align: center;
+	display: block;
+}
+#logo img{
+	margin: 10px 5px 5px 5px;
+	max-width: 200px;
+}
+#slogan {
+	text-align: center;
+}
+
+.ui-content {
+	ul {
+		padding: 0 0 0 1em;
+	}
+	ul.ui-listview {
+		padding: 0;
+	}
+	.intro {
+		margin: 0 0 2em 0;
+	}
+	img {
+		max-width: 100%;
+	}
+}
+
+.ui-mobile-viewport, .ui-page {
+	background-color: #fefefe;
+}
+.ui-page .ui-header {
+	background-color: #93CAF4;
+	border-color: #fff;
+	border-width: 2px 0px 2px 0;
+	
+  .ui-title {
+  	color: #fff;
+  	text-shadow: 0px 1px 0px rgb(92, 152, 198);
+  	margin: 0px 15%;
+  }
+  .ui-btn-left.ui-btn-icon-notext {
+  	background-color: rgba(0, 0, 0, 0.3);
+  	border-width: 0;
+  	top: 0.45em;
+  	left: 0.45em;
+  }
+}
+.ui-content { 
+	.ui-link, .ui-link:visited {
+		color: #60ACF0;
+		text-shadow: none;
+	}
+	.ui-link:hover, .ui-link:active {
+		color: rgba(76, 133, 177, 1);
+	}
+	.ui-btn {
+		background-color: #f3f3f3;
+		&:hover {
+			background-color: rgb(228, 227, 227);
+		}
+	}
+	.ui-listview { 
+		> li.ui-first-child .ui-btn {
+			border-top-width: 0;
+		}
+		.ui-btn {
+			border-color: #fefefe;
+			border-width: 1px 0;
+		}
+	}
+	
+}
+/* Active button */
+.ui-page-theme-a .ui-btn.ui-btn-active,
+html .ui-bar-a .ui-btn.ui-btn-active,
+html .ui-body-a .ui-btn.ui-btn-active,
+html body .ui-group-theme-a .ui-btn.ui-btn-active,
+html head + body .ui-btn.ui-btn-a.ui-btn-active,
+/* Active checkbox icon */
+.ui-page-theme-a .ui-checkbox-on:after,
+html .ui-bar-a .ui-checkbox-on:after,
+html .ui-body-a .ui-checkbox-on:after,
+html body .ui-group-theme-a .ui-checkbox-on:after,
+.ui-btn.ui-checkbox-on.ui-btn-a:after,
+/* Active flipswitch background */
+.ui-page-theme-a .ui-flipswitch-active,
+html .ui-bar-a .ui-flipswitch-active,
+html .ui-body-a .ui-flipswitch-active,
+html body .ui-group-theme-a .ui-flipswitch-active,
+html body .ui-flipswitch.ui-bar-a.ui-flipswitch-active,
+/* Active slider track */
+.ui-page-theme-a .ui-slider-track .ui-btn-active,
+html .ui-bar-a .ui-slider-track .ui-btn-active,
+html .ui-body-a .ui-slider-track .ui-btn-active,
+html body .ui-group-theme-a .ui-slider-track .ui-btn-active,
+html body div.ui-slider-track.ui-body-a .ui-btn-active {
+	background-color: #93CAF4 /*{a-active-background-color}*/;
+	border-color: #93CAF4 /*{a-active-border}*/;
+	color: #ffffff /*{a-active-color}*/;
+	text-shadow: 0px 1px 0px rgb(92, 152, 198);
+}
+/* Active radio button icon */
+.ui-page-theme-a .ui-radio-on:after,
+html .ui-bar-a .ui-radio-on:after,
+html .ui-body-a .ui-radio-on:after,
+html body .ui-group-theme-a .ui-radio-on:after,
+.ui-btn.ui-radio-on.ui-btn-a:after {
+	border-color: #93CAF4 /*{a-active-background-color}*/;
+}
+/* Focus */
+.ui-page-theme-a .ui-btn:focus,
+html .ui-bar-a .ui-btn:focus,
+html .ui-body-a .ui-btn:focus,
+html body .ui-group-theme-a .ui-btn:focus,
+html head + body .ui-btn.ui-btn-a:focus,
+/* Focus buttons and text inputs with div wrap */
+.ui-page-theme-a .ui-focus,
+html .ui-bar-a .ui-focus,
+html .ui-body-a .ui-focus,
+html body .ui-group-theme-a .ui-focus,
+html head + body .ui-btn-a.ui-focus,
+html head + body .ui-body-a.ui-focus {
+	box-shadow: 0 0 12px #93CAF4 /*{a-active-background-color}*/;
+}
+
+#action {
+	margin: 0 -1em;
+	padding: 1em;
+	color: #fff;
+  text-shadow: 0px 1px 0px #999;
+	&.error {
+    background: #EB313C;
+    text-shadow: 0px 1px 0px #333;
+	}
+	&.warning {
+    background: #E9A86E;
+}
+	&.notice {
+	    background: #93CAF4;
+	}
+	&.info {
+	    background: #97DD8A;
+	}
+}
+
+/* hack to fade-in loader widget (will break normal loader usage) */
+.ui-loader {
+	display: block;
+	opacity: 0;
+	transition: opacity 0.5s linear;
+}
+.ui-loading .ui-loader.fadeIn {
+	opacity: 0.18;
+}
+
+/*//// Add to home ////*/
+.ath-viewport {
+	.ath-container {
+		box-shadow: 0 0 0 0.2em #D1D1D1;
+		background-color: #fff;
+	}
+	.ath-ios.ath-phone:after,
+	.ath-ios.ath-tablet:after,
+	.ath-android:after {
+		background-color: #fff;
+	}
+	.ath-android:after {
+		background: -webkit-linear-gradient(-45deg,	rgba(255,255,255,0) 0,
+																								rgba(255,255,255,0) 50%,
+																								rgba(255,255,255,1) 50%,
+																								rgba(255,255,255,1) 100%);
+	}
+	// add shadow around up arrow
+	.ath-ios.ath-tablet:after {
+		box-shadow: -.2em -.2em 0 #d1d1d1;
+	}
+	// close cross color
+	.ath-container:before {
+		color: #F18DB1;
+	}
+}
