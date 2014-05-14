@@ -40,7 +40,7 @@ body.ui-mobile-viewport {
 	
   .ui-title {
   	color: #fff;
-  	text-shadow: 0px 1px 0px #999;
+  	text-shadow: 0px 1px 0px rgb(92, 152, 198);
   }
   .ui-btn-left.ui-btn-icon-notext {
   	background-color: rgba(0, 0, 0, 0.3);
@@ -49,20 +49,31 @@ body.ui-mobile-viewport {
   	left: 0.45em;
   }
 }
-.ui-content .ui-listview { 
-	> li.ui-first-child .ui-btn {
-		border-top-width: 0;
+.ui-content { 
+	.ui-link, .ui-link:visited {
+		color: #60ACF0;
+		text-shadow: none;
+	}
+	.ui-link:hover, .ui-link:active {
+		color: rgba(76, 133, 177, 1);
 	}
 	.ui-btn {
-		border-color: #fefefe;
-		border-width: 1px 0;
 		background-color: #f3f3f3;
 		&:hover {
 			background-color: rgb(228, 227, 227);
 		}
 	}
+	.ui-listview { 
+		> li.ui-first-child .ui-btn {
+			border-top-width: 0;
+		}
+		.ui-btn {
+			border-color: #fefefe;
+			border-width: 1px 0;
+		}
+	}
+	
 }
-
 /* Active button */
 .ui-page-theme-a .ui-btn.ui-btn-active,
 html .ui-bar-a .ui-btn.ui-btn-active,
@@ -90,7 +101,7 @@ html body div.ui-slider-track.ui-body-a .ui-btn-active {
 	background-color: #93CAF4 /*{a-active-background-color}*/;
 	border-color: #93CAF4 /*{a-active-border}*/;
 	color: #ffffff /*{a-active-color}*/;
-	text-shadow: 0 /*{a-active-shadow-x}*/ 1px /*{a-active-shadow-y}*/ 0 /*{a-active-shadow-radius}*/ #005599 /*{a-active-shadow-color}*/;
+	text-shadow: 0px 1px 0px rgb(92, 152, 198);
 }
 /* Active radio button icon */
 .ui-page-theme-a .ui-radio-on:after,
@@ -136,7 +147,7 @@ html head + body .ui-body-a.ui-focus {
 	}
 }
 
-/* hack to fadein loader widget (will break normal loader usage) */
+/* hack to fade-in loader widget (will break normal loader usage) */
 .ui-loader {
 	display: block;
 	opacity: 0;
@@ -146,7 +157,7 @@ html head + body .ui-body-a.ui-focus {
 	opacity: 0.18;
 }
 
-/* Add to home */
+/*//// Add to home ////*/
 .ath-viewport {
 	.ath-container {
 		box-shadow: 0 0 0 0.2em #D1D1D1;
