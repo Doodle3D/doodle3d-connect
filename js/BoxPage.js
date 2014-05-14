@@ -12,7 +12,7 @@
 	var _title;
 	var _intro;
 	var _drawItem;
-	var _updateItem;
+	//var _updateItem;
 	var _joinNetworkItem;
 	var _defaultItems;
 	
@@ -34,7 +34,7 @@
 		
 		_defaultItems = _list.children();
 		_drawItem = _list.find("#drawItem");
-		_updateItem = _list.find("#updateItem");
+		//_updateItem = _list.find("#updateItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
 		
 		// make sure draw link is opened in same WebApp (added to homescreen) 
