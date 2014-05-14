@@ -30,13 +30,13 @@
 	var _self = this;
 	
 	$.mobile.document.on( "pageinit", PAGE_ID, function( event, data ) {
-		console.log("Connecting to network page pageinit");
+		console.log(PAGE_ID+": pageinit");
 		_page = $(this);
 		_statusField = _page.find("#status");
 		_actionField = _page.find("#action");
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
-		console.log("Connecting to network page pagebeforeshow");
+		console.log(PAGE_ID+": pagebeforeshow");
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		var form = data.prevPage.find("form");
 		// check if there are url params and a form from a prev page
@@ -49,6 +49,8 @@
 		_infoAPI.init(boxURL);
 		_networkAPI.init(boxURL);
 		retrieveWiFiBoxID(function() {
+			console.log("  _wifiboxid: ",_wifiboxid);
+			console.log("  _wifiboxSSID: ",_wifiboxSSID);
 			joinNetwork();
 			_networkAPI.refreshing = onRefreshing;
 			_networkAPI.updated = onStatusUpdated;
@@ -56,7 +58,7 @@
 		});
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
-		console.log("Connecting to network page pagehide");
+		console.log(PAGE_ID+": pagebeforehide");
 		_networkAPI.stopAutoRefresh();
 		_connectAPI.stop();
 		_connectedBoxNetworkAPI.stopAutoRefresh();
@@ -68,8 +70,6 @@
 		_infoAPI.getInfo(function(infoData) {
 			_wifiboxid = infoData.wifiboxid;
 			_wifiboxSSID = infoData.substituted_ssid;
-			console.log("  _wifiboxid: ",_wifiboxid);
-			console.log("  _wifiboxSSID: ",_wifiboxSSID);
 			completeHandler();
 		},function() {
 			_wifiboxid = undefined;
@@ -79,7 +79,7 @@
 		});
 	}
 	function joinNetwork() {
-		console.log("joinNetwork");
+		console.log(PAGE_ID+":joinNetwork");
 		_networkAPI.associate(_pageData.ssid,_formData.password,true);
 		_connectedChecking = false;
 	}
@@ -126,9 +126,11 @@
 		// for a box with the same wifiboxid 
 		if(data.status === NetworkAPI.STATUS.CONNECTING && !_connectedChecking) {
 			if(_wifiboxid !== undefined || _wifiboxSSID !== undefined) {
+				console.log("  start checking for same box");
 				_connectAPI.boxAppeared = onBoxAppeared;
 			} else {
 				// if there is no wifiboxid or ssid available we'll check if we're online
+				console.log("  start checking for internet");
 				_connectAPI.listSuccess = onListSuccess;
 			}
 			_connectAPI.checkLocal = false;
@@ -192,6 +194,7 @@
 	}
 	// when no wifiboxid or wifiboxSSID is available but we are online, we redirect to the boxes page 
 	function onListSuccess() {
+		console.log(PAGE_ID+":onListSuccess");
 		_backupRedirectDelay = setTimeout(function () {
 			$.mobile.changePage("#boxes");
 		},BACKUP_REDIRECT_DELAY);
