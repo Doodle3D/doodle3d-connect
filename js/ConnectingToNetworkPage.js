@@ -38,15 +38,14 @@
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Connecting to network page pagebeforeshow");
 		_pageData = d3d.util.getPageParams(PAGE_ID);
-		if(_pageData === undefined) { 
+		var form = data.prevPage.find("form");
+		// check if there are url params and a form from a prev page
+		if(_pageData === undefined || form.length === 0) { 
 			$.mobile.changePage("#boxes");
 			return;
 		}
 		var boxURL = "http://"+_pageData.localip;
-		
-		var form = data.prevPage.find("form");
 		_formData = d3d.util.getFormData(form);
-				
 		_infoAPI.init(boxURL);
 		_networkAPI.init(boxURL);
 		retrieveWiFiBoxID(function() {
