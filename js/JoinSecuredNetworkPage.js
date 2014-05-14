@@ -34,6 +34,10 @@
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log(PAGE_ID+" pagebeforeshow");
 		_pageData = d3d.util.getPageParams(PAGE_ID);
+		if(_pageData === undefined) { 
+			$.mobile.changePage("#boxes");
+			return;
+		}
 		console.log("  _pageData: ",_pageData);
 		_title.text("Join "+_pageData.ssid);
 		_form.attr("id","Join "+_pageData.ssid);

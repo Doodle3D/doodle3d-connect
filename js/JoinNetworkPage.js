@@ -29,6 +29,10 @@
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Join network page pagebeforeshow");
 		_boxData = d3d.util.getPageParams(PAGE_ID);
+		if(_boxData === undefined) { 
+			$.mobile.changePage("#boxes");
+			return;
+		}
 		var boxURL = "http://"+_boxData.localip;
 		console.log("  _boxData: ",_boxData);
 		

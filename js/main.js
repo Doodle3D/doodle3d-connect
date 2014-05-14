@@ -105,11 +105,11 @@ d3d.util = {
 	// To get to url parameters we need the url
 	// only pagecontainer events contain url's
 	// we parse the parameters and store them in a global object
+	d3d.pageParams = {};
 	$.mobile.document.on( "pagebeforechange", function( event, data ) {
 		if (typeof data.toPage !== "string") { return; }
 		var url = d3d.util.parseURL(data.toPage);
 		if(url.parameters === undefined) { return; }
-		if(!d3d.pageParams) { d3d.pageParams = {}; }
 		d3d.pageParams[url.hash] = url.parameters;
 		
 		// let jQuery mobile navigate to page (providing only the page id so it understands)
