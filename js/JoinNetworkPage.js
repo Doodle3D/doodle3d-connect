@@ -73,8 +73,8 @@
 			var secured = (network.encryption !== "none" && network.encryption !== "");
 			var link;
 			var icon = "";
+			linkParams.encryption = network.encryption;
 			if(secured) {
-				linkParams.encryption = network.encryption;
 				link = d3d.util.replaceURLParameters(baseSecuredLink,linkParams);
 				icon = "lock";
 			} else {

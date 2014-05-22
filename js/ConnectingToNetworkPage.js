@@ -39,8 +39,13 @@
 		console.log(PAGE_ID+": pagebeforeshow");
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		var form = data.prevPage.find("form");
-		// check if there are url params and a form from a prev page
-		if(_pageData === undefined || form.length === 0) { 
+		// check if there are url params and 
+		// when encrypted if there was a form from a prev page
+		if(_pageData.encryption === "") {
+			_pageData.encryption = "none";
+		}
+		if(_pageData === undefined || 
+			(_pageData.encryption !== "none" && form.length === 0)) { 
 			$.mobile.changePage("#boxes");
 			return;
 		}
