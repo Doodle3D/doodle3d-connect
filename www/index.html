@@ -53,7 +53,7 @@
 		<p class="intro"></p>
 		<ul data-role="listview">
 			<li id="drawItem"><a href="#draw">Draw</a></li>
-			<!-- <li id="updateItem"><a href="#update">Update</a></li> -->
+			<li id="updateItem"><a href="#update">Update<span class="ui-li-count"></span></a></li>
 			<li id="joinNetworkItem"><a href="#join_network">Join network</a></li>
 			<li><a href="#yourapp">Your app here?</a></li>
 		</ul>
@@ -183,10 +183,37 @@
 <div data-role="page" id="update">
 	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
 	<div data-role="header">
-		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 		<h1>Update</h1>
 	</div><!-- /header -->
 	<div role="main" class="ui-content">
+		<h3 id="status"></h3>
+		<form data-ajax="false" data-target="#updating">
+			<fieldset class="" data-role="collapsible">
+				<h3>Options</h3>
+				<input id="retainConfiguration" type="checkbox" name="retain" value="retainConfiguration" checked="true">
+				<label for="retainConfiguration">Preserve personal sketches and settings</label>
+ 				<input id="includeBetas" type="checkbox" name="doodle3d.update.includeBetas" value="includeBetas">
+ 				<label for="includeBetas">Include beta releases (<a href="#beta_info">more info</a>)</label>
+			</fieldset>
+			<input type=submit value="Update">
+		</form>
+		<small id="info"></small>
+	</div><!-- /content -->
+</div><!-- /page -->
+
+
+<div data-role="page" id="updating">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Updating...</h1>
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
+		<h3 id="status"></h3>
+		<p id=description></p>
 	</div><!-- /content -->
 </div><!-- /page -->
 
@@ -202,6 +229,19 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
+
+<div data-role="page" id="beta_info">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Beta info</h1>
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
+		<p>You can subscribe for Doodle3D beta software, this means you'll get the latest versions that are still under development. Only use this when you're prepared to deal with some bugs.</p>
+		<p>This allows you to test new features and give us earlier feedback. The more people that test these versions the more stable the regular version will be.</p>
+	</div><!-- /content -->
+</div><!-- /page -->
+ 
 
 	<script>
 		$(function(){
