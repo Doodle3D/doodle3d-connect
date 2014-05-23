@@ -61,7 +61,6 @@
 		_networkAPI.init(boxURL);
 		retrieveNetworkStatus();
 		_updateAPI.init(boxURL);
-		retrieveUpdateStatus();
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		clearTimeout(_retryRetrieveStatusDelay);
@@ -91,6 +90,8 @@
 			var updateLink = _updateItem.find("a").attr("href");
 			updateLink = d3d.util.replaceURLParameters(updateLink,_boxData);
 			_updateItem.find("a").attr("href",updateLink);
+			
+			retrieveUpdateStatus();
 			
 		} else { // offline
 			//console.log("offline");
