@@ -11,7 +11,7 @@
 	var _form;
 	var _statusField;
 	var _infoField;
-	var _retainConfigurationCheckbox;
+	var _noRetainCheckbox;
 	var _includeBetasCheckbox;
 	var _submitButton;
 	
@@ -30,11 +30,11 @@
 		_statusField = _page.find("#status");
 		_infoField = _page.find("#info");
 		_form = _page.find("form");
-		_retainConfigurationCheckbox = _form.find("#retainConfiguration");
+		_noRetainCheckbox = _form.find("#noRetainConfiguration");
 		_includeBetasCheckbox = _form.find("#includeBetas");
 		_submitButton = _form.find("input[type=submit]");
 		
-		_retainConfigurationCheckbox.change(retainConfigurationChanged);
+		_noRetainCheckbox.change(noRetainCheckboxChanged);
 		_includeBetasCheckbox.change(includeBetasChanged);
 		_form.submit(update);
 		
@@ -130,7 +130,7 @@
 	}
 	function updateButton(data) {
 		console.log(PAGE_ID+":updateButton");
-		var retain = _retainConfigurationCheckbox.prop('checked');
+		var noRetain = _noRetainCheckbox.prop('checked');
 		
 		var buttonText = "Update";
 		_submitButton.button('disable');
@@ -139,21 +139,21 @@
 			case UpdateAPI.STATUS.IMAGE_READY:
 			case UpdateAPI.STATUS.DOWNLOAD_FAILED:
 			case UpdateAPI.STATUS.INSTALL_FAILED:
-				if(data.can_update || !retain) {
+				if(data.can_update || noRetain) {
 					_submitButton.button('enable');
 					if (data.newest_version_is_beta) {
-						if(retain) {
-							buttonText = "Update to beta";
-						} else {
+						if(noRetain) {
 							buttonText = "Clean update to beta";
+						} else {
+							buttonText = "Update to beta";
 						}
 					} else if (data.current_version_is_beta && !data.newest_version_is_newer) {
-						if(retain) {
-							buttonText = "Revert to latest stable release";
-						} else {
+						if(noRetain) {
 							buttonText = "Clean revert to latest stable release";
+						} else {
+							buttonText = "Revert to latest stable release";
 						}
-					} else if (!retain){
+					} else if (noRetain){
 						if(data.newest_version_is_newer) {
 							buttonText = "Clean update";
 						} else {
@@ -174,8 +174,8 @@
 		var abbrMonths = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Sep', 'Aug', 'Oct', 'Nov', 'Dec' ];
 		return abbrMonths[fields[1] - 1] + " " + fields[2] + ", " + fields[0];
 	}
-	function retainConfigurationChanged () {
-		console.log(PAGE_ID+":retainConfigurationChanged");
+	function noRetainCheckboxChanged () {
+		//console.log(PAGE_ID+":noRetainCheckboxChanged");
 		updateButton(_updateStatus);
 	}
 	function includeBetasChanged () {
@@ -184,7 +184,7 @@
 		var settings = {};
 		settings[_includeBetasCheckbox.attr('name')] = _includeBetasCheckbox.prop('checked');
 		_configAPI.save(settings,function() {
-			console.log("  saved");
+			//console.log("  saved");
 			retrieveUpdateStatus();
 		});
 	}

@@ -15,11 +15,10 @@
 	var _configAPI = new ConfigAPI();
 	var _pageData = {};
 	var _formData = {};
-	var _updateStatus = {};
 	var _installing = false;
 	var UPDATED_REDIRECT_DELAY = 5000;
 	var _updatedRedirectDelay;
-	
+	var _no_retain;
 	var PAGE_ID = "#updating";
 	
 	var _self = this;
@@ -31,7 +30,7 @@
 		_descriptionField = _page.find("#description");
   });
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
-		console.log(PAGE_ID+":pagebeforeshow");
+		//console.log(PAGE_ID+":pagebeforeshow");
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		var form = data.prevPage.find("form");
 		// check if there are url params and 
@@ -42,6 +41,7 @@
 			return;
 		}
 		_formData = d3d.util.getFormData(form);
+		//console.log("  _formData: ",_formData);
 		var boxURL = "http://"+_pageData.localip;
 		_updateAPI.init(boxURL);
 		_updateAPI.refreshing = onRefreshing;
@@ -58,17 +58,15 @@
 	
 	
 	function downloadUpdate() {
-		console.log(PAGE_ID+":downloadUpdate");
+		//console.log(PAGE_ID+":downloadUpdate");
 		_updateAPI.download();
-		// override state
-		_updateStatus.state_code = UpdateAPI.STATUS.DOWNLOADING;
-		updatePage(_updateStatus);
 	}
 	function installUpdate() {
-		console.log(PAGE_ID+":installUpdate");
-		var no_retain = !(_formData.retain);
-		console.log("  no_retain: ",no_retain);
-		_updateAPI.install(no_retain);
+		//console.log(PAGE_ID+":installUpdate");
+		//console.log("  _formData: ",_formData);
+		_no_retain = (_formData.no_retain)? true : false;
+		//console.log("  no_retain: ",_no_retain);
+		_updateAPI.install(_no_retain);
 		_installing = true;
 	}
 	
@@ -78,37 +76,33 @@
 		d3d.util.showLoader(true);
 	}
 	function onStatusUpdated(data) {
-		console.log(PAGE_ID+": onStatusUpdated ");
-		console.log("  state_code: ",data.state_code," text: ",data.state_text);
+		//console.log(PAGE_ID+": onStatusUpdated ");
+		//console.log("  state_code: ",data.state_code," text: ",data.state_text);
+		updatePage(data);
+		
 		switch(data.state_code) {
 			case UpdateAPI.STATUS.IMAGE_READY: 
-				console.log("  _installing: ",_installing);
 				if(!_installing) {
 					installUpdate();
-					data.state_code = UpdateAPI.STATUS.INSTALLING;
 				}
 				break;
-			case UpdateAPI.STATUS.NONE: 
-				console.log("  _installing: ",_installing);
-				if(_installing) {
-					data.state_code = UpdateAPI.STATUS.INSTALLED;
-					_updateAPI.stopAutoRefresh();
-					clearTimeout(_updatedRedirectDelay);
-					_updatedRedirectDelay = setTimeout(function () {
-						// redirect to box page
-						console.log("  redirect to box");
+			case UpdateAPI.STATUS.INSTALLED: 
+				_updateAPI.stopAutoRefresh();
+				clearTimeout(_updatedRedirectDelay);
+				_updatedRedirectDelay = setTimeout(function () {
+					if(_no_retain) {
+						//console.log("  redirect to boxes");
+						$.mobile.changePage("#boxes");
+					} else {
+						//console.log("  redirect to box");
 						// replace this page with boxes page in history
 						window.history.replaceState(null, "", "#boxes");
-						var link = "#box";
-						link = d3d.util.replaceURLParameters(link,_pageData);
+						var link = d3d.util.replaceURLParameters("#box",_pageData);
 						$.mobile.changePage(link);
-					},UPDATED_REDIRECT_DELAY);
-					
-				}
+					}
+				},UPDATED_REDIRECT_DELAY);
 				break;
 		}
-		updatePage(data);
-		_updateStatus = data;
 	}
 	function updatePage(data) {
 		console.log(PAGE_ID+": updatePage state: ",data.state_code);
@@ -141,6 +135,9 @@
 		switch(data.state_code){
 			case UpdateAPI.STATUS.INSTALLING:
 				description = "Do not remove power from the WiFi-Box.";
+				if(_no_retain) {
+					description += "<br/><small>Because you didn’t preserve your personal sketches and settings you will need to reconnect your WiFi-Box to your WiFi network. <br/>After an estimated update time you will be redirected to the boxes page. When it does, please connect your device to the WiFi network of the WiFi-Box and return to the boxes page. </small>";
+				}
 				break;
 			case UpdateAPI.STATUS.DOWNLOAD_FAILED:
 			case UpdateAPI.STATUS.INSTALL_FAILED:
@@ -148,7 +145,7 @@
 				break;
 		}
 		console.log("  description: ",description);
-		_descriptionField.text(description);
+		_descriptionField.html(description);
 	}
 	
 })(window);
