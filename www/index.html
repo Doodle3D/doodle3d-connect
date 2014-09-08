@@ -53,6 +53,7 @@
 		<ul data-role="listview">
 			<li id="drawItem"><a href="#draw">Draw</a></li>
 			<li id="updateItem"><a href="#update">Update<span class="ui-li-count"></span></a></li>
+            <li id="settingsItem"><a href="#settings">Settings</a></li>
 			<li id="joinNetworkItem"><a href="#join_network">Join network</a></li>
 			<li><a href="#yourapp">Your app here?</a></li>
 		</ul>
@@ -206,7 +207,64 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
-
+<div data-role="page" id="settings">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Settings</h1>
+        
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
+<!--        <p class="intro"></p>-->
+		<ul data-role="listview">
+            <li id="networkSettingsItem"><a href="#networksettings">Network</a></li>
+            <li id="printerSettingsItem"><a href="#printersettings">3D-Printer</a></li>
+            <li id="appSettingsItem"><a href="#applicationsettings">Applications</a></li>
+            
+        </ul>
+    </div>
+</div>
+    
+<div data-role="page" id="networksettings">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Network Settings</h1>
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
+        <p class="intro">Your WiFi-Box is currently connected to ....<br>You can connect to another network or use the Doodle3D WiFi-Box offline running it's own WiFi hotspot.</p>
+		<ul data-role="listview">
+            <li><a href="#joinAnotherNetwork">Join another network</a></li>
+            <li><a href="#createHotspot">Create hotspot</a></li>
+        </ul>
+    </div>
+</div>
+    
+<div data-role="page" id="createHotspot">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Create WiFi hotspot</h1>
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
+        <p class="intro">Your WiFi-Box is about to create it's own WiFi Hotspot. It will disconnect from the internet in this mode.</p>
+        <form data-ajax="false" data-target="#connecting_to_network">
+			<input type="text" name="txtHotspotSSID" placeholder="Doodle3D-AB1234" value="Doodle3D-AB1234" data-clear-btn="true" autocomplete="off" autofocus required="required" autocapitalize="off" autocorrect="off">
+            <input type="text" name="txtHotspotSSID" placeholder="Password" value="" data-clear-btn="true" autocomplete="off" autofocus autocapitalize="off" autocorrect="off">
+            
+<!--
+            <input type="password" name="password" placeholder="Password" data-clear-btn="true" data-typetoggle='#showPassword' autocomplete="off" autofocus required="required" autocapitalize="off" autocorrect="off">
+			<input id="showPassword" type="checkbox" value="showPassword">
+			<label for="showPassword" class="inline">show password</label>
+-->
+			<input type=submit value="Create WiFi hotspot" onclick="alert('not implemented yet')">
+		</form>
+    </div>
+</div>
+    
 <div data-role="page" id="updating">
 	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
 	<div data-role="header">
