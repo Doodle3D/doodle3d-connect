@@ -99,6 +99,7 @@ module.exports = function(grunt) {
           NetworkAPI: true,
           InfoAPI: true,
           ConfigAPI: true,
+          UpdateAPI:true,
           addToHomescreen: true
         },
         browser: true,

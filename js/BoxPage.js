@@ -12,12 +12,13 @@
 	var _title;
 	var _intro;
 	var _drawItem;
-	//var _updateItem;
+	var _updateItem;
 	var _joinNetworkItem;
 	var _defaultItems;
 	
 	var _networkStatus;
 	var _networkAPI = new NetworkAPI();
+	var _updateAPI = new UpdateAPI();
 	var _boxData = {};
 	var _retryRetrieveStatusDelay;
 	var _retryRetrieveStatusDelayTime = 3000;
@@ -34,7 +35,7 @@
 		
 		_defaultItems = _list.children();
 		_drawItem = _list.find("#drawItem");
-		//_updateItem = _list.find("#updateItem");
+		_updateItem = _list.find("#updateItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
 		
 		// make sure draw link is opened in same WebApp (added to homescreen) 
@@ -59,6 +60,7 @@
 		
 		_networkAPI.init(boxURL);
 		retrieveNetworkStatus();
+		_updateAPI.init(boxURL);
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		clearTimeout(_retryRetrieveStatusDelay);
@@ -74,7 +76,6 @@
 			_retryRetrieveStatusDelay = setTimeout(_self.retrieveStatus, _retryRetrieveStatusDelayTime); // retry after delay
 		});
 	}
-	
 	function setNetworkStatus(status) {
 		console.log(PAGE_ID+":setNetworkStatus: ",status);
 		var introText = "";
@@ -85,7 +86,12 @@
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
-			// ToDo: retrieve update information
+			
+			var updateLink = _updateItem.find("a").attr("href");
+			updateLink = d3d.util.replaceURLParameters(updateLink,_boxData);
+			_updateItem.find("a").attr("href",updateLink);
+			
+			retrieveUpdateStatus();
 			
 		} else { // offline
 			//console.log("offline");
@@ -110,5 +116,17 @@
 		
 		_list.listview('refresh'); // jQuery mobile enhance content
 		_networkStatus = status;
+	}
+	
+	function retrieveUpdateStatus() {
+		console.log(PAGE_ID+":retrieveUpdateStatus");
+		var updateCounter = _list.find("#updateItem .ui-li-count");
+		updateCounter.hide();
+		_updateAPI.status(function(data) { // completed
+			console.log("UpdateAPI:refresh:completed");
+			var canUpdate = data.can_update;
+			updateCounter.text(canUpdate? 1 : 0);
+			updateCounter.show();
+		});
 	}
 })(window);
