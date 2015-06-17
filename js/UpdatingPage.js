@@ -87,6 +87,7 @@
 				}
 				break;
 			case UpdateAPI.STATUS.INSTALLED: 
+				_installing = false;
 				_updateAPI.stopAutoRefresh();
 				clearTimeout(_updatedRedirectDelay);
 				_updatedRedirectDelay = setTimeout(function () {
@@ -101,6 +102,9 @@
 						$.mobile.changePage(link);
 					}
 				},UPDATED_REDIRECT_DELAY);
+				break;
+			case UpdateAPI.STATUS.INSTALL_FAILED:
+				_installing = false;
 				break;
 		}
 	}

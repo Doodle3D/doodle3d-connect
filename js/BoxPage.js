@@ -53,14 +53,15 @@
 		//console.log("  _boxData: ",_boxData);
 		
 		_title.text(_boxData.wifiboxid);
-		setNetworkStatus(NetworkAPI.STATUS.CONNECTED);
 		
 		var drawLink = (_boxData.link)? _boxData.link : boxURL;
 		_page.find("#drawItem a").attr("href",drawLink);
 		
 		_networkAPI.init(boxURL);
-		retrieveNetworkStatus();
 		_updateAPI.init(boxURL);
+		
+		setNetworkStatus(NetworkAPI.STATUS.CONNECTED);
+		retrieveNetworkStatus();
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		clearTimeout(_retryRetrieveStatusDelay);
