@@ -33,14 +33,14 @@
   });
 	$.mobile.document.on( "pageshow", PAGE_ID, function( event, data ) {
 		//console.log("Boxes page pageshow");
-		addToHomescreen(/*{
-			debug: true,           // activate debug mode in ios emulation
-			skipFirstVisit: false,	// show at first access
-			startDelay: 0,          // display the message right away
-			lifespan: 0,            // do not automatically kill the call out
-			displayPace: 0,         // do not obey the display pace
-			maxDisplayCount: 0      // do not obey the max display count
-		}*/);
+		addToHomescreen({
+			//debug: true,					// show on desktop browsers and unsupported devices
+			skipFirstVisit: true,		// Don't show on first visit
+			//startDelay: 0,				// display the message right away
+			//lifespan: 0,					// do not automatically kill the call out
+			//displayPace: 0,				// do not obey the display pace
+			//maxDisplayCount: 0		// do not obey the max display count
+		});
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		//console.log("Boxes page pagehide");
