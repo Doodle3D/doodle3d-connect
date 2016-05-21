@@ -1,6 +1,14 @@
 # doodle3d-connect
 The Doodle3D connect system allows users / applications to find their Doolde3D WiFi-Box(es) on the same WiFi network. The benefit over other systems is that this doesn't require an application with Bonjour-like support, it can be used by a website using Javascript. Visit http://connect.doodle3d.com to scan your local network for Doodle3D WiFi-Boxes.
 
+The following image shows a typical doodle3d-connect page. The most common way to get here is:
+
+1. with an active internet connection visit http://connect.doodle3d.com
+2. connect to a Doodle3D-123456 WiFi accesspoint.
+3. wait a couple of seconds. Your WiFi-Box should appear in the list.
+
+![connect.doodle3d.com](https://cloud.githubusercontent.com/assets/156066/15451030/645fd5ae-1fb0-11e6-9521-e2271c1d2bc5.png)
+
 ![Diagram of doodle3d-connect](https://cloud.githubusercontent.com/assets/156066/15450961/519baea0-1fad-11e6-9b58-9ca597db0a55.png)
 
 #Server
