@@ -9,9 +9,8 @@ The following image shows a typical doodle3d-connect page. The most common way t
 
 ![connect.doodle3d.com](https://cloud.githubusercontent.com/assets/156066/15451030/645fd5ae-1fb0-11e6-9521-e2271c1d2bc5.png)
 
-![Diagram of doodle3d-connect](https://cloud.githubusercontent.com/assets/156066/15450961/519baea0-1fad-11e6-9b58-9ca597db0a55.png)
-
 #Server
+![Diagram of doodle3d-connect](https://cloud.githubusercontent.com/assets/156066/15450961/519baea0-1fad-11e6-9b58-9ca597db0a55.png)
 The Doodle3D connect server has an api with 2 methods:
 
 ##list
