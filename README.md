@@ -47,3 +47,7 @@ network/alive. A very simple method that doesn't contain any logic or info. It's
 ##(Web)App
 (Web)Apps can use the connect system to find WiFi-Boxes on the same network.
 They continuely query the list api method to retrieve local WiFi-Boxes information. Because the server can't know their current status the (Wep)App should query the alive api method of the WiFi-Boxes. When it get's a valid response the WiFi-Box can be shown to the user. Besides querying the boxes it retrieves through the list api The Web(App) should also continuesly query the alive method of boxes that are already shown. To make this easier for (Wep)App developers we created a JavaScript library that handles this; ConnectAPI.js.
+
+#Future & Alternatives
+* [Network Service Discovery API - doodle3d-client/issues/248](https://github.com/Doodle3D/doodle3d-client/issues/248)
+* [Scanning local network - doodle3d-client/issues/250](https://github.com/Doodle3D/doodle3d-client/issues/250)
