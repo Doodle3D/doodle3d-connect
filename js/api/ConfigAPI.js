@@ -61,6 +61,17 @@ function ConfigAPI() {
 			if(failedHandler) failedHandler();
 		});
 	};
+
+	this.loadSetting = function(settingName,completeHandler,failedHandler) {
+		this.load(settingName+"=",function(successData) {
+			completeHandler(successData[settingName]);
+		},failedHandler);
+	}
+	
+	this.loadPrinterType = function(completeHandler,failedHandler) {
+		this.loadSetting("printer.type",completeHandler,failedHandler);
+	}
+
 	this.save = function(newSettings,completeHandler,failedHandler) {
 		//console.log("ConfigAPI:save");
 		$.ajax({

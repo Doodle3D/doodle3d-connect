@@ -13,6 +13,7 @@
 	var _intro;
 	var _drawItem;
 	var _updateItem;
+	var _settingsItem;
 	var _joinNetworkItem;
 	var _defaultItems;
 	
@@ -36,6 +37,7 @@
 		_defaultItems = _list.children();
 		_drawItem = _list.find("#drawItem");
 		_updateItem = _list.find("#updateItem");
+		_settingsItem = _list.find("#settingsItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
 		
 		// make sure draw link is opened in same WebApp (added to homescreen) 
@@ -82,7 +84,7 @@
 		var introText = "";
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			//console.log("online");
-			_drawItem.find("a").text("Draw");
+			_drawItem.find("a").text("Draw / Sketch");
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",false);
@@ -92,13 +94,18 @@
 			updateLink = d3d.util.replaceURLParameters(updateLink,_boxData);
 			_updateItem.find("a").attr("href",updateLink);
 			
+			//settingsLink
+			var settingsLink = _settingsItem.find("a").attr("href");
+			settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
+			_settingsItem.find("a").attr("href",settingsLink);
+
 			retrieveUpdateStatus();
 			
 		} else { // offline
 			//console.log("offline");
 			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
-			_drawItem.find("a").text("Draw (offline)");
+			_drawItem.find("a").text("Draw / Sketch (offline)");
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",true);
