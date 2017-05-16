@@ -20,6 +20,7 @@
 	var _printerAPI = new PrinterAPI();
 	var _pageData = {};
 	var _updateStatus = {};
+	var _title;
 	
 	var PAGE_ID = "#settings";
 	
@@ -37,12 +38,15 @@
 		console.log(PAGE_ID+":pageinit");
 
 		_page = $(this);
+		_title = _page.find(".ui-title");
 
 		$("#divSettings").hide();
 		d3d.util.showLoader();
 
 		$("#lstPrinters").on("change", function(data) {
 			var printerType = $(this).val();
+			
+			d3d.util.showLoader();
 			
 			_configAPI.savePrinterType(printerType,function(successData) {
 				refreshSettings();
@@ -106,6 +110,8 @@
 			return;
 		}
 		var boxURL = "http://"+_pageData.localip;
+
+		_title.text("Settings for " + _pageData.wifiboxid);
 		
 		_configAPI.init(boxURL);
 		_printerAPI.init(boxURL);
