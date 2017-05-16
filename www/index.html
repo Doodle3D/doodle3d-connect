@@ -279,17 +279,7 @@
         
 	</div><!-- /header -->
 	<div id="divSettings" role="main" class="ui-content">
-        <!-- <p class="intro">test</p> -->
-
-
-		<a href="index.html" data-icon="check" data-role="button" data-inline="true" data-theme="c">Save settings</a>
-			<!-- <div align="right"> -->
-				<!-- <a href="index.html" data-role="button" class="ui-btn-right ui-btn-inline">Save</a> -->
-			<!-- </div> -->
-			 <!-- data-theme="a" data-inline="true" -->
-
-<!-- <a href="#" class="ui-btn-right ui-btn-inline">Login</a> -->
-
+        <p class="intro">Use this page to select which 3D-printer is connected to your Doodle3D WiFi-Box. By selecting a printer the default settings for this printer will be loaded. Values are saved automatically.</p>
 
 		<div data-role="collapsible" data-collapsed="false">
 
@@ -328,7 +318,7 @@
 
 			<div data-role="fieldcontain">
 				<label for="name">Filament thickness (mm):</label>
-		        <input type="number" id="filamentThickness" name="filamentThickness" data-mini="true"/>
+		        <input type="number" id="filamentThickness" name="filamentThickness" data-mini="true" step=".01" min="1.75" max="3.3"/>
 			</div>
 
 			<div data-role="fieldcontain">

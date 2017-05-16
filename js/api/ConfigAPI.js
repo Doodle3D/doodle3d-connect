@@ -83,15 +83,22 @@ function ConfigAPI() {
 			success: function(response){
 				//console.log("ConfigAPI:save response: ",response);
 				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
+					if (failedHandler) failedHandler(response);
 				} else {
-					completeHandler(response.data);
+					console.log("ConfigAPI.save",newSettings,response.data);
+					if (completeHandler) completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
 			if(failedHandler) failedHandler();
 		});
 	};
+
+	this.savePrinterType =  function(printerType,completeHandler,failedHandler) {
+		var settings = {"printer.type": printerType};
+		this.save(settings,completeHandler,failedHandler);
+	};
+
 	this.resetAll = function(completeHandler,failedHandler) {
 		//console.log("ConfigAPI:resetAll");
 		$.ajax({

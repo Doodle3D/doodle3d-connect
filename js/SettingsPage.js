@@ -1,7 +1,7 @@
 /*
  * This file is part of the Doodle3D project (http://doodle3d.com).
  *
- * Copyright (c) 2013, Doodle3D
+ * Copyright (c) 2013-2017, Doodle3D
  * This software is licensed under the terms of the GNU GPL v2 or later.
  * See file LICENSE.txt or visit http://www.gnu.org/licenses/gpl.html for full license details.
  */
@@ -25,9 +25,8 @@
 	
 	var _self = this;
 
-	function updateFields() {
-		var isHeatedBed = $("#chkBed").prop("checked");
-		if (isHeatedBed) {
+	function showOrHideFields() {
+		if ($("#chkBed").prop("checked")) {
 			$("#grpBedTemp").show(); 
 		} else {
 			$("#grpBedTemp").hide();
@@ -42,19 +41,62 @@
 		$("#divSettings").hide();
 		d3d.util.showLoader();
 
-		$("#chkBed").on("change", function(data) {
-			updateFields();
+		$("#lstPrinters").on("change", function(data) {
+			var printerType = $(this).val();
+			
+			_configAPI.savePrinterType(printerType,function(successData) {
+				refreshSettings();
+			},function(failData) {
+				console.log("savePrinterType fail",failData);
+			});
+		});
+
+		$("#nozzleTemperature").on('slidestop', function( event ) { 
+			_configAPI.save({"printer.temperature":$(this).val()});
+		});
+
+		$("#nozzleTemperature").on('focusout', function( event ) { 
+			_configAPI.save({"printer.temperature":$(this).val()});
+		});
+
+		$("#bedTemperature").on('slidestop', function( event ) { 
+			_configAPI.save({"printer.bed.temperature":$(this).val()});
+		});
+
+		$("#bedTemperature").on('focusout', function( event ) { 
+			_configAPI.save({"printer.bed.temperature":$(this).val()});
 		});
 
 		$("#filamentThickness").on("change", function(data) {
-			console.log("filamentThickness change",$(this).val());
+			_configAPI.save({"printer.filamentThickness":$(this).val()});
 		});
 
-		$("#bedTemperature").on("change", function(data) {
-			console.log("bedTemperature change",$(this).val());
+		$("#dimensionsX").on("change", function(data) {
+			_configAPI.save({"printer.dimensions.x":$(this).val()});
 		});
-	});
+
+		$("#dimensionsY").on("change", function(data) {
+			_configAPI.save({"printer.dimensions.y":$(this).val()});
+		});
 	
+		$("#dimensionsZ").on("change", function(data) {
+			_configAPI.save({"printer.dimensions.z":$(this).val()});
+		});
+
+		$('#startgcode').on("change", function(data) {
+			_configAPI.save({"printer.startcode":$(this).val()});
+		});
+		
+		$('#endgcode').on("change", function(data) {
+			_configAPI.save({"printer.end":$(this).val()});
+		});
+
+		$("#chkBed").on("change", function(data) {
+			showOrHideFields();
+		});
+
+	});
+
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		
@@ -68,7 +110,14 @@
 		_configAPI.init(boxURL);
 		_printerAPI.init(boxURL);
 
+		refreshSettings();
+	});
 
+	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
+	
+	});
+
+	function refreshSettings() {
 		_configAPI.loadAll(function(successData) {
 			var printerType = successData["printer.type"];
 			var printerStartGCode = successData["printer.startcode"];
@@ -93,7 +142,6 @@
 			$('#nozzleTemperature').val(nozzleTemperature);
 
 			_printerAPI.listAll(function(printers) {
-				console.log(PAGE_ID,'page init',data);
 				
 				$("#lstPrinters").empty();
 
@@ -106,9 +154,13 @@
 
 				$("#divSettings").show();
 				d3d.util.hideLoader();
+				showOrHideFields();
 
-			},function(failData) { //_printerAPI.listAll
-				console.log(PAGE_ID,'FAIL _printerAPI.listall',data);
+				$("#bedTemperature").slider("refresh");
+				$("#nozzleTemperature").slider("refresh");
+
+			},function(failData) {
+				console.log(PAGE_ID,'FAIL _printerAPI.listAll');
 				$.mobile.changePage("#boxes");
 				return;
 			});
@@ -118,12 +170,7 @@
 			$.mobile.changePage("#boxes");
 			return;
 		});
-		
-	});
-
-	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
-	
-	});
+	}
 
 })(window);
 
