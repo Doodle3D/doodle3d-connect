@@ -82,6 +82,7 @@
 	function setNetworkStatus(status) {
 		console.log(PAGE_ID+":setNetworkStatus: ",status);
 		var introText = "";
+
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			//console.log("online");
 			_drawItem.find("a").text("Draw / Sketch");
@@ -90,28 +91,25 @@
 			_defaultItems.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
 			
+			//update link
 			var updateLink = _updateItem.find("a").attr("href");
 			updateLink = d3d.util.replaceURLParameters(updateLink,_boxData);
 			_updateItem.find("a").attr("href",updateLink);
 			
-			//settingsLink
-			var settingsLink = _settingsItem.find("a").attr("href");
-			settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
-			_settingsItem.find("a").attr("href",settingsLink);
-
 			retrieveUpdateStatus();
 			
 		} else { // offline
 			//console.log("offline");
 			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
-			_drawItem.find("a").text("Draw / Sketch (offline)");
+			_drawItem.find("a").text("Draw / Sketch (local)");
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",true);
 			_drawItem.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
-			
+
+			//joinLink
 			var joinLink = _joinNetworkItem.find("a").attr("href");
 			joinLink = d3d.util.replaceURLParameters(joinLink,_boxData);
 			_joinNetworkItem.find("a").attr("href",joinLink);
@@ -120,6 +118,12 @@
 		_intro.text(introText);
 		_intro.toggleClass("ui-screen-hidden",(introText === ""));
 		
+		//settingsLink
+		var settingsLink = _settingsItem.find("a").attr("href");
+		settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
+		_settingsItem.find("a").attr("href",settingsLink);
+		_settingsItem.toggleClass("ui-screen-hidden",false);
+
 		// ToDo: update footer with network info
 		
 		_list.listview('refresh'); // jQuery mobile enhance content
