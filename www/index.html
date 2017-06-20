@@ -66,7 +66,8 @@
 		<p class="intro"></p>
 		<ul data-role="listview">
 			<li id="drawItem"><a href="#draw">Draw</a></li>
-			<!-- <li id="transformItem"><a href="http://transform.doodle3d.com">Doodle3D Transform</a></li> -->
+			<li id="printItem"><a href="#print">Print</a></li>
+			<li id="controlItem"><a href="#control">Control</a></li>
 			<li id="settingsItem" data-icon="gear"><a href="#settings">Settings</a></li>
 			<li id="updateItem"><a href="#update">Firmware Update<span class="ui-li-count"></span></a></li>
 			<li id="joinNetworkItem"><a href="#join_network">Join network </a></li>
@@ -270,6 +271,140 @@
 	</div><!-- /content -->
 </div><!-- /page -->
 
+<!-- <div data-role="page" id="printSettingsGcode">
+	<a href="#print" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>GCODE Settings</h1>
+	</div>
+</div>
+
+<div data-role="page" id="printSettingsMaterial">
+	<a href="#print" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Material Settings</h1>
+	</div>
+</div> -->
+
+<!-- <div data-role="page" id="printing">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Printing</h1>
+	</div>
+
+	<p>Print started: Today, 15:04</p>
+	<p>File Id: 3123123123123123123123123123</p>
+	<p>File Name: monster.gcode</p>
+	<p>File Size: 40MB</p>
+	<p>Print Progress: 10%</p>
+	<p>Temperature: 200&deg;C</p>
+
+	<button>Stop</button>
+
+</div> -->
+
+
+<div data-role="page" id="print">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Print</h1>
+        
+	</div><!-- /header -->
+	<div id="divPrint" role="main" class="ui-content">
+        <p class="intro">Let's 3D-print your model by sending it to your printer over WiFi. Please check the settings below and press Print.</p>
+
+		<ul id="lstPrint" data-role="listview" data-inset="true">
+	      <li class="boxItem">
+	        <a href="#">
+	        <img src="img/icons/wifibox.jpg">
+	        <h2>...</h2>
+	        <p>...</p>
+	        </a>
+	      </li>
+	      <li class="printerItem">
+	        <a href="#settings">
+	        <img src="img/icons/printers/blank.png">
+	        <h2>...</h2>
+	        <p>...</p>
+	        </a>
+	      </li>
+	      <li class="materialItem">
+	        <a href="#settings">
+	        <img src="img/icons/material/white.jpg">
+	        <h2>Material</h2>
+	        <p>...</p>
+	        </a>
+	      </li>
+	      <!-- <li class="modelItem">
+	        <a href="#">
+	        <img src="https://doodle3d.cloudant.com/doodle3d-shared-sketches/de7c74a332a831404a43ba2a51ed6453/img" width="80" height="80">
+	        <h2>3D Model</h2>
+	        <p>44MB (8c57e905-b08a-4681-a0c2-5834eeeb43a0)</p>
+	        </a>
+	      </li> -->
+	      <li class="gcodeItem" >
+	        <a href="#printSettingsGcode">
+	        <img src="img/icons/gcode.png" width="80" height="80">
+	        <h2>GCODE File</h2>
+	        <p></p>
+	        </a>
+	      </li>
+	    </ul>
+
+        <button id="btnPrint" class="ui-shadow ui-btn ui-corner-all">Print</button>
+    </div>
+</div>
+
+<div data-role="page" id="control">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a href="../toolbar/" data-rel="back"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Control</h1>    
+	</div><!-- /header -->
+
+	<div id="divControl" role="main" class="ui-content">
+        <!-- <p class="intro">...</p> -->
+
+		<div id="infoState">loading...</div>
+
+		<div id="grpStatusAndControl">
+			<ul data-role="listview" data-inset="true"> 
+				<li id="liPrinterStatus" data-icon="false"><a href="#">Printer status<span id="infoPrinterStatus" class="ui-li-count"></span></a></li>
+				<li data-icon="false"><a href="#">Nozzle temperature<span id="infoNozzleTemperature" class="ui-li-count"></span></a></li>
+				<li id="liPrintingProgress" data-icon="false"><a href="#">Printing progress<span id="infoPrintingProgress" class="ui-li-count">...</span></a></li>
+			</ul>
+
+			<div iddata-role="controlgroup" data-type="horizontal">
+				<!-- <input type="button" id="btnHome" data-role="button" data-icon="home" value="Home">
+				<input type="button" id="btnHeatup" data-role="button" data-icon="arrow-u" value="Heatup">
+				<input type="button" id="btnCooldown" data-role="button" data-icon="arrow-d" value="Cooldown"> -->
+			</div>
+
+			<div id="grpCustomGCODE" data-role="collapsible">
+				<h3>Send custom GCODE...</h3>
+				<div data-role="fieldcontain">
+					<label for="startgcode">GCODE:<br>(500 lines max.)<br><br><small><strong>Example:</strong><br><pre style="margin-top:0">G28          ; Home
+M104 S180    ; Heat-up
+G1 X100 Y100 ; Move</pre></small></label>
+					<textarea name="gcode" id="gcode" rows="5" style="font-family: courier, monospace">G28</textarea>
+				</div>
+				<button id="btnSend">Send</button>
+			</div>
+
+			<button id="btnStop" data-role="button">Stop print</button>
+
+		</div>
+	</div>
+</div>
+
 <div data-role="page" id="settings">
 	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
 	<div data-role="header">
@@ -289,10 +424,6 @@
 	        <h3>Printer settings</h3>
 
 			<div data-role="fieldcontain">
-				<!-- <label for="name"></label>
-				<label>
-					<input type="checkbox" name="checkbox-0 ">Enable heated bed
-				</label> -->
 			    <label for="chkBed">Heated bed:</label>
 			    <input type="checkbox" data-role="flipswitch" name="chkBed" id="chkBed">
 			</div>
@@ -354,9 +485,6 @@
 			 	<input type="range" name="nozzleTemperature" id="nozzleTemperature" value="200" min="20" max="260" data-highlight="true"  />
 			</div>
 		</div>
-	
-	
-
 
     </div>
 </div>
