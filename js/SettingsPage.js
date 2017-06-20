@@ -18,12 +18,17 @@
 	var _updateAPI = new UpdateAPI();
 	var _configAPI = new ConfigAPI();
 	var _printerAPI = new PrinterAPI();
+	var _infoAPI = new InfoAPI();
 	var _pageData = {};
 	var _updateStatus = {};
 	var _title;
 	
 	var PAGE_ID = "#settings";
 	
+	var timerObject = {
+		interval_id : null
+	};
+
 	var _self = this;
 
 	function showOrHideFields() {
@@ -101,7 +106,7 @@
 
 	});
 
-	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
+	$.mobile.document.on("pagebeforeshow", PAGE_ID, function( event, data ) {
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		
 		if(_pageData === undefined) { 
@@ -115,12 +120,18 @@
 		
 		_configAPI.init(boxURL);
 		_printerAPI.init(boxURL);
+		_infoAPI.init(boxURL);
 
 		refreshSettings();
+
 	});
 
+	$.mobile.document.on('pagehide', PAGE_ID, function(){   
+
+	}); 
+
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
-	
+		console.log("pagebeforehide");
 	});
 
 	function refreshSettings() {
