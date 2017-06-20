@@ -12,8 +12,10 @@
 	var _title;
 	var _intro;
 	var _drawItem;
+	var _printItem;
 	var _updateItem;
 	var _settingsItem;
+	var _controlItem;
 	var _joinNetworkItem;
 	var _defaultItems;
 	
@@ -38,8 +40,10 @@
 		_drawItem = _list.find("#drawItem");
 		_updateItem = _list.find("#updateItem");
 		_settingsItem = _list.find("#settingsItem");
+		_controlItem = _list.find("#controlItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
-		
+		_printItem = _list.find("#printItem");
+
 		// make sure draw link is opened in same WebApp (added to homescreen) 
 		// and it doesn't start a browser
 		$.stayInWebApp("#box #drawItem a",true);
@@ -64,6 +68,8 @@
 		
 		setNetworkStatus(NetworkAPI.STATUS.CONNECTED);
 		retrieveNetworkStatus();
+
+
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		clearTimeout(_retryRetrieveStatusDelay);
@@ -89,6 +95,7 @@
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",false);
+			_printItem.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
 			
 			//update link
@@ -103,7 +110,7 @@
 			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
 			_drawItem.find("a").text("Draw / Sketch (local)");
-			
+		
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",true);
 			_drawItem.toggleClass("ui-screen-hidden",false);
@@ -123,6 +130,23 @@
 		settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
 		_settingsItem.find("a").attr("href",settingsLink);
 		_settingsItem.toggleClass("ui-screen-hidden",false);
+
+		//settingsLink
+		var controlLink = _controlItem.find("a").attr("href");
+		controlLink = d3d.util.replaceURLParameters(controlLink,_boxData);
+		_controlItem.find("a").attr("href",controlLink);
+		_controlItem.toggleClass("ui-screen-hidden",false);
+
+		//printLink
+		var printLink = _printItem.find("a").attr("href");
+		printLink = d3d.util.replaceURLParameters(printLink,_boxData);
+		_printItem.find("a").attr("href",printLink);
+		
+		if (d3d && d3d.pageParams && d3d.pageParams.uuid) {
+			_printItem.show();
+		} else {
+			_printItem.hide();
+		}
 
 		// ToDo: update footer with network info
 		
