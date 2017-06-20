@@ -46,4 +46,72 @@ function PrinterAPI() {
 			if(failedHandler) failedHandler();
 		});
 	};
+
+	this.fetch = function(data, completeHandler,failedHandler) {
+		console.log("fetch",_wifiboxURL,data);
+
+		$.ajax({
+			url: _wifiboxURL + "/printer/fetch",
+			type: "POST",
+			dataType: 'json',
+			data: data,
+			timeout: _timeoutTime,
+			success: function(response){
+				console.log("printerAPI.fetch response=",response);
+				if(response.status == "error" || response.status == "fail") {
+					if (failedHandler) failedHandler(response);
+				} else {
+					if (completeHandler) completeHandler(response.data);
+				}
+			}
+		}).fail(function() {
+			if(failedHandler) failedHandler();
+		});
+	};
+
+	this.print = function(data, completeHandler,failedHandler) {
+		// data = { "gcode": gcode, "first": first, "start": start },
+		console.log("print",_wifiboxURL,data);
+
+		$.ajax({
+			url: _wifiboxURL + "/printer/print",
+			type: "POST",
+			dataType: 'json',
+			data: data, 
+			timeout: _timeoutTime,
+			success: function(response){
+				console.log("printerAPI.print response=",response);
+				if(response.status == "error" || response.status == "fail") {
+					if (failedHandler) failedHandler(response);
+				} else {
+					if (completeHandler) completeHandler(response.data);
+				}
+			}
+		}).fail(function() {
+			if (failedHandler) failedHandler();
+		});
+	};
+
+	this.stop = function(data, completeHandler, failedHandler) {
+		console.log("stop",_wifiboxURL,data);
+
+		$.ajax({
+			url: _wifiboxURL + "/printer/stop",
+			type: "POST",
+			dataType: 'json',
+			data: data, 
+			timeout: _timeoutTime,
+			success: function(response){
+				console.log("printerAPI.stop response=",response);
+				if(response.status == "error" || response.status == "fail") {
+					if (failedHandler) failedHandler(response);
+				} else {
+					if (completeHandler) completeHandler(response.data);
+				}
+			}
+		}).fail(function() {
+			if (failedHandler) failedHandler();
+		});
+	};
+
 }

@@ -58,4 +58,24 @@ function InfoAPI() {
 			if(failedHandler) failedHandler();
 		});
 	};
+
+	this.getStatus = function(completeHandler,failedHandler) {
+		$.ajax({
+			url: _wifiboxURL + "/info/status",
+			type: "GET",
+			dataType: 'json',
+			timeout: _timeoutTime,
+			success: function(response){
+				if (response.status == "error" || response.status == "fail") {
+					if (failedHandler) failedHandler(response);
+				} else {
+					if (completeHandler) completeHandler(response.data);
+				}
+			}
+		}).fail(function() {
+			if (failedHandler) failedHandler();
+		});
+	};
+
+
 }

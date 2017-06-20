@@ -13,7 +13,7 @@ function ConfigAPI() {
 	var _wifiboxURL;
 	var _wifiboxCGIBinURL;
 	
-	var _timeoutTime 							= 3000;
+	var _timeoutTime = 3000;
 	var _saveSettingsTimeoutTime 	= 8000;
 	
 	var _self = this;
@@ -33,13 +33,13 @@ function ConfigAPI() {
 			timeout: _timeoutTime,
 			success: function(response){
 				if(response.status == "error" || response.status == "fail") {
-					if(failedHandler) failedHandler(response);
+					if (failedHandler) failedHandler(response);
 				} else {
-					completeHandler(response.data);
+					if (completeHandler) completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
-			if(failedHandler) failedHandler();
+			if (failedHandler) failedHandler();
 		});
 	};
 	this.load = function(targetSettings,completeHandler,failedHandler) {
