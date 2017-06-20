@@ -101,6 +101,7 @@ module.exports = function(grunt) {
           ConfigAPI: true,
           PrinterAPI: true,
           UpdateAPI:true,
+          ServerAPI:true,
           addToHomescreen: true
         },
         browser: true,
