@@ -117,14 +117,15 @@
 		if (data.current_release_date) {
 			html += ' (released: ' + formatDate(data.current_release_date) + ')';
 		}
-		var localReleasenotes = "http://"+_pageData.localip+"/ReleaseNotes.html";
+
+		var localReleasenotes = "http://"+_pageData.localip+"/ReleaseNotes.html?"+data.current_version;
 		html += ' (<a target="d3d-curr-relnotes" href="'+localReleasenotes+'">release notes</a>).';
 		if(data.can_update) {
 			html += '<br/>Latest version: ' + data.newest_version;
 			if (data.newest_release_date) {
 				html += ' (released: ' + formatDate(data.newest_release_date) + ')';
 			}
-			html += ' (<a target="d3d-new-relnotes" href="http://doodle3d.com/releasenotes/">release notes</a>).';
+			html += ' (<a target="d3d-new-relnotes" href="http://doodle3d.com/releasenotes/?'+data.newest_version+'">release notes</a>).';
 		}
 		_infoField.html(html);
 	}
