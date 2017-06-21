@@ -14,6 +14,7 @@
 	var _noRetainCheckbox;
 	var _includeBetasCheckbox;
 	var _submitButton;
+	var _settings;
 	
 	var _updateAPI = new UpdateAPI();
 	var _configAPI = new ConfigAPI();
@@ -83,16 +84,19 @@
 		$("#btnStop").on("click", function(data) {
 			$(this).hide();
 
-			_configAPI.loadSetting("printer.endcode",function(successData) {
-				console.log('btnStop','endcode',successData);
-				_printerAPI.stop({gcode:successData}, function(successData) {
+			_configAPI.loadAll(function(successData) {
+				_settings = successData;
+
+				var endcode = _configAPI.subsituteVariables(_settings["printer.endcode"],_settings);
+
+				_printerAPI.stop({gcode:endcode}, function(successData) {
 					console.log("btnStop success",successData);
 					refreshStatus();
 				},function(failData) {
 					console.log("btnStop fail",failData);
 				});
 			}, function(failData) {
-				console.log('btnStop failed to load endcode',failData);
+				console.log('btnStop failed to load settings',failData);
 			});
 
 		});

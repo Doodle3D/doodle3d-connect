@@ -41,16 +41,6 @@
 		$("#btnPrint").on("click", fetchPrint);
 	});
 
-	function formatBytes(a,b) {
-		if (0===a) {
-			return "0 Bytes";
-		} else {
-			var c=1e3,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"];
-			var f=Math.floor(Math.log(a)/Math.log(c));
-			return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f];
-		}
-	}
-
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		
@@ -77,7 +67,7 @@
 
 		_serverAPI.getInfo(d3d.pageParams.uuid, function(successData) {
 			console.log("getInfo success",successData);
-			$("#lstPrint li.gcodeItem p").text(formatBytes(successData["bytes"]));
+			$("#lstPrint li.gcodeItem p").text(d3d.util.formatBytes(successData["bytes"]));
 			console.log(successData);
 
 
@@ -104,9 +94,7 @@
 		_configAPI.loadAll(function(successData) {
 			_settings = successData;
 			console.log(_settings);
-			var startcode = subsituteVariables(successData["printer.startcode"],successData);
-			var endcode = subsituteVariables(successData["printer.endcode"],successData);
-
+			
 			var printerLink = $("#lstPrint li.printerItem a").attr("href");
 			printerLink = d3d.util.replaceURLParameters(printerLink,_pageData);
 			$("#lstPrint li.printerItem a").attr("href",printerLink);
@@ -116,9 +104,6 @@
 				_settings["printer.temperature"] + " &deg;C";
 			$("#lstPrint li.materialItem p").html(materialInfo);
 			$("#lstPrint li.materialItem a").attr("href",printerLink);
-
-			$("#printStartgcode").val(startcode);
-			$("#printEndgcode").val(endcode);
 
 			_printerAPI.listAll(function(successData) {
 				console.log("printer listAll");
@@ -136,52 +121,33 @@
 
 	});
 
-	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
+	$.mobile.document.on("pagebeforehide", PAGE_ID, function( event, data ) {
 
 	});
 
 	function fetchPrint() {
-		console.log("fetchPrint",d3d.pageParams.uuid);
-		_printerAPI.fetch({
+		var startcode = _configAPI.subsituteVariables(_settings["printer.startcode"],_settings);
+		var endcode = _configAPI.subsituteVariables(_settings["printer.endcode"],_settings);
+
+		var data = {
 			"id": d3d.pageParams.uuid,
-			"startcode": $("#printStartgcode").val(),
-			"endcode": $("#printEndgcode").val()
-		},function(successData) {
+			"start_code": startcode,
+			"end_code": endcode
+		};
+
+		console.log("fetchPrint",d3d.pageParams.uuid,data);
+		_printerAPI.fetch(data,function(successData) {
 			console.log("fetchPrint success",successData);
-			$.mobile.changePage("#printing");
+
+			var url = d3d.util.replaceURLParameters("#control",_pageData);
+			$.mobile.changePage(url);
+
 		},function(failData) {
 			console.log("fetchPrint fail",failData);
+			window.alert("Problem: " + failData.msg);
 		});
 	}
 
-	function subsituteVariables(gcode,settings) {
-		//,temperature,bedTemperature,preheatTemperature,preheatBedTemperature
-		var temperature = settings["printer.temperature"];
-		var bedTemperature = settings["printer.bed.temperature"];
-		var preheatTemperature = settings["printer.heatup.temperature"];
-		var preheatBedTemperature = settings["printer.heatup.bed.temperature"];
-		var printerType = settings["printer.type"];
-		var heatedbed = settings["printer.heatedbed"];
-
-		switch (printerType) {
-			case "makerbot_replicator2": printerType = "r2"; break; 
-			case "makerbot_replicator2x": printerType = "r2x"; break;
-			case "makerbot_thingomatic": printerType = "t6"; break;
-			case "makerbot_generic": printerType = "r2"; break;
-			case "wanhao_duplicator4": printerType = "r2x"; break;
-			case "_3Dison_plus": printerType = "r2"; break;
-		}
-		var heatedBedReplacement = (heatedbed)? "" : ";";
-
-		gcode = gcode.replace(/{printingTemp}/gi ,temperature);
-		gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);
-		gcode = gcode.replace(/{preheatTemp}/gi ,preheatTemperature);
-		gcode = gcode.replace(/{preheatBedTemp}/gi ,preheatBedTemperature);
-		gcode = gcode.replace(/{printerType}/gi ,printerType);
-		gcode = gcode.replace(/{if heatedBed}/gi ,heatedBedReplacement);
-
-		return gcode;
-	}
 
 })(window);
 
