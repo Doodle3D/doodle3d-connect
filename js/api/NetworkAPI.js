@@ -53,18 +53,39 @@ function NetworkAPI() {
 			timeout: _timeoutTime,
 			success: function(response){
 				//console.log("NetworkAPI:scan response: ",response);
-				if(response.status == "error" || response.status == "fail") {
+				if (response.status == "error" || response.status == "fail") {
 					//console.log("NetworkAPI:scan failed: ",response);
-					if(failedHandler) failedHandler(response);
+					if (failedHandler) failedHandler(response);
 				} else {
-					completeHandler(response.data);
+					if (completeHandler) completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
 			//console.log("NetworkAPI:scan failed");
-			if(failedHandler) failedHandler();
+			if (failedHandler) failedHandler();
 		});
 	};
+
+	this.knownSSIDs = function(completeHandler,failedHandler) {
+		$.ajax({
+			url: _wifiboxURL + "/network/known",
+			type: "GET",
+			dataType: 'json',
+			timeout: _timeoutTime,
+			success: function(response){
+				if (response.status == "error" || response.status == "fail") {
+					if (failedHandler) failedHandler(response);
+				} else {
+					if (completeHandler) completeHandler(response.data.networks.map(function(obj) {
+						return obj.ssid;
+					}));
+				}
+			}
+		}).fail(function() {
+			if (failedHandler) failedHandler();
+		});
+	};
+
 	this.status = function(completeHandler,failedHandler) {
 		//console.log("NetworkAPI:status");
 		// After switching wifi network or creating a access point we delay the actual status 
@@ -144,9 +165,11 @@ function NetworkAPI() {
 		console.log("  phrase: ",phrase);
 		var postData = {
 				ssid:ssid,
-				phrase:phrase,
-				recreate:recreate
+				phrase:phrase
 		};
+		// 		recreate:recreate  //RC: when passing 'false' to the API it is still interpreteted as 'true'
+		// };
+		console.log('postData',postData);
 		$.ajax({
 			url: _wifiboxCGIBinURL + "/network/associate",
 			type: "POST",
@@ -154,10 +177,10 @@ function NetworkAPI() {
 			dataType: 'json',
 			timeout: _timeoutTime,
 			success: function(response){
-				//console.log("NetworkAPI:associate response: ",response);
+				// console.log("NetworkAPI:associate response: ",response);
 			}
 		}).fail(function() {
-			//console.log("NetworkAPI:associate: timeout (normal behavior)");
+			// console.log("NetworkAPI:associate: timeout (normal behavior)");
 		});
 		_associateTime = new Date().getTime();
 	};
