@@ -38,13 +38,14 @@
 		_page = $(this);
 		_title = _page.find(".ui-title");
 
-		$("#btnPrint").on("click", fetchPrint);
+		$("#btnPrint").button().on("click", fetchPrint);
+		$("#btnPrint").button('disable');
 	});
 
-	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
+	$.mobile.document.on("pagebeforeshow", PAGE_ID, function( event, data ) {
 		_pageData = d3d.util.getPageParams(PAGE_ID);
 		
-		console.log(_pageData);
+		console.log(PAGE_ID,'_pageData',_pageData);
 
 		if(_pageData === undefined) { 
 			console.log("ERROR",PAGE_ID,"_pageData undefined");
@@ -53,8 +54,7 @@
 		}
 		var boxURL = "http://"+_pageData.localip;
 
-		$("#lstPrint li.boxItem h2").text(_pageData.wifiboxid);
-		$("#lstPrint li.gcodeItem h2").text("GCODE file");
+		// $("#lstPrint li.boxItem h2").text(_pageData.wifiboxid);
 		$("#lstPrint li.gcodeItem").attr("title",d3d.pageParams.uuid);
 
 		_infoAPI.init(boxURL);
@@ -63,29 +63,65 @@
 		_printerAPI.init(boxURL);
 		_serverAPI.init("https://gcodeserver.doodle3d.com");
 
-		$("#lstPrint li.materialItem p").html(d3d.pageParams.uuid);
+		$("#btnPrint").button('disable');
+		// $("#lstPrint li.materialItem p").html(d3d.pageParams.uuid);
+
+		// $("#lstPrint li.gcodeItem p").text("...")
 
 		_serverAPI.getInfo(d3d.pageParams.uuid, function(successData) {
 			console.log("getInfo success",successData);
-			$("#lstPrint li.gcodeItem p").text(d3d.util.formatBytes(successData["bytes"]));
-			console.log(successData);
+			var filesize = d3d.util.formatBytes(successData["bytes"]);
+
+			_serverAPI.fetchHeader(d3d.pageParams.uuid,function(successData) {
+				console.log("_serverAPI fetchHeader success",successData);
+				var header = successData;
+				// $("#lstPrint li.gcodeItem h2").text("GCODE File");
+				$("#lstPrint li.gcodeItem p").text(header.name + " (" + filesize + ")");
+			}, function(failData) {
+				console.log("_serverAPI fetchHeader fail",failData);
+			});
 
 
 		},function(failData) {
 			console.log("getInfo failed",failData);
-			$("#lstPrint li.gcodeItem p").text("oops, '"+failData + "'");
+			$("#lstPrint li.gcodeItem p").text("Problem: '"+(failData?failData.msg:"Unknown error") + "'");
+			$("#lstPrint li.gcodeItem p").addClass('failState');
+			$("#btnPrint").button('disable');
 		});
+
+
 
 		_networkAPI.status(function(successData) {
 			console.log("network status",successData);
-			$("#lstPrint li.boxItem p").text(successData.statusMessage + " @ " + successData.ssid + "@ " + _pageData.localip);
-
+			$("#lstPrint li.boxItem p").text(successData.statusMessage + " (" + successData.ssid + " @ " + _pageData.localip + ")");
 		}, function(failData) {
-
+			console.log("_networkAPI status failed",failData);
 		});
 	
+		_infoAPI.getInfo(function(successData) {
+			console.log("info/",successData);
+			$("#lstPrint li.boxItem h2").text(successData.wifiboxid);
+		}, function(failData) {
+			console.log("info/ failed",failData);
+		}); 
+
 		_infoAPI.getStatus(function(successData) {
+			
+			$("#lstPrint li.printerItem p").removeClass();
+			$("#lstPrint li.printerItem p").addClass(successData.state);
 			$("#lstPrint li.printerItem p").text("Status: " + successData.state);
+			// console.log("info getStatus",successData.state);
+			if (successData.state==="idle") {
+				$("#btnPrint").button('enable');
+			}
+
+			if (successData.state==="printing") { //redirect to Control page
+				// var url = d3d.util.replaceURLParameters("#control",_pageData);
+				// $.mobile.changePage(url);
+				$("#btnPrint").button('disable');
+				console.log("already printing...");
+			}
+
 		},function(failData) {
 			console.log("getStatus fail");
 			d3d.util.hideLoader();
