@@ -118,11 +118,25 @@
 		_intro.text(introText);
 		_intro.toggleClass("ui-screen-hidden",(introText === ""));
 		
+		//printLink
+		var _printItem = _list.find("#printItem");
+		var printLink = _printItem.find("a").attr("href");
+		printLink = d3d.util.replaceURLParameters(printLink,_boxData);
+		_printItem.find("a").attr("href",printLink);
+
+
+
+		if (d3d && d3d.pageParams && d3d.pageParams.uuid) {
+			_drawItem.hide();
+			_printItem.show();
+		}
+
+
 		//settingsLink
-		var settingsLink = _settingsItem.find("a").attr("href");
-		settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
-		_settingsItem.find("a").attr("href",settingsLink);
-		_settingsItem.toggleClass("ui-screen-hidden",false);
+		// var settingsLink = _settingsItem.find("a").attr("href");
+		// settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
+		// _settingsItem.find("a").attr("href",settingsLink);
+		// _settingsItem.toggleClass("ui-screen-hidden",false);
 
 		// ToDo: update footer with network info
 		
