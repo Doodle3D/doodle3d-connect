@@ -10,7 +10,7 @@
 	var _page;
 	var _list;
 	var _title;
-	var _intro;
+	// var _intro;
 	var _drawItem;
 	var _printItem;
 	var _updateItem;
@@ -34,7 +34,7 @@
 		_page = $(this);
 		_list = _page.find("ul[data-role=listview]");
 		_title = _page.find(".ui-title");
-		_intro = _page.find(".intro");
+		// _intro = _page.find(".intro");
 		
 		_defaultItems = _list.children();
 		_drawItem = _list.find("#drawItem");
@@ -47,7 +47,8 @@
 		// make sure draw link is opened in same WebApp (added to homescreen) 
 		// and it doesn't start a browser
 		$.stayInWebApp("#box #drawItem a",true);
-  });
+	});
+
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Box page pagebeforeshow");
 		_boxData = d3d.util.getPageParams(PAGE_ID);
@@ -56,13 +57,18 @@
 			return;
 		}
 		var boxURL = "http://"+_boxData.localip;
-		//console.log("  _boxData: ",_boxData);
 		
+		//store the localip to be able to retrieve it in main.js when opening from Transform
+		localStorage.setItem("localip",_boxData.localip); 
+
 		_title.text(_boxData.wifiboxid);
+		$(".infoWiFiBoxId").text(_boxData.wifiboxid);
 		
 		var drawLink = (_boxData.link)? _boxData.link : boxURL;
 		_page.find("#drawItem a").attr("href",drawLink);
 		
+		$("#filemanagerItem a").attr("href",drawLink + "/filemanager");
+
 		_networkAPI.init(boxURL);
 		_updateAPI.init(boxURL);
 		
@@ -87,11 +93,11 @@
 	}
 	function setNetworkStatus(status) {
 		console.log(PAGE_ID+":setNetworkStatus: ",status);
-		var introText = "";
+		// var introText = "";
 
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			//console.log("online");
-			_drawItem.find("a").text("Draw / Sketch");
+			// _drawItem.find("h2").text("Draw / Sketch");
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",false);
@@ -102,19 +108,24 @@
 			var updateLink = _updateItem.find("a").attr("href");
 			updateLink = d3d.util.replaceURLParameters(updateLink,_boxData);
 			_updateItem.find("a").attr("href",updateLink);
+
+			$("#collapsibleWiFiBox").collapsible("option", "collapsed",true);
 			
 			retrieveUpdateStatus();
 			
 		} else { // offline
 			//console.log("offline");
-			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
+			// introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
-			_drawItem.find("a").text("Draw / Sketch (local)");
+			// _drawItem.find("h2").text("Draw / Sketch (local)");
 		
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",true);
 			_drawItem.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
+
+			$("#collapsibleWiFiBox").collapsible("option", "collapsed",false);
+			// $("#collapsibleApps").collapsible("option", "collapsed",false);
 
 			//joinLink
 			var joinLink = _joinNetworkItem.find("a").attr("href");
@@ -122,8 +133,8 @@
 			_joinNetworkItem.find("a").attr("href",joinLink);
 		}
 		
-		_intro.text(introText);
-		_intro.toggleClass("ui-screen-hidden",(introText === ""));
+		// _intro.text(introText);
+		// _intro.toggleClass("ui-screen-hidden",(introText === ""));
 		
 		//settingsLink
 		var settingsLink = _settingsItem.find("a").attr("href");
@@ -131,19 +142,28 @@
 		_settingsItem.find("a").attr("href",settingsLink);
 		_settingsItem.toggleClass("ui-screen-hidden",false);
 
-		//settingsLink
+		//updateLink
 		var controlLink = _controlItem.find("a").attr("href");
 		controlLink = d3d.util.replaceURLParameters(controlLink,_boxData);
 		_controlItem.find("a").attr("href",controlLink);
 		_controlItem.toggleClass("ui-screen-hidden",false);
+		
+		//networkSettingsLink
+		// var networksettingsLink = $("#networksettingsItem a").attr("href");
+		// networksettingsLink = d3d.util.replaceURLParameters(networksettingsLink,_boxData);
+		// $("#networksettingsItem a").attr("href",networksettingsLink);
 
 		//printLink
 		var printLink = _printItem.find("a").attr("href");
 		printLink = d3d.util.replaceURLParameters(printLink,_boxData);
 		_printItem.find("a").attr("href",printLink);
+
 		
 		if (d3d && d3d.pageParams && d3d.pageParams.uuid) {
 			_printItem.show();
+			$("#collapsiblePrinter").collapsible("option", "collapsed",false);
+			// $( ".selector" ).collapsible( "option", "collapsed", false );
+
 		} else {
 			_printItem.hide();
 		}
