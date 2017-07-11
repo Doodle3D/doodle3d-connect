@@ -70,7 +70,7 @@
 		var link = "#box";
 		link = d3d.util.replaceURLParameters(link,linkParams);
 		var id = boxData.localip.replace(/\./g,"-");
-		var linkElement = $("<a href='"+link+"' class='link'>"+boxData.wifiboxid+"</a>");
+		var linkElement = $("<a href='"+link+"' class='link'><img src='img/icons/wifibox.jpg'>"+boxData.wifiboxid+"</a>");
 		var box = $("<li id='"+id+"' class='box'></li>");
 		box.append(linkElement);
 		box.hide().appendTo(_list).fadeIn(500);
