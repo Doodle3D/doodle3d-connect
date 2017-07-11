@@ -131,6 +131,8 @@ d3d.util = {
 	d3d.pageParams.uuid = d3d.util.getQueryParam("uuid");
 
 	$.mobile.document.on( "pagebeforechange", function( event, data ) {
+		console.log("main.pagebeforechange");
+
 		if (typeof data.toPage !== "string") { return; }
 		var url = d3d.util.parseURL(data.toPage);
 		if(url.parameters === undefined) { return; }
@@ -143,4 +145,13 @@ d3d.util = {
 		// make sure that the parameters are not removed from the visible url
 		event.preventDefault();
 	});
+
+	if (d3d.pageParams.uuid) { //connect was opened with printlink
+		var localip = localStorage.getItem("localip");
+		var url = "?uuid="+d3d.pageParams.uuid+"#print";
+		if (localip) {
+			url += "?localip=" + localip;
+		}
+		location.href = url; 
+	}
 })(window);
