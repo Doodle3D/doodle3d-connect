@@ -44,18 +44,42 @@
 		$("#grpStatusAndControl").hide();
 
 		$("#btnSend").on("click", function(data) {
-			console.log("test",$("#gcode").val());
-			$(this).hide();
-			_printerAPI.print({
-				gcode: $("#gcode").val(),
-				start: true,
-				first: true
-			},function(successData) {
-				console.log("success");
-			},function(failData) {
-				console.log("fail");
+			// console.log("test",$("#gcode").val());
+			
+			_configAPI.loadAll(function(successData) {
+				_settings = successData;
+
+				var gcode = _configAPI.subsituteVariables($("#gcode").val(),_settings);
+
+				console.log("btnPrint subsituteVariables: ",gcode);
+
+				$(this).hide();
+				_printerAPI.print({
+					gcode: gcode,
+					start: true,
+					first: true
+				},function(successData) {
+					console.log("btnSend success");
+				},function(failData) {
+					console.log("btnSend fail");
+				});
 			});
+			
 		});
+
+		_pageData = d3d.util.getPageParams(PAGE_ID);
+		
+		// console.log(_pageData);
+
+		if(_pageData === undefined) { 
+			console.log("ERROR",PAGE_ID,"_pageData undefined");
+			$.mobile.changePage("#boxes");
+			return;
+		}
+
+		var backUrl = d3d.util.replaceURLParameters("#box",_pageData);
+		$("#btnControlBack").attr("href",backUrl);
+
 /*
 		$("#btnCooldown").button().on("click", function(data) {
 			_printerAPI.print({
@@ -82,6 +106,10 @@
 		});
 */
 		$("#btnStop").on("click", function(data) {
+			if (!window.confirm("Are you sure you want to stop the current print?")) {
+				return;
+			}
+			
 			$(this).hide();
 
 			_configAPI.loadAll(function(successData) {
@@ -94,6 +122,7 @@
 					refreshStatus();
 				},function(failData) {
 					console.log("btnStop fail",failData);
+					window.alert("Problem: " + failData.msg);
 				});
 			}, function(failData) {
 				console.log('btnStop failed to load settings',failData);
@@ -145,7 +174,7 @@
 			d3d.util.hideLoader();
 
 		},function(failData) {
-			console.log("getStatus fail");
+			console.log("getStatus fail",failData);
 			$("#grpStatusAndControl").hide();
 			d3d.util.hideLoader();
 		});
