@@ -103,7 +103,7 @@
 		var actionText = "";
 		switch(data.status) {
 			case NetworkAPI.STATUS.CONNECTING:
-				statusText = "Connecting to "+_pageData.ssid+"...";
+				statusText = "WiFi-Box is now trying to connect to "+_pageData.ssid+"...";
 				//actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
 				actionText = "Please reconnect yourself to <b>"+_pageData.ssid+"</b>. Once you are connected return to this page.";
 				_actionField.attr("class","notice"); 
