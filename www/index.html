@@ -98,7 +98,7 @@
 			</li>
 
 			<li>
-				<img src="img/icons/printers/ultimaker2go.png" width="80" height="80">
+				<img id="iconPrinter" src="img/icons/blank.png" width="80" height="80">
 				<h2>3D-Printer</h2>
 				<p id="infoPrinter">...</p>
 			</li>
@@ -116,7 +116,7 @@
 			<li>
 				<img src="img/icons/wifibox.jpg" width="80" height="80">
 				<select id="lstBoxes"></select>
-				<p style="white-space: normal;" id="infoWiFiBox">...</p>
+				<p style="white-space: normal;" id="infoWiFiBox"></p>
 			</li>
 		</ul>
 
@@ -124,6 +124,29 @@
     </div>
 </div>
 
+<div data-role="page" id="control">
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+	<div data-role="header">
+		<a id="btnControlBack" href="#"
+			class="ui-btn ui-btn-left ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+		<h1>Control</h1>    
+	</div><!-- /header -->
+
+	<div id="divControl" role="main" class="ui-content">
+        <!-- <p class="intro">...</p> -->
+		<div id="infoState">loading...</div>
+
+		<div id="grpStatusAndControl">
+			<ul data-role="listview" data-inset="true"> 
+				<li id="liPrinterStatus" data-icon="false"><a href="#">Printer status<span id="infoPrinterStatus" class="ui-li-count"></span></a></li>
+				<li data-icon="false"><a href="#">Nozzle temperature<span id="infoNozzleTemperature" class="ui-li-count"></span></a></li>
+				<li id="liPrintingProgress" data-icon="false"><a href="#">Printing progress<span id="infoPrintingProgress" class="ui-li-count">...</span></a></li>
+			</ul>
+		</div>
+
+		<button id="btnStop" data-role="button">Stop print</button>
+	</div>
+</div>
 
 <div data-role="page" id="find">
 	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
