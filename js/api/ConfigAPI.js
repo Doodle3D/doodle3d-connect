@@ -96,7 +96,15 @@ function ConfigAPI() {
 
 	this.savePrinterType =  function(printerType,completeHandler,failedHandler) {
 		var settings = {"printer.type": printerType};
-		this.save(settings,completeHandler,failedHandler);
+		this.save(settings,function(successData) {
+			if (successData.validation["printer.type"]==="ok") {
+				if (completeHandler) completeHandler(successData);
+			} else {
+				if (failedHandler) failedHandler(successData); //passing successData because it contains valiation error
+			}
+		},function(failData) {
+			if (failedHandler) failedHandler(failData);
+		});
 	};
 
 	this.resetAll = function(completeHandler,failedHandler) {
@@ -117,4 +125,33 @@ function ConfigAPI() {
 			if(failedHandler) failedHandler();
 		});
 	};
+
+	this.subsituteVariables = function(gcode,settings) {
+		//,temperature,bedTemperature,preheatTemperature,preheatBedTemperature
+		var temperature = settings["printer.temperature"];
+		var bedTemperature = settings["printer.bed.temperature"];
+		var preheatTemperature = settings["printer.heatup.temperature"];
+		var preheatBedTemperature = settings["printer.heatup.bed.temperature"];
+		var printerType = settings["printer.type"];
+		var heatedbed = settings["printer.heatedbed"];
+
+		switch (printerType) {
+			case "makerbot_replicator2": printerType = "r2"; break; 
+			case "makerbot_replicator2x": printerType = "r2x"; break;
+			case "makerbot_thingomatic": printerType = "t6"; break;
+			case "makerbot_generic": printerType = "r2"; break;
+			case "wanhao_duplicator4": printerType = "r2x"; break;
+			case "_3Dison_plus": printerType = "r2"; break;
+		}
+		var heatedBedReplacement = (heatedbed)? "" : ";";
+
+		gcode = gcode.replace(/{printingTemp}/gi ,temperature);
+		gcode = gcode.replace(/{printingBedTemp}/gi ,bedTemperature);
+		gcode = gcode.replace(/{preheatTemp}/gi ,preheatTemperature);
+		gcode = gcode.replace(/{preheatBedTemp}/gi ,preheatBedTemperature);
+		gcode = gcode.replace(/{printerType}/gi ,printerType);
+		gcode = gcode.replace(/{if heatedBed}/gi ,heatedBedReplacement);
+
+		return gcode;
+	}
 }
