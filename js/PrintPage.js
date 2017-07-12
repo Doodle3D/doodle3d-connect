@@ -39,12 +39,16 @@
 		_connectAPI.list(function(successData) {
 			console.log("_connectAPI.list success",successData);
 			$("#lstBoxes").empty();
-			$("#lstBoxes").append($("<option/>"));
+			$("#lstBoxes").append($("<option></option>"));
 
+			var selectedItem;
 			for (var i in successData) {
 				var box = successData[i];
 
 				var selected = (box.localip===_pageData.localip) ? "selected " : "";
+				if (selected) {
+					selectedItem = _pageData.localip;
+				}
 
 				$("#lstBoxes").append($("<option "+selected+" value="+box.localip+">"+box.wifiboxid+"</option>"));
 			}
@@ -52,8 +56,8 @@
 
 			$("#lstBoxes").selectmenu("refresh", true);
 
-			if (_pageData.localip) {
-				onSelectWiFiBox(_pageData.localip);
+			if (selectedItem) {
+				onSelectWiFiBox(selectedItem);
 			}
 
 		}, function(failData) {
@@ -119,56 +123,96 @@
 		}
 	}
 
-	function print() {
-
+	function checkPrinterTypeMatch(completeHandler, failedHandler) {
 		_configAPI.loadAll(function(successData) {
 			_wifiboxSettings = successData;
-			var slicerPrinterType = _slicerSettings.type;
-			var wifiboxPrinterType = _wifiboxSettings["printer.type"];
 
-			if (slicerPrinterType!==wifiboxPrinterType) {
-				var override = window.confirm("The GCODE file was sliced for '"+slicerPrinterType+"'.\n"+
-					"Your WiFi-Box is currently configured for '"+wifiboxPrinterType+"'\n\n"+
-					"Do you want to override the settings on your WiFi-Box with the new settings from the slicer?");
-				
-				if (override) {
-					//
-					_configAPI.savePrinterType(slicerPrinterType,function(successData) {
-						console.log(successData);
-						window.alert(successData.validation["printer.type"] + " (printer.type)");
-					},function(failData) {
-						window.alert("Could not save printer type '",slicerPrinterType,"')' to WiFi-Box");
-					});
+			var data = {
+				slicerPrinterType: _slicerSettings.printer.type,
+				wifiboxPrinterType: _wifiboxSettings["printer.type"]
+			};
+
+			if (data.slicerPrinterType === data.wifiboxPrinterType) {
+				if (completeHandler) {
+					completeHandler(data);
+				}
+			} else {
+				if (failedHandler) {
+					failedHandler(data);
 				}
 			}
 		});
-
-		if (true) {
-			return;
-		}
-
-		//var startcode = _configAPI.subsituteVariables(_wifiboxSettings["printer.startcode"],_wifiboxSettings);
-		//var endcode = _configAPI.subsituteVariables(_wifiboxSettings["printer.endcode"],_wifiboxSettings);
-
-		var data = {
-			"id": d3d.pageParams.uuid,
-		//	"start_code": startcode,
-		//	"end_code": endcode
-		};
-
-		//console.log("fetchPrint",d3d.pageParams.uuid,data);
-		_printerAPI.fetch(data,function(successData) {
-			console.log("fetchPrint success",successData);
-
-			var url = d3d.util.replaceURLParameters("#control",_pageData);
-			$.mobile.changePage(url);
-
-		},function(failData) {
-			console.log("fetchPrint fail",failData);
-			window.alert("Problem: " + failData.msg);
-		});
 	}
 
+	function forcePrinterTypeMatch(completeHandler, failedHandler) {
+
+		checkPrinterTypeMatch(function(successData) {
+			completeHandler({msg:"slicerPrinterType matches wifiboxPrinterType"});
+
+		}, function(failData) {
+			
+			var override = window.confirm("The GCODE file was sliced for '"+failData.slicerPrinterType+"'.\n"+
+				"Your WiFi-Box is currently configured for '"+failData.wifiboxPrinterType+"'\n\n"+
+				"Do you want to override the settings on your WiFi-Box with the new settings from the slicer?");
+			
+			if (override) {
+				_configAPI.savePrinterType(failData.slicerPrinterType, function(successData) {
+
+					//reload settings from WiFi-Box with new printerType to get the right start & end gcode
+					_configAPI.loadAll(function(successData) {
+						_wifiboxSettings = successData;
+						completeHandler({msg:"printer.type successfully updated and _wifiboxSettings successfully reloaded"});
+
+					}, function(failData) {
+						failedHandler({msg:"reload config failed"});
+					});
+
+				}, function(failData) {
+					failedHandler({msg:"saving failed printer.type failed",details:failData});
+				});
+			} else {
+				failedHandler({msg:"Please use the settings from Slicer."});
+			}
+		});
+
+	}
+
+	function print() {
+		console.log("print");
+
+		forcePrinterTypeMatch(function(successData) {
+			console.log("successfully made sure printerType and config is up to date",successData);
+
+			var startcode = _configAPI.subsituteVariables(_wifiboxSettings["printer.startcode"],_wifiboxSettings);
+			var endcode = _configAPI.subsituteVariables(_wifiboxSettings["printer.endcode"],_wifiboxSettings);
+
+			var data = {
+				"id": d3d.pageParams.uuid,
+				"start_code": startcode,
+				"end_code": endcode
+			};
+
+			//console.log("fetchPrint",d3d.pageParams.uuid,data);
+			_printerAPI.fetch(data,function(successData) {
+				console.log("fetchPrint success",successData);
+
+				var url = d3d.util.replaceURLParameters("#control",_pageData);
+				$.mobile.changePage(url);
+
+			},function(failData) {
+				console.log("fetchPrint fail",failData);
+				window.alert("Problem: " + failData.msg);
+			});
+
+			
+
+		},function(failData) {
+			window.alert("Sorry, the print can not be started because the settings don't match between the Slicer and the WiFi-Box.\n\nDetails: " + failData.msg);
+		});
+		
+
+	}
+		
 	function clearInfo() {
 		$("#infoFile").text("...");
 		$("#infoPrinter").text("...");
@@ -187,10 +231,11 @@
 				console.log("_serverAPI fetchHeader success",successData);
 				var header = successData;
 				_slicerSettings = header; //copy header json data into _slicerSettings
-				var printerId = header.type;
+				var printerId = header.printer.type;
+				var printerTitle = header.printer.title;
 
 				$("#infoFile").text(header.name + " (" + filesize + ")");
-				$("#infoPrinter").text(printerId);
+				$("#infoPrinter").text(printerTitle);
 				$("#infoMaterial").html(header.filamentThickness + "mm @ " + header.temperature + "&deg;C");
 				$("#iconPrinter").attr('src','img/icons/printers/'+printerId+'.png');
 				
