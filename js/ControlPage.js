@@ -15,7 +15,7 @@
 	var _includeBetasCheckbox;
 	var _submitButton;
 	var _settings;
-	
+
 	var _updateAPI = new UpdateAPI();
 	var _configAPI = new ConfigAPI();
 	var _printerAPI = new PrinterAPI();
@@ -46,7 +46,8 @@
 		$("#btnStop").hide();
 		$("#btnNewPrint").hide();
 
-		
+		$("#infoDisconnected").hide();
+		$("#infoConnecting").hide();
 
 		//$("#btnSend").on("click", function(data) {
 		//	// console.log("test",$("#gcode").val());
@@ -141,6 +142,7 @@
 		d3d.util.showLoader();
 
 		_infoAPI.getStatus(function(successData) {
+
 			$("#grpStatusAndControl").show();
 
 			var state = successData.state;
@@ -152,7 +154,19 @@
 				$("#infoState").show();
 				$("#infoState").text("Printer " + state + "...");
 				$("#grpStatusAndControl").hide();
+				
+				if (state==="connecting") {
+					$("#infoConnecting").show();
+					$("#infoDisconnected").hide();
+				} else if (state==="disconnected") {
+					$("#infoConnecting").hide();
+					$("#infoDisconnected").show();
+				}
+
 			} else {
+				$("#infoDisconnected").hide();
+				$("#infoConnecting").hide();
+
 				$("#infoState").hide();
 				$("#grpStatusAndControl").show();
 				$("#infoNozzleTemperature").html(successData.hotend + " / " + successData.hotend_target + " &deg;C");
@@ -247,7 +261,7 @@
 		_infoAPI.getInfo(function(successData) {
 			$("span#infoWiFiBox").text(successData.wifiboxid);
 		},function(failData) {
-			
+
 		});
 
 		// refreshSettings();

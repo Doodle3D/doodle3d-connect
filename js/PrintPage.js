@@ -69,6 +69,8 @@
 
 		}, function(failData) {
 			console.log("_connectAPI.list failData",failData);
+			$("#infoWiFiBox").html("<span class='error'>failed to retrieve list with local WiFi-Box'es</span>");
+
 		});
 
 		$("#lstBoxes").on("change", function(data) {
@@ -210,7 +212,6 @@
 			//console.log("fetchPrint",d3d.pageParams.uuid,data);
 			_printerAPI.fetch(data,function(successData) {
 				console.log("fetchPrint success",successData);
-
 
 				setTimeout(function() {
 					var url = d3d.util.replaceURLParameters("#control",_pageData);

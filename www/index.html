@@ -108,8 +108,7 @@
 				<h2>Material</h2>
 				<p id="infoMaterial">...</p>
 			</li>
-
-	    </ul>
+		</ul>
 
 		Please select your Doodle3D WiFi-Box:
 		<ul data-role="listview" data-inset="true">
@@ -135,6 +134,17 @@
 	<div id="divControl" role="main" class="ui-content">
         <!-- <p class="intro">...</p> -->
 		<div id="infoState">loading...</div>
+
+		<div id="infoDisconnected">
+			<p>Please make sure the WiFi-Box is connected to your 3D-printer using a USB cable.</p>
+		</div>
+
+		<div id="infoConnecting">
+			<p>This can take a while, 20 seconds or so...</p>
+			<!-- <p>Hmm... this takes longer than usual...</p> -->
+			<p>If it takes too long please try to restart your WiFi-Box. Also make sure the WiFi-Box is running the latest firmware.</p>
+			<p>If you think you're really stuck, please <a href="javascript:talkus('open')">chat</a> with us to see if we can help.</p>
+		</div>
 
 		<div id="grpStatusAndControl">
 			<ul data-role="listview" data-inset="true"> 
