@@ -254,6 +254,9 @@
 			
 			console.log("_configAPI.loadAll success",_settings);
 
+			$("span#infoPrinterType").text(successData["printer.type"]);
+
+
 			// $("#infoWiFiBox").text(_settings.)
 
 		},function(failData) {
