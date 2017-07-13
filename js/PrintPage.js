@@ -108,7 +108,7 @@
 			_networkAPI.status(function(successData) {
 				console.log("network status",successData);
 				// $("#lstPrint li.boxItem p").text(
-				var netInfo = successData.statusMessage + " (" + successData.ssid + " @ " + successData.localip + ")";
+				var netInfo = successData.statusMessage + " (" + successData.ssid + " @ <a href='http://" + successData.localip + "'>"+successData.localip+"</a>)";
 				
 				_infoAPI.getStatus(function(successData) {
 					console.log(successData);
