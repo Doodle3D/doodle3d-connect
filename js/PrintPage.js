@@ -70,7 +70,6 @@
 		}, function(failData) {
 			console.log("_connectAPI.list failData",failData);
 			$("#infoWiFiBox").html("<span class='error'>failed to retrieve list with local WiFi-Box'es</span>");
-
 		});
 
 		$("#lstBoxes").on("change", function(data) {

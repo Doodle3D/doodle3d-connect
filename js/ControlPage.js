@@ -158,6 +158,12 @@
 				if (state==="connecting") {
 					$("#infoConnecting").show();
 					$("#infoDisconnected").hide();
+
+					//update firmware link
+					var url = d3d.util.replaceURLParameters("#update",_pageData);
+					$("#linkConnectingFirmware").attr("href",url);
+
+					
 				} else if (state==="disconnected") {
 					$("#infoConnecting").hide();
 					$("#infoDisconnected").show();
@@ -211,12 +217,12 @@
 
 			if (state==="ready") {
 
-				if (d3d && d3d.pageParams && d3d.pageParams.uuid) {
-					console.log("show button btnNewPrint");
-					var url = d3d.util.replaceURLParameters("#print",_pageData);
-					// $("#btnNewPrint").attr("href",url);
-					// $("#btnNewPrint").show();
-				}
+				//if (d3d && d3d.pageParams && d3d.pageParams.uuid) {
+					//console.log("show button btnNewPrint");
+					//var url = d3d.util.replaceURLParameters("#print",_pageData);
+					//$("#btnNewPrint").attr("href",url);
+					//$("#btnNewPrint").show();
+				//}
 
 			} else {
 				// $("#grpCustomGCODE").hide();
