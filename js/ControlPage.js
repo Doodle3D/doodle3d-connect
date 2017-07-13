@@ -190,8 +190,11 @@
 				//request filename only once
 				if ($("#infoPrintingFile").text()==="") {
 					_serverAPI.fetchHeader(uuid,function(successData) {
+						console.log("infoPrintingFile fetchHeader",successData);
 						$("#liPrintingFile").show();
+						$("#liPrinterType").show();
 						$("#infoPrintingFile").text(successData.name);
+						$("#infoPrinterType").text(successData.printer.title);
 					},function(failData) {
 						$("#liPrintingFile").hide();
 					});					
