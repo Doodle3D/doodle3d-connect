@@ -28,6 +28,13 @@
 			$.mobile.changePage("#boxes");
 			return;
 		}
+
+		if (!d3d || !d3d.pageParams || !d3d.pageParams.uuid) {
+			console.log("ERROR",PAGE_ID,"d3d.pageParams no uuid");
+			$.mobile.changePage("#boxes");
+			return;	
+		}
+
 		var boxURL = "http://"+_pageData.localip;
 
 		//disabled by default
@@ -67,6 +74,7 @@
 		$("#lstBoxes").on("change", function(data) {
 			var ip = $(this).val();
 			console.log("lstBoxes change",ip);
+
 			onSelectWiFiBox(ip);
 		});
 
@@ -93,6 +101,8 @@
 			_printerAPI.init(boxURL);
 			_configAPI.init(boxURL);
 
+			var localip = localStorage.setItem("localip",ip);
+
 			_networkAPI.status(function(successData) {
 				console.log("network status",successData);
 				// $("#lstPrint li.boxItem p").text(
@@ -106,8 +116,10 @@
 						$("#btnPrint").button('enable');
 					}
 
+					_pageData.localip = ip; //update pageData to reflect the selected WiFi-Box without reloading the page
+					var url = d3d.util.replaceURLParameters("#control",_pageData);
 					var info = netInfo + " - Printer status: ";
-					info += "<span class='"+state+"'>"+state+"</span>";
+					info += "<a href='"+url+"'><span class='"+state+"'>"+state+"</span></a>";
 					$("#infoWiFiBox").html(info);
 				}, function(failData) {
 					console.log(failData);
@@ -171,7 +183,7 @@
 					failedHandler({msg:"saving failed printer.type failed",details:failData});
 				});
 			} else {
-				failedHandler({msg:"Please use the settings from Slicer."});
+				failedHandler({msg:""});
 			}
 		});
 
@@ -192,19 +204,25 @@
 				"end_code": endcode
 			};
 
+			$("#btnPrint").button('disable');
+			d3d.util.showLoader();
+
 			//console.log("fetchPrint",d3d.pageParams.uuid,data);
 			_printerAPI.fetch(data,function(successData) {
 				console.log("fetchPrint success",successData);
 
-				var url = d3d.util.replaceURLParameters("#control",_pageData);
-				$.mobile.changePage(url);
+
+				setTimeout(function() {
+					var url = d3d.util.replaceURLParameters("#control",_pageData);
+					$.mobile.changePage(url);
+				},3000);
 
 			},function(failData) {
 				console.log("fetchPrint fail",failData);
 				window.alert("Problem: " + failData.msg);
 			});
 
-			
+
 
 		},function(failData) {
 			window.alert("Sorry, the print can not be started because the settings don't match between the Slicer and the WiFi-Box.\n\nDetails: " + failData.msg);
@@ -240,13 +258,19 @@
 				$("#iconPrinter").attr('src','img/icons/printers/'+printerId+'.png');
 				
 			}, function(failData) {
-				console.log("_serverAPI fetchHeader fail",failData);
+				console.log("_serverAPI.fetchHeader fail",failData);
 				clearInfo();
 			});
 
 
 		},function(failData) {
 			clearInfo();
+			console.log("_serverAPI.getInfo fail",failData);
+			setTimeout(function() {
+				console.log("_serverAPI.getInfo: now try again",uuid);
+				loadGCodeInfoFromServer(uuid);
+			},3000);
+
 		});
 
 	}

@@ -15,6 +15,7 @@
 	var _updateItem;
 	var _settingsItem;
 	var _joinNetworkItem;
+	var _printItem;
 	var _defaultItems;
 	
 	var _networkStatus;
@@ -39,11 +40,13 @@
 		_updateItem = _list.find("#updateItem");
 		_settingsItem = _list.find("#settingsItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
+		_printItem = _list.find("#printItem");
 		
 		// make sure draw link is opened in same WebApp (added to homescreen) 
 		// and it doesn't start a browser
 		$.stayInWebApp("#box #drawItem a",true);
-  });
+	});
+
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Box page pagebeforeshow");
 		_boxData = d3d.util.getPageParams(PAGE_ID);
@@ -54,6 +57,8 @@
 		var boxURL = "http://"+_boxData.localip;
 		//console.log("  _boxData: ",_boxData);
 		
+		_printItem.hide();
+
 		_title.text(_boxData.wifiboxid);
 		
 		var drawLink = (_boxData.link)? _boxData.link : boxURL;
@@ -119,7 +124,6 @@
 		_intro.toggleClass("ui-screen-hidden",(introText === ""));
 		
 		//printLink
-		var _printItem = _list.find("#printItem");
 		var printLink = _printItem.find("a").attr("href");
 		printLink = d3d.util.replaceURLParameters(printLink,_boxData);
 		_printItem.find("a").attr("href",printLink);

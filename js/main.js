@@ -116,7 +116,7 @@ d3d.util = {
 	},
 
 	formatPercentage:function(cur,total) {
-		console.log("formatPercentage",cur,total);
+		// console.log("formatPercentage",cur,total);
 		return Math.round(cur/total*100) + "%";
 	},
 
