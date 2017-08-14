@@ -97,8 +97,29 @@ d3d.util = {
 		if (!("autofocus" in document.createElement("input"))) {
 			var target = form.find("input[autofocus]:visible");
 			target.focus();
-    }
-	}
+		}
+	},
+
+	getQueryParam:function(param) {
+		var result = window.location.search.match(new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)"));
+		return result ? result[3] : false;
+	},
+	
+	formatBytes:function(a,b) {
+		if (0===a) {
+			return "0 Bytes";
+		} else {
+			var c=1e3,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"];
+			var f=Math.floor(Math.log(a)/Math.log(c));
+			return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f];
+		}
+	},
+
+	formatPercentage:function(cur,total) {
+		// console.log("formatPercentage",cur,total);
+		return Math.round(cur/total*100) + "%";
+	},
+
 };
 
 (function (w) {
@@ -106,6 +127,9 @@ d3d.util = {
 	// only pagecontainer events contain url's
 	// we parse the parameters and store them in a global object
 	d3d.pageParams = {};
+	d3d.pageParams.uuid = d3d.util.getQueryParam("uuid");
+	console.log(d3d.pageParams.uuid);
+
 	$.mobile.document.on( "pagebeforechange", function( event, data ) {
 		if (typeof data.toPage !== "string") { return; }
 		var url = d3d.util.parseURL(data.toPage);
@@ -119,4 +143,14 @@ d3d.util = {
 		// make sure that the parameters are not removed from the visible url
 		event.preventDefault();
 	});
+
+	if (d3d.pageParams.uuid) { //connect was opened with printlink
+		var localip = localStorage.getItem("localip");
+		var url = "?uuid="+d3d.pageParams.uuid+"#print";
+		if (localip) {
+			url += "?localip=" + localip;
+		}
+		location.href = url; 
+	}
+
 })(window);

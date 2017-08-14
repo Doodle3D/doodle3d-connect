@@ -56,9 +56,9 @@ function ConnectAPI() {
 					completeHandler(response.data);
 				}
 			}
-		}).fail(function() {
+		}).fail(function(failData) {
 			//console.log("ConnectAPI:list failed");
-			if(failedHandler) failedHandler();
+			if(failedHandler) failedHandler(failData);
 			if(_self.listFailed) {_self.listFailed(); }
 		});
 	};

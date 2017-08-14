@@ -13,7 +13,9 @@
 	var _intro;
 	var _drawItem;
 	var _updateItem;
+	var _settingsItem;
 	var _joinNetworkItem;
+	var _printItem;
 	var _defaultItems;
 	
 	var _networkStatus;
@@ -36,12 +38,15 @@
 		_defaultItems = _list.children();
 		_drawItem = _list.find("#drawItem");
 		_updateItem = _list.find("#updateItem");
+		_settingsItem = _list.find("#settingsItem");
 		_joinNetworkItem = _list.find("#joinNetworkItem");
+		_printItem = _list.find("#printItem");
 		
 		// make sure draw link is opened in same WebApp (added to homescreen) 
 		// and it doesn't start a browser
 		$.stayInWebApp("#box #drawItem a",true);
-  });
+	});
+
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Box page pagebeforeshow");
 		_boxData = d3d.util.getPageParams(PAGE_ID);
@@ -52,6 +57,8 @@
 		var boxURL = "http://"+_boxData.localip;
 		//console.log("  _boxData: ",_boxData);
 		
+		_printItem.hide();
+
 		_title.text(_boxData.wifiboxid);
 		
 		var drawLink = (_boxData.link)? _boxData.link : boxURL;
@@ -80,14 +87,16 @@
 	function setNetworkStatus(status) {
 		console.log(PAGE_ID+":setNetworkStatus: ",status);
 		var introText = "";
+
 		if(status === NetworkAPI.STATUS.CONNECTED) { // online
 			//console.log("online");
-			_drawItem.find("a").text("Draw");
+			_drawItem.find("a").text("Draw / Sketch");
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",true);
 			
+			//update link
 			var updateLink = _updateItem.find("a").attr("href");
 			updateLink = d3d.util.replaceURLParameters(updateLink,_boxData);
 			_updateItem.find("a").attr("href",updateLink);
@@ -98,13 +107,14 @@
 			//console.log("offline");
 			introText = "Please connect your WiFi-Box to the internet. You can also use it offline, but then you won't be able to update.";
 			
-			_drawItem.find("a").text("Draw (offline)");
+			_drawItem.find("a").text("Draw / Sketch (local)");
 			
 			// display the right buttons
 			_defaultItems.toggleClass("ui-screen-hidden",true);
 			_drawItem.toggleClass("ui-screen-hidden",false);
 			_joinNetworkItem.toggleClass("ui-screen-hidden",false);
-			
+
+			//joinLink
 			var joinLink = _joinNetworkItem.find("a").attr("href");
 			joinLink = d3d.util.replaceURLParameters(joinLink,_boxData);
 			_joinNetworkItem.find("a").attr("href",joinLink);
@@ -113,6 +123,25 @@
 		_intro.text(introText);
 		_intro.toggleClass("ui-screen-hidden",(introText === ""));
 		
+		//printLink
+		var printLink = _printItem.find("a").attr("href");
+		printLink = d3d.util.replaceURLParameters(printLink,_boxData);
+		_printItem.find("a").attr("href",printLink);
+
+
+
+		if (d3d && d3d.pageParams && d3d.pageParams.uuid) {
+			_drawItem.hide();
+			_printItem.show();
+		}
+
+
+		//settingsLink
+		// var settingsLink = _settingsItem.find("a").attr("href");
+		// settingsLink = d3d.util.replaceURLParameters(settingsLink,_boxData);
+		// _settingsItem.find("a").attr("href",settingsLink);
+		// _settingsItem.toggleClass("ui-screen-hidden",false);
+
 		// ToDo: update footer with network info
 		
 		_list.listview('refresh'); // jQuery mobile enhance content
