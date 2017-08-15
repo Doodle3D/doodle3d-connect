@@ -41,6 +41,11 @@
 			//displayPace: 0,				// do not obey the display pace
 			//maxDisplayCount: 0		// do not obey the max display count
 		});
+
+		if (localStorage.getItem("hideBanner")==="true") {
+			$("#getyours").hide();		
+		}
+
   });
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		//console.log("Boxes page pagehide");

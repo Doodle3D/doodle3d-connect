@@ -14,11 +14,14 @@
 	var _networkAPI = new NetworkAPI();
 	var _printerAPI = new PrinterAPI();
 	var _configAPI = new ConfigAPI();
+	var _updateAPI = new UpdateAPI();
 	var PAGE_ID = "#print";
 	var _pageData = {};
 	var _self = this;
 	var _wifiboxSettings;
 	var _slicerSettings;
+	var timerId;
+
 
 	$.mobile.document.on("pagebeforeshow", PAGE_ID, function( event, data ) {
 		_pageData = d3d.util.getPageParams(PAGE_ID);
@@ -40,6 +43,7 @@
 		//disabled by default
 		$("#btnPrint").button().on("click", print);
 		$("#btnPrint").button('disable');
+		$("#pleaseUpgrade").hide();
 
 		loadGCodeInfoFromServer(d3d.pageParams.uuid);
 
@@ -75,18 +79,53 @@
 		$("#lstBoxes").on("change", function(data) {
 			var ip = $(this).val();
 			console.log("lstBoxes change",ip);
-
+			$("#infoWiFiBox").text("...");
+			$("#pleaseUpgrade").hide();
 			onSelectWiFiBox(ip);
 		});
+
+		timerId = setInterval(refreshWiFiBoxInfo,5000);
 
 	});
 
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		_connectAPI.stop();
+		clearInterval(timerId);
 	});
 
+	function retrieveUpdateStatus() {
+		
+		
+		_updateAPI.status(function(data) { // completed
+			var canUpdate = data.can_update;
+			
+			if (canUpdate) {
+				$("#pleaseUpgrade").show();
+				$("#newest_version").text(" ("+data.newest_version+")");
+
+				console.log("_pageData",_pageData);
+
+				var updateLink = $("#pleaseUpgrade a").attr("href");
+				updateLink = d3d.util.replaceURLParameters(updateLink,_pageData);
+				$("#pleaseUpgrade a").attr("href",updateLink);
+			}
+
+		});
+	}
+
 	function onSelectWiFiBox(ip) {
-		$("#infoWiFiBox").text("");
+		refreshWiFiBoxInfo(ip);		
+	}
+
+	function refreshWiFiBoxInfo(ip) {
+		if (!ip) {
+			ip = _pageData.localip;
+			if (!ip) {
+				return;
+			}
+		}
+
+		$("#infoWiFiBox").show();
 
 		if (!ip) {
 			$("#btnPrint").button('disable');
@@ -96,21 +135,27 @@
 			// redirect
 			$.mobile.changePage("#boxes");
 		} else {
+
+			// console.log("IP:",ip);
+
 			var boxURL = "http://"+ip;
 			_infoAPI.init(boxURL);
 			_networkAPI.init(boxURL);
 			_printerAPI.init(boxURL);
 			_configAPI.init(boxURL);
+			_updateAPI.init(boxURL);
+
+			retrieveUpdateStatus();
 
 			var localip = localStorage.setItem("localip",ip);
 
 			_networkAPI.status(function(successData) {
-				console.log("network status",successData);
+				// console.log("network status",successData);
 				// $("#lstPrint li.boxItem p").text(
 				var netInfo = successData.statusMessage + " (" + successData.ssid + " @ <a href='http://" + successData.localip + "'>"+successData.localip+"</a>)";
 				
 				_infoAPI.getStatus(function(successData) {
-					console.log(successData);
+					// console.log(successData);
 					var state = successData.state;
 					if (state==="idle") {
 						state="ready";
@@ -123,7 +168,7 @@
 					info += "<a href='"+url+"'><span class='"+state+"'>"+state+"</span></a>";
 					$("#infoWiFiBox").html(info);
 				}, function(failData) {
-					console.log(failData);
+					console.log("_infoAPI.getStatus failData:",failData);
 					$("#infoWiFiBox").html("<span class='error'>failed to retrieve <em>printer status</em> from WiFi-Box</span>");
 				});
 
@@ -235,7 +280,7 @@
 		$("#infoFile").text("...");
 		$("#infoPrinter").text("...");
 		$("#infoMaterial").html("...");
-		$("#iconPrinter").attr('src','img/icons/blank.png');
+		// $("#iconPrinter").attr('src','img/icons/blank.png');
 	}
 
 	function loadGCodeInfoFromServer(uuid) {
@@ -252,10 +297,10 @@
 				var printerId = header.printer.type;
 				var printerTitle = header.printer.title;
 
-				$("#infoFile").text(header.name + " (" + filesize + ")");
-				$("#infoPrinter").text(printerTitle);
-				$("#infoMaterial").html(header.filamentThickness + "mm @ " + header.temperature + "&deg;C");
-				$("#iconPrinter").attr('src','img/icons/printers/'+printerId+'.png');
+				$("#infoFile").html("Filename: <b>" + header.name + " (" + filesize + ")</b>");
+				$("#infoPrinter").html("Printer: <b>" + printerTitle + "</b>");
+				$("#infoMaterial").html("Material: <b>" + header.filamentThickness + "mm @ " + header.temperature + "&deg;C</b>");
+				// $("#iconPrinter").attr('src','img/icons/printers/'+printerId+'.png');
 				
 			}, function(failData) {
 				console.log("_serverAPI.fetchHeader fail",failData);

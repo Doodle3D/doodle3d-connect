@@ -122,6 +122,11 @@ d3d.util = {
 
 };
 
+function hideBanner() {
+	$("#getyours").hide();
+	localStorage.setItem("hideBanner",true);
+}
+
 (function (w) {
 	// To get to url parameters we need the url
 	// only pagecontainer events contain url's
@@ -150,7 +155,7 @@ d3d.util = {
 		if (localip) {
 			url += "?localip=" + localip;
 		}
-		location.href = url; 
+		// location.href = url; 
 	}
 
 })(window);
