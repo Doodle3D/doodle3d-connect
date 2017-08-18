@@ -122,6 +122,11 @@ d3d.util = {
 
 };
 
+function hideBanner() {
+	$("#getyours").hide();
+	localStorage.setItem("hideBanner",true);
+}
+
 (function (w) {
 	// To get to url parameters we need the url
 	// only pagecontainer events contain url's

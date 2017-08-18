@@ -35,8 +35,11 @@
 <body>
 
 <div data-role="page" id="boxes" data-title="Doodle3D Connect">
-	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
 	
+	<div id="getyours" class="getyours"><img src="img/icons/wifibox.jpg"><br>No WiFi-Box yet?<br>Get your own <a href="https://shop.doodle3d.com">here</a>.<br><br><a href="#" onclick="hideBanner()">Close</a></div>
+
+	<a href="#boxes" id="logo"><img src="img/logo_full.png"></a>
+
 	<div role="main" class="ui-content">
 		<h3>Let's connect to your Doodle3D WiFi-Box</h3>
 		<p>This webpage helps you to find your Doodle3D WiFi-Box on your local network.</p>
@@ -88,10 +91,30 @@
 	<div id="divPrint" role="main" class="ui-content">
         <p class="intro">Let's 3D-print your model by sending it to your printer over WiFi. Please check the settings below and press Print.</p>
 
-		<label for="name">The following GCODE file is ready for printing:</label>
-		<ul id="lstPrint" data-role="listview" data-inset="true">
-	      
+<form>
+
+		<!-- Please select your Doodle3D WiFi-Box: -->
+		<ul data-role="listview" data-inset="true">
 			<li>
+				<img src="img/icons/wifibox.jpg" width="80" height="80">
+				<select id="lstBoxes"></select>
+				<p style="white-space: normal;" id="infoWiFiBox"></p>
+		        <p style="white-space: normal;" id="pleaseUpgrade">New firmware for your Doodle3D WiFi-Box is available. Please <a href="#update">update</a> to the latest version <span id="newest_version"></span>.</p>
+			</li>
+		</ul>
+
+
+
+		<!-- <label for="name">The following GCODE file is ready for printing:</label> -->
+		<ul id="lstPrint" data-role="listview" data-inset="true">
+	    
+	    <li>
+		    <p id="infoFile">...</p>
+			<p id="infoPrinter">...</p>
+			<p id="infoMaterial">...</p>
+		</li>
+
+<!-- 			<li>
 				<img src="img/icons/gcode.png" width="80" height="80">
 				<h2>File to print</h2>
 				<p id="infoFile">...</p>
@@ -107,19 +130,13 @@
 				<img src="img/icons/white.jpg" width="80" height="80">
 				<h2>Material</h2>
 				<p id="infoMaterial">...</p>
-			</li>
+			</li> -->
 		</ul>
+		
+        <input type="button" id="btnPrint" class="ui-shadow .ui-input-btn ui-btn ui-corner-all" value="Print">
 
-		Please select your Doodle3D WiFi-Box:
-		<ul data-role="listview" data-inset="true">
-			<li>
-				<img src="img/icons/wifibox.jpg" width="80" height="80">
-				<select id="lstBoxes"></select>
-				<p style="white-space: normal;" id="infoWiFiBox"></p>
-			</li>
-		</ul>
+        </form>
 
-        <input type="button" id="btnPrint" class="ui-shadow ui-btn ui-corner-all" value="Print">
     </div>
 </div>
 

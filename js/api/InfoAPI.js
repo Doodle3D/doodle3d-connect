@@ -20,7 +20,7 @@ function InfoAPI() {
 	var _self = this;
 
 	this.init = function(wifiboxURL) {
-		console.log("InfoAPI:init");
+		// console.log("InfoAPI:init");
 		
 		_wifiboxURL = wifiboxURL+_apiPath;
 		_wifiboxCGIBinURL = wifiboxURL+_apiCGIPath;
