@@ -155,7 +155,7 @@ function hideBanner() {
 		if (localip) {
 			url += "?localip=" + localip;
 		}
-		// location.href = url; 
+		location.href = url; 
 	}
 
 })(window);
