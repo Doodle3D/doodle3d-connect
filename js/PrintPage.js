@@ -186,6 +186,11 @@
 		_configAPI.loadAll(function(successData) {
 			_wifiboxSettings = successData;
 
+			//hack to support Ultimaker 2+. actual fix would be to add Ultimaker 2+ to WiFi-Box firmware.
+			if (_slicerSettings.printer.type==="ultimaker2_plus") {
+				_slicerSettings.printer.type = "ultimaker2"; 
+			}
+
 			var data = {
 				slicerPrinterType: _slicerSettings.printer.type,
 				wifiboxPrinterType: _wifiboxSettings["printer.type"]
