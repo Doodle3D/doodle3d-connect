@@ -27,8 +27,8 @@ function ConnectAPI() {
 	var _running;
 	var _listChanged = false;
 	
-	var _wiredBox = {localip:"192.168.5.1",wifiboxid:"Wired WiFi-Box"};
-	var _apBox = {localip:"192.168.10.1",wifiboxid:"WiFi-Box",link:"http://draw.doodle3d.com"};
+	var _wiredBox = {localip:"192.168.5.1",wifiboxid:"Doodle3D WiFi-Box (using cable)"};
+	var _apBox = {localip:"192.168.10.1",wifiboxid:"Doodle3D WiFi-Box (AccessPoint)",link:"http://draw.doodle3d.com"};
 	
 	var _boxTimeoutTime 		= 500;
 	var _numBoxesChecking 	= 0; // count how many boxes we are checking
