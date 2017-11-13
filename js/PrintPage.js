@@ -191,6 +191,10 @@
 				_slicerSettings.printer.type = "ultimaker2"; 
 			}
 
+			if (_slicerSettings.printer.type==="ultimaker2_extended_plus") {
+				_slicerSettings.printer.type = "ultimaker2"; 
+			}
+
 			var data = {
 				slicerPrinterType: _slicerSettings.printer.type,
 				wifiboxPrinterType: _wifiboxSettings["printer.type"]
