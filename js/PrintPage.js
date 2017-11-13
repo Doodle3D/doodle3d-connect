@@ -175,7 +175,8 @@
 
 			}, function(failData) {
 				console.log("_networkAPI status failed",failData);
-				$("#infoWiFiBox").html("<span class='error'>failed to retrieve <em>network status</em> from WiFi-Box</span>");
+				//this message is shown often which is confusing for the user.
+				// $("#infoWiFiBox").html("<span class='error'>failed to retrieve <em>network status</em> from WiFi-Box</span>");
 			});
 
 		}
