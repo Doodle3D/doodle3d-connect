@@ -15,6 +15,7 @@
 	var _networkAPI = new NetworkAPI();
 	var _boxData = {};
 	var _refreshDelay;
+	var _knownSSIDs;
 	var _refreshDelayTime = 3000;
 	var PAGE_ID = "#join_network";
 	
@@ -25,7 +26,8 @@
 		_page = $(this);
 		_list = _page.find("ul[data-role=listview]");
 		//_joinOtherItem = _list.find("#joinOther");
-  });
+	});
+
 	$.mobile.document.on( "pagebeforeshow", PAGE_ID, function( event, data ) {
 		console.log("Join network page pagebeforeshow");
 		_boxData = d3d.util.getPageParams(PAGE_ID);
@@ -37,20 +39,32 @@
 		console.log("  _boxData: ",_boxData);
 		
 		_networkAPI.init(boxURL);
-		refreshNetworks();
-  });
+
+		_networkAPI.knownSSIDs(function(successData) {
+			console.log("known",successData);
+			_knownSSIDs = successData;
+			refreshNetworks();
+		},function(failData) {
+			console.log("known networks fail");
+		});
+
+	});
+
 	$.mobile.document.on( "pagebeforehide", PAGE_ID, function( event, data ) {
 		console.log("Join network page pagehide");
 		clearTimeout(_refreshDelay);
-  });
+	});
+
 	function refreshNetworks() {
 		//console.log("JoinNetwork:refreshNetworks");
 		d3d.util.showLoader();
 		_networkAPI.scan(function(data) { // completed
-			//console.log("JoinNetwork:refreshNetworks:scanned");
+			// console.log("JoinNetwork:refreshNetworks:scanned");
+			// console.log(data);
 			d3d.util.hideLoader();
 			_networks = {};
 			$.each(data.networks, function(index,network) {
+				network.known = _knownSSIDs.indexOf(network.ssid)>-1;
 				_networks[network.ssid] = network;
 			});
 			// update list
@@ -60,32 +74,53 @@
 			_refreshDelay = setTimeout(refreshNetworks, _refreshDelayTime);
 		});
 	}
+
 	function updateList() {
 		_list.empty();
 		var baseConnectingLink = _list.data("connecting-target");
 		var baseSecuredLink = _list.data("secured-target");
 		var linkParams = $.extend({}, _boxData);
 		//console.log("  linkParams: ",linkParams);
-		$.each(_networks, function(index,network) {
+		// $.each(_networks, function(index,network) {
 			//console.log("  network: ",network);
+
+		var _ssids = $.map(_networks, function(obj) {
+			return obj.ssid;
+		});
+
+		_ssids.sort(function(a, b) {
+			return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
+
+		// $.each(_ssids, function(ssid) {
+		for (var i=0; i<_ssids.length; i++) {
+			var ssid = _ssids[i];
+
+			var network = _networks[ssid];
+
 			linkParams.ssid = network.ssid;
 			
 			var secured = (network.encryption !== "none" && network.encryption !== "");
 			var link;
-			var icon = "";
+			var icon = secured ? "lock" : "alert";
 			linkParams.encryption = network.encryption;
-			if(secured) {
-				link = d3d.util.replaceURLParameters(baseSecuredLink,linkParams);
-				icon = "lock";
+			
+			if (!secured || network.known) { //skip the password page
+					link = d3d.util.replaceURLParameters(baseConnectingLink,linkParams);
 			} else {
-				link = d3d.util.replaceURLParameters(baseConnectingLink,linkParams);
+				link = d3d.util.replaceURLParameters(baseSecuredLink,linkParams);
 			}
+
+			var className = (network.known ? 'knownNetwork' : ''); //previously joined
+
 			//console.log("  link: ",link);
 			_list.append(
-					$('<li data-icon="'+icon+'"><a href="'+link+'">'+network.ssid+'</a></li>')
+					// $('<li data-icon="'+icon+'"><a href="'+link+'">'+network.ssid+'</a></li>')
+				$('<li class="'+className+'" data-icon="'+icon+'"><a href="'+link+'">'+network.ssid+'</a></li>')
 			);
-		});
+		}
 		//_list.append(_joinOtherItem);
 		_list.listview('refresh'); // jQuery mobile enhance content
 	}
+
 })(window);

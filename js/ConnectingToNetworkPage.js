@@ -44,8 +44,10 @@
 		if(_pageData.encryption === "") {
 			_pageData.encryption = "none";
 		}
-		if(_pageData === undefined || 
-			(_pageData.encryption !== "none" && form.length === 0)) { 
+		// if(_pageData === undefined || 
+			// (_pageData.encryption !== "none" && form.length === 0)) { 
+		if (_pageData === undefined) { // || (_pageData.encryption !== "none" && form.length === 0)) { 
+			//RC: removed this check because it makes it more difficult to re-associate with a known network
 			$.mobile.changePage("#boxes");
 			return;
 		}
@@ -85,7 +87,8 @@
 	}
 	function joinNetwork() {
 		console.log(PAGE_ID+":joinNetwork");
-		_networkAPI.associate(_pageData.ssid,_formData.password,true);
+		//_networkAPI.associate(_pageData.ssid,_formData.password,true); //recreate=true
+		_networkAPI.associate(_pageData.ssid,_formData.password,false);		
 		_connectedChecking = false;
 	}
 	function onRefreshing() {

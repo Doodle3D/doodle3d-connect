@@ -57,7 +57,7 @@ function NetworkAPI() {
 					//console.log("NetworkAPI:scan failed: ",response);
 					if(failedHandler) failedHandler(response);
 				} else {
-					completeHandler(response.data);
+					if (completeHandler) completeHandler(response.data);
 				}
 			}
 		}).fail(function() {
@@ -65,6 +65,31 @@ function NetworkAPI() {
 			if(failedHandler) failedHandler();
 		});
 	};
+
+	this.knownSSIDs = function(completeHandler,failedHandler) {
+ 		$.ajax({
+ 			url: _wifiboxURL + "/network/known",
+ 			type: "GET",
+ 			dataType: 'json',
+ 			timeout: _timeoutTime,
+ 			success: function(response){
+console.log("knownSSIDs",response);
+
+ 				if (response.status == "error" || response.status == "fail") {
+ 					if (failedHandler) failedHandler(response);
+ 				} else {
+ 					if (completeHandler) completeHandler(response.data.networks.map(function(obj) {
+ 						return obj.ssid;
+ 					}));
+ 				}
+ 			}
+ 		}).fail(function() {
+ 			console.log("knownSSIDs fail");
+ 			if (failedHandler) failedHandler();
+ 		});
+ 	};
+ 
+
 	this.status = function(completeHandler,failedHandler) {
 		//console.log("NetworkAPI:status");
 		// After switching wifi network or creating a access point we delay the actual status 
@@ -144,8 +169,7 @@ function NetworkAPI() {
 		console.log("  phrase: ",phrase);
 		var postData = {
 				ssid:ssid,
-				phrase:phrase,
-				recreate:recreate
+				phrase:phrase
 		};
 		$.ajax({
 			url: _wifiboxCGIBinURL + "/network/associate",
